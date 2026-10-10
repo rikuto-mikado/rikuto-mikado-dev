@@ -278,12 +278,6 @@ export default function App() {
               <span className="px-3.5 py-1.5 rounded-full text-xs font-sans bg-[#eae4da] text-[#783515] border border-[#d6ccbd] font-medium">
                 💻 Full-Stack Development
               </span>
-              <span className="px-3.5 py-1.5 rounded-full text-xs font-sans bg-[#eae4da] text-[#783515] border border-[#d6ccbd] font-medium">
-                🌐 Cisco CCNP & Global Standards
-              </span>
-              <span className="px-3.5 py-1.5 rounded-full text-xs font-sans bg-[#eae4da] text-[#783515] border border-[#d6ccbd] font-medium">
-                🌱 Agriculture & Long-Term Vision
-              </span>
             </div>
           </div>
 
