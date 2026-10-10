@@ -4,6 +4,7 @@ import certIndianCooking from './assets/cert-indian-cooking.png'
 import certPythonBootcamp from './assets/cert-python-bootcamp.png'
 import certPythonMega from './assets/cert-python-mega.png'
 import myfaceImg from './assets/myface.jpeg'
+import heroLogo from './assets/favicon-02.png'
 
 interface TimelineItem {
   period: string
@@ -196,9 +197,13 @@ export default function App() {
 
         {/* Hero content card */}
         <div className="max-w-4xl mx-auto text-center space-y-8 my-auto w-full">
-          {/* Subtle category tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#d4a373]/70 bg-[#ede9df] text-[#9A4C22] text-xs uppercase tracking-widest font-sans font-semibold">
-            <span>Engineering • Systems • Foundations</span>
+          {/* Brand Logo */}
+          <div className="flex justify-center items-center">
+            <img
+              src={heroLogo}
+              alt="RIKUTO"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-sm hover:scale-105 transition-transform duration-300"
+            />
           </div>
 
           {/* Top dashed divider */}
