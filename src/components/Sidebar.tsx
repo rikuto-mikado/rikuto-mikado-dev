@@ -1,50 +1,14 @@
 import { useEffect } from 'react'
-
-interface NavItem {
-  id: string
-  num: string
-  label: string
-  subtitle: string
-}
-
-const navItems: NavItem[] = [
-  {
-    id: 'about',
-    num: '01',
-    label: 'About',
-    subtitle: 'Vision & Physical Foundation',
-  },
-  {
-    id: 'trajectory',
-    num: '02',
-    label: 'Trajectory',
-    subtitle: 'Experience & Milestones',
-  },
-  {
-    id: 'courses',
-    num: '03',
-    label: 'Learning',
-    subtitle: 'Courses & Certifications',
-  },
-  {
-    id: 'roadmap',
-    num: '04',
-    label: 'Roadmap',
-    subtitle: 'Strategic 3-Phase Plan',
-  },
-  {
-    id: 'contact',
-    num: '05',
-    label: 'Contact',
-    subtitle: 'Get in Touch & Socials',
-  },
-]
+import type { Language } from '../data/translations'
+import { uiText } from '../data/translations'
 
 interface SidebarProps {
   isOpen: boolean
   onClose: () => void
   isDark: boolean
   onToggleTheme: () => void
+  lang: Language
+  onToggleLang: () => void
   activeSection: string
   logoSrc: string
   socialLinks: {
@@ -59,10 +23,47 @@ export default function Sidebar({
   onClose,
   isDark,
   onToggleTheme,
+  lang,
+  onToggleLang,
   activeSection,
   logoSrc,
   socialLinks,
 }: SidebarProps) {
+  const ui = uiText[lang]
+
+  const navItems = [
+    {
+      id: 'about',
+      num: '01',
+      label: ui.navAbout,
+      subtitle: ui.navAboutSub,
+    },
+    {
+      id: 'trajectory',
+      num: '02',
+      label: ui.navTrajectory,
+      subtitle: ui.navTrajectorySub,
+    },
+    {
+      id: 'courses',
+      num: '03',
+      label: ui.navLearning,
+      subtitle: ui.navLearningSub,
+    },
+    {
+      id: 'roadmap',
+      num: '04',
+      label: ui.navRoadmap,
+      subtitle: ui.navRoadmapSub,
+    },
+    {
+      id: 'contact',
+      num: '05',
+      label: ui.navContact,
+      subtitle: ui.navContactSub,
+    },
+  ]
+
   // Lock body scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
@@ -150,7 +151,7 @@ export default function Sidebar({
                 Rikuto Mikado
               </p>
               <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9A4C22] font-semibold block mt-1">
-                Index
+                {ui.navIndex}
               </span>
             </div>
           </button>
@@ -174,7 +175,7 @@ export default function Sidebar({
         {/* Main Navigation Links */}
         <nav className="px-6 sm:px-8 py-8 flex-1 flex flex-col justify-center space-y-2">
           <p className="text-[11px] font-sans uppercase tracking-[0.25em] text-[#9A4C22] font-semibold mb-3 px-2">
-            Table of Contents
+            {ui.tableOfContents}
           </p>
 
           <ul className="space-y-1.5">
@@ -211,7 +212,7 @@ export default function Sidebar({
                       <div>
                         <div className="flex items-center gap-2">
                           <span
-                            className={`font-serif text-xl sm:text-2xl font-bold tracking-tight transition-transform duration-300 group-hover:translate-x-1 ${
+                            className={`font-serif text-lg sm:text-xl font-bold tracking-tight transition-transform duration-300 group-hover:translate-x-1 ${
                               isActive ? 'text-[#9A4C22]' : ''
                             }`}
                           >
@@ -252,27 +253,27 @@ export default function Sidebar({
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-6 sm:p-8 border-t border-dashed border-[#d4a373]/30 space-y-6">
+        <div className="p-6 sm:p-8 border-t border-dashed border-[#d4a373]/30 space-y-4">
           {/* Quick Theme Switcher Inside Sidebar */}
           <div
-            className={`p-3.5 rounded-xl border flex items-center justify-between transition-colors duration-300 ${
+            className={`p-3 rounded-xl border flex items-center justify-between transition-colors duration-300 ${
               isDark ? 'bg-[#1C1A18] border-[#2D2A26]' : 'bg-[#EDE7DC]/70 border-[#dcd6c9]'
             }`}
           >
             <div className="flex items-center gap-3">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors duration-300 ${
                   isDark
                     ? 'bg-[#282522] text-[#F5C563] border border-[#3A352F]'
                     : 'bg-white text-[#9A4C22] border border-[#d4a373]/60 shadow-xs'
                 }`}
               >
                 {isDark ? (
-                  <svg className="w-4 h-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-3.5 h-3.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 ) : (
-                  <svg className="w-4 h-4 -rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-3.5 h-3.5 -rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                   </svg>
                 )}
@@ -283,10 +284,10 @@ export default function Sidebar({
                     isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
                   }`}
                 >
-                  {isDark ? 'Dark Theme' : 'Light Theme'}
+                  {isDark ? ui.themeDarkName : ui.themeLightName}
                 </p>
                 <span className="text-[10px] font-sans text-gray-400">
-                  {isDark ? 'Midnight charcoal' : 'Warm paper ivory'}
+                  {isDark ? ui.themeDarkSub : ui.themeLightSub}
                 </span>
               </div>
             </div>
@@ -294,20 +295,63 @@ export default function Sidebar({
             <button
               onClick={onToggleTheme}
               aria-label="Toggle color theme"
-              className={`px-3 py-1.5 rounded-full text-xs font-sans font-medium transition-all duration-300 cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-xs font-sans font-medium transition-all duration-300 cursor-pointer ${
                 isDark
                   ? 'bg-[#292622] hover:bg-[#34302b] text-[#F5C563] border border-[#3A352F]'
                   : 'bg-white hover:bg-gray-50 text-[#9A4C22] border border-[#d4a373]/60 shadow-xs'
               }`}
             >
-              Switch to {isDark ? 'Light' : 'Dark'}
+              {isDark ? ui.light : ui.dark}
+            </button>
+          </div>
+
+          {/* Quick Language Switcher Inside Sidebar */}
+          <div
+            className={`p-3 rounded-xl border flex items-center justify-between transition-colors duration-300 ${
+              isDark ? 'bg-[#1C1A18] border-[#2D2A26]' : 'bg-[#EDE7DC]/70 border-[#dcd6c9]'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center font-sans text-[11px] font-bold tracking-wider transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-[#282522] text-[#E0A96D] border border-[#3A352F]'
+                    : 'bg-white text-[#9A4C22] border border-[#d4a373]/60 shadow-xs'
+                }`}
+              >
+                {lang === 'en' ? 'EN' : 'JP'}
+              </div>
+              <div>
+                <p
+                  className={`text-xs font-sans font-semibold leading-none ${
+                    isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
+                  }`}
+                >
+                  {lang === 'en' ? 'English' : '日本語'}
+                </p>
+                <span className="text-[10px] font-sans text-gray-400">
+                  {lang === 'en' ? 'Switch to Japanese' : '英語表示に切り替え'}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={onToggleLang}
+              aria-label="Toggle language"
+              className={`px-3 py-1 rounded-full text-xs font-sans font-medium transition-all duration-300 cursor-pointer ${
+                isDark
+                  ? 'bg-[#292622] hover:bg-[#34302b] text-[#E0A96D] border border-[#3A352F]'
+                  : 'bg-white hover:bg-gray-50 text-[#9A4C22] border border-[#d4a373]/60 shadow-xs'
+              }`}
+            >
+              {ui.langToggle}
             </button>
           </div>
 
           {/* Contact & Location info */}
-          <div className="space-y-2">
+          <div className="space-y-1.5 pt-1">
             <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9A4C22] font-semibold block">
-              Contact & Location
+              {ui.contactAndLocation}
             </span>
             <a
               href="mailto:mikadorikuto@gmail.com"
@@ -318,7 +362,7 @@ export default function Sidebar({
               mikadorikuto@gmail.com
             </a>
             <p className="text-xs font-sans text-gray-400 font-light">
-              Hokkaido, Japan
+              {ui.locationText}
             </p>
           </div>
 
@@ -345,8 +389,8 @@ export default function Sidebar({
             })}
           </div>
 
-          <div className="text-[11px] font-sans text-gray-400 tracking-wide">
-            © 2026 Rikuto Mikado
+          <div className="text-[11px] font-sans text-gray-400 tracking-wide pt-1">
+            {ui.copyright}
           </div>
         </div>
       </aside>

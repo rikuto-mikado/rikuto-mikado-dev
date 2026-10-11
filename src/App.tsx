@@ -1,210 +1,23 @@
-import { useState, useEffect } from 'react'
+import{ useState, useEffect } from 'react'
 import LightTrails from './components/LightTrails'
 import Sidebar from './components/Sidebar'
+import type { Language, CourseItem } from './data/translations'
+import { timelineEventsData, coursesData, uiText } from './data/translations'
 import certFullstackWeb from './assets/cert-fullstack-web.png'
 import certIndianCooking from './assets/cert-indian-cooking.png'
 import certPythonBootcamp from './assets/cert-python-bootcamp.png'
 import certPythonMega from './assets/cert-python-mega.png'
 import myfaceImg from './assets/myface.jpeg'
-import logoForDay from './assets/favicon-02.png'  // Black circular badge for day
-import logoForNight from './assets/01-original.png' // Cream circular badge for night
+import logoForDay from './assets/favicon-02.png'
+import logoForNight from './assets/01-original.png'
 import urakawaLandscape from './assets/urakawa-landscape.png'
 
-interface TimelineItem {
-  period: string
-  duration?: string
-  location?: string
-  category: string
-  title: string
-  narrative: string
-  details?: string[]
-  isCurrent?: boolean
-  isUpcoming?: boolean
+const certImages: Record<string, string> = {
+  pythonBootcamp: certPythonBootcamp,
+  fullstackWeb: certFullstackWeb,
+  pythonMega: certPythonMega,
+  indianCooking: certIndianCooking,
 }
-
-interface CourseItem {
-  title: string
-  instructor: string
-  hours: string
-  platform: string
-  date: string
-  category: string
-  note?: string
-  image: string
-  certificateId: string
-}
-
-const timelineEvents: TimelineItem[] = [
-  {
-    period: '2031 & Beyond',
-    category: 'Career Transition & Research',
-    location: 'Sapporo / Kanto / Global',
-    title: 'Career Transition: Mission-Critical Data Centers, Global Enterprises & Master’s Degree',
-    narrative:
-      'After establishing a proven track record in field engineering, I plan to transition into mission-critical facilities, such as enterprise data centers or global multinational firms, utilizing platforms like LinkedIn. Given Japan’s aging technical workforce and the ongoing expansion of digital infrastructure, this career approach is grounded in strong, structural market demand. Alongside professional work, I plan to enroll in an accredited online or international Master’s program (such as in the UK or Australia) to pursue graduate-level research over the long term.',
-    details: [
-      'Transition to multinational corporations, major domestic enterprises, or mission-critical data centers in Sapporo or the Kanto metropolitan area.',
-      'Take and pass the second-stage practical examination for 2nd-Class Electrical Construction Management Engineer after completing 3 years of verified field experience.',
-      'Concurrently enroll in an overseas Master’s degree program (UK or Australia, considering online/distance formats) to engage in advanced technical studies and long-term academic research.',
-    ],
-    isUpcoming: true,
-  },
-  {
-    period: 'Apr 2031 – Mar 2032',
-    duration: 'Field Year 3',
-    category: 'Professional Milestone',
-    location: 'Hokkaido / Kanto, Japan',
-    title: 'Third-Year Field Capstone: Facility Management & Network Credentials',
-    narrative:
-      'My third year of field experience focuses on acquiring key qualifications widely respected across Japan’s facilities management industry, while reinforcing networking capabilities to connect physical electrical systems with data networks.',
-    details: [
-      'Take and obtain the Building Environmental Hygiene Management Engineer (Building Manager) license in October upon completing the required two years of practical experience, a vital credential in Japan’s qualification-driven facility market.',
-      'Target Cisco Certified Network Professional (CCNP Enterprise) during this third year to solidify network and systems competencies, maintaining alternative plans if adjustments are necessary.',
-      'Retake the IELTS exam as the two-year validity period approaches, aiming to maintain or improve upon my initial benchmark score.',
-      'Submit the formal application for the First-Class Electrician license upon fulfilling the full three years of practical on-site experience.',
-    ],
-    isUpcoming: true,
-  },
-  {
-    period: 'Apr 2029 – Mar 2031',
-    duration: 'Field Years 1–2',
-    category: 'Employment & Degree Studies',
-    location: 'Japan & UK (Distance)',
-    title: 'Industry Employment & Concurrent UK OTHM Degree Pathway',
-    narrative:
-      'Entering full-time industry employment as an electrical engineer, I will accumulate mandatory hands-on field experience while simultaneously advancing through an accredited British degree pathway through distance learning.',
-    details: [
-      'Begin the UK OTHM Level 4/5 Diploma program, equivalent to the first two years of an accredited British Bachelor’s degree, with the long-term plan of completing a full Bachelor’s via a Top-up year and continuing toward a Master’s.',
-      'Sit for the Qualified Energy Manager examination around August of my second year of practical experience, taking advantage of curriculum overlap with the Chief Electrical Engineer syllabus.',
-      'Maintain disciplined, daily English study routines to stay prepared for the 2-year IELTS renewal cycle.',
-    ],
-    isUpcoming: true,
-  },
-  {
-    period: 'Apr 2028 – Mar 2029',
-    duration: 'Vocational Year 2',
-    category: 'Advanced Vocational Studies',
-    location: 'Hokkaido, Japan',
-    title: 'Vocational Year 2: Advanced Electrical Licenses & Examination Milestones',
-    narrative:
-      'My second vocational institute year is dedicated to passing advanced electrical and facility certifications, balancing study loads carefully to manage examination pressure effectively.',
-    details: [
-      'Sit for the First-Class Electrician examination around October, allocating generous study time to ensure thorough preparation without undue stress.',
-      'Take the first-stage exam of 2nd-Class Electrical Construction Management Engineer around June to earn the official Assistant Management Engineer qualification.',
-      'Take and obtain the Fire Defense Equipment Officer Category A4 certification during the winter term.',
-      'Complete all remaining subject requirements for Third-Class Chief Electrical Engineer within these two vocational years (with flexibility to adapt later targets like Energy Manager if extra focus is needed).',
-      'Continue consistent English learning in preparation for my second IELTS sitting.',
-    ],
-    isUpcoming: true,
-  },
-  {
-    period: 'Apr 2027 – Mar 2028',
-    duration: 'Vocational Year 1',
-    category: 'Vocational Enrollment',
-    location: 'Hokkaido, Japan',
-    title: 'Vocational Institute Entry: Foundations, 2nd-Class License & English Benchmark',
-    narrative:
-      'Beginning formal vocational education in electrical engineering, establishing foundational theory, hands-on workshop competencies, and securing early licensing and language milestones.',
-    details: [
-      'Take my first official IELTS exam in the second half of Year 1 (targeting a testing venue in Tokyo) to establish an academic proficiency benchmark.',
-      'Sit for and obtain the Second-Class Electrician license near the end of Year 1.',
-      'Leverage the twice-yearly exam schedule for Third-Class Chief Electrical Engineer, methodically passing subjects as preparation matures.',
-    ],
-    isUpcoming: true,
-  },
-  {
-    period: 'Sep 2026 - Present',
-    duration: 'Current',
-    category: 'Hands-On Transition & Preparation',
-    location: 'Urakawa, Hokkaido, Japan',
-    title: 'Transition to Physical Infrastructure & Core Exam Preparation',
-    narrative:
-      'Briefly relocated to Latvia for a Computer Science bachelor’s program, but returned to Japan within weeks after reassessing local living costs and the rapid acceleration of AI technologies. Seeing the fast changes driven by LLMs, I decided to build a dependable foundation in the physical world. I redirected my focus toward electrical engineering and infrastructure—actively preparing for core national licenses including Third-Class Chief Electrical Engineer—while keeping full-stack development as a valuable skill that keeps me flexible for the future.',
-    isCurrent: true,
-  },
-  {
-    period: 'Jun 2025 - Aug 2026',
-    duration: '1 yr 3 mos',
-    category: 'Independent Living & Intensive Dev',
-    location: 'Sapporo, Hokkaido, Japan',
-    title: 'Self-Directed Full-Stack Training & Life Independence',
-    narrative:
-      'Lived independently in Sapporo with family support, dedicating daily schedules to intensive full-stack development through Udemy while mastering essential life skills such as cooking and personal discipline. Clarified personal priorities and core values, cultivating the autonomous capability to learn and iterate without relying on a mentor.',
-  },
-  {
-    period: 'Jan 2025 - Jun 2025',
-    duration: '6 mos',
-    category: 'Exploration & Foundation Building',
-    location: 'Urakawa, Hokkaido, Japan',
-    title: 'Academic Exploration, AI Literacy & Software Initiation',
-    narrative:
-      'Following early high school graduation, utilized the Sophia learning platform with the initial goal of enrolling in a US distance-learning university. Read research papers, tracked global developments, and used generative AI tools to accelerate information gathering while gaining hands-on understanding of both AI power and hallucination risks. Shifted from the US distance-degree plan to commit fully to full-stack development, establishing a strict self-management routine.',
-  },
-  {
-    period: 'Jun 2024 - Feb 2025',
-    duration: '9 mos',
-    category: 'High School Education',
-    location: 'Online / US Accredited',
-    title: 'Penn Foster Group — Early High School Diploma',
-    narrative:
-      'Transferred from local schooling to Penn Foster Group and accelerated coursework to graduate early with an official US High School Diploma.',
-  },
-  {
-    period: 'Apr 2023 - May 2024',
-    duration: '1 yr 1 mo',
-    category: 'Secondary Education',
-    location: 'Urakawa, Hokkaido, Japan',
-    title: 'Hokkaido Urakawa High School',
-    narrative: 'Enrolled in high school education, establishing foundational academic disciplines.',
-  },
-]
-
-const courses: CourseItem[] = [
-  {
-    title: 'The Complete Python Bootcamp From Zero to Hero',
-    instructor: 'Jose Portilla',
-    hours: '22 hrs',
-    platform: 'Udemy',
-    date: 'May 2025',
-    category: 'Python & Software Logic',
-    note: 'Foundational programming concepts, OOP, and automation scripts.',
-    image: certPythonBootcamp,
-    certificateId: 'UC-2564e41c-d6d2-4262-9340-eaef1bad012c',
-  },
-  {
-    title: 'The Complete Full-Stack Web Development Bootcamp',
-    instructor: 'Dr. Angela Yu',
-    hours: '61.5 hrs',
-    platform: 'Udemy',
-    date: 'Sep 2025',
-    category: 'Full-Stack Architecture',
-    note: 'Comprehensive client-server development, databases, REST APIs, and modern frontend.',
-    image: certFullstackWeb,
-    certificateId: 'UC-edecf7ff-e086-4b2c-b515-04ffa3639a18',
-  },
-  {
-    title: 'Python Mega Course: Build 20 Real-World Apps & AI Agents',
-    instructor: 'Ardit Sulce',
-    hours: '50.5 hrs',
-    platform: 'Udemy',
-    date: 'Mar 2026',
-    category: 'AI Agents & Production Apps',
-    note: 'Practical agentic workflows, API integrations, and standalone production tools.',
-    image: certPythonMega,
-    certificateId: 'UC-63511031-1538-46ec-87d1-89c031c7ffec',
-  },
-  {
-    title: 'INDIAN COOKING - RESTAURANT STYLE COOKING COURSE',
-    instructor: 'Satvir Singh',
-    hours: '6.5 hrs',
-    platform: 'Udemy',
-    date: 'Oct 2026',
-    category: 'Life Skills & Culinary Craft',
-    note: 'Culinary self-reliance mastered during independent living in Sapporo.',
-    image: certIndianCooking,
-    certificateId: 'UC-6290b034-8ffd-48a0-b549-9c08c6f18786',
-  },
-]
 
 function GithubIcon({ className = 'w-6 h-6' }: { className?: string }) {
   return (
@@ -265,6 +78,14 @@ export default function App() {
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('about')
+  const [lang, setLang] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('preferred_lang')
+      if (saved === 'ja' || saved === 'en') return saved
+      return navigator.language.startsWith('ja') ? 'ja' : 'en'
+    }
+    return 'en'
+  })
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme')
@@ -274,6 +95,10 @@ export default function App() {
     return false
   })
 
+  const ui = uiText[lang]
+  const timelineEvents = timelineEventsData[lang]
+  const courses = coursesData[lang]
+
   useEffect(() => {
     localStorage.setItem('theme', isDark ? 'dark' : 'light')
     if (isDark) {
@@ -282,13 +107,22 @@ export default function App() {
       document.documentElement.classList.remove('dark')
     }
 
-    // Dynamically update browser tab favicon (swapped as requested)
+    // Dynamically update browser tab favicon
     const favicons = document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']")
     favicons.forEach((favicon) => {
       favicon.removeAttribute('media')
       favicon.href = isDark ? '/favicon-light.png' : '/favicon-dark.png'
     })
   }, [isDark])
+
+  useEffect(() => {
+    localStorage.setItem('preferred_lang', lang)
+    document.documentElement.lang = lang
+  }, [lang])
+
+  const toggleLang = () => {
+    setLang((prev) => (prev === 'en' ? 'ja' : 'en'))
+  }
 
   // Scrollspy: update active section during scroll
   useEffect(() => {
@@ -328,7 +162,7 @@ export default function App() {
         isDark ? 'bg-[#131211] text-[#E8E4DD]' : 'bg-[#F5F4F0] text-gray-800'
       }`}
     >
-      {/* Floating Header Dock (Dark Mode Toggle & Navigation Menu) */}
+      {/* Floating Header Dock (Dark Mode Toggle, Language Switcher & Navigation Menu) */}
       <div
         className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-40 flex items-center p-1 sm:p-1.5 rounded-full border shadow-xl backdrop-blur-md transition-all duration-300 ${
           isDark
@@ -358,23 +192,44 @@ export default function App() {
           )}
         </button>
 
-        {/* Elegant Separator */}
-        <div className={`h-4 w-px mx-1 ${isDark ? 'bg-[#3A352F]' : 'bg-[#d4a373]/50'}`} />
+        {/* Separator */}
+        <div className={`h-4 w-px mx-0.5 sm:mx-1 ${isDark ? 'bg-[#3A352F]' : 'bg-[#d4a373]/50'}`} />
+
+        {/* Language Switcher Button (Right next to Dark Mode) */}
+        <button
+          onClick={toggleLang}
+          aria-label={lang === 'en' ? '日本語に切り替える' : 'Switch to English'}
+          title={lang === 'en' ? '日本語に切り替える' : 'Switch to English'}
+          className={`flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full font-sans text-xs font-semibold tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer ${
+            isDark
+              ? 'text-[#E0A96D] hover:bg-[#282522]'
+              : 'text-[#9A4C22] hover:bg-white/80'
+          }`}
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0c2.5 0 4.5-4 4.5-9s-2-9-4.5-9-4.5 4-4.5 9 2 9 4.5 9zm-9-9h18" />
+          </svg>
+          <span className="font-bold">{lang === 'en' ? 'JA' : 'EN'}</span>
+        </button>
+
+        {/* Separator */}
+        <div className={`h-4 w-px mx-0.5 sm:mx-1 ${isDark ? 'bg-[#3A352F]' : 'bg-[#d4a373]/50'}`} />
 
         {/* Sidebar Menu Trigger Button */}
         <button
           onClick={() => setIsSidebarOpen(true)}
-          aria-label="Open navigation menu"
+          aria-label={ui.menu}
           aria-expanded={isSidebarOpen}
           aria-controls="side-navigation"
           className={`flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full font-sans text-xs font-semibold tracking-wider uppercase transition-all duration-300 transform active:scale-95 cursor-pointer ${
-            isDark
+            isSidebarOpen
+              ? 'bg-[#9A4C22] text-white'
+              : isDark
               ? 'hover:bg-[#282522] text-[#F5F3EE]'
               : 'hover:bg-white text-gray-800'
           }`}
         >
-          <span className="hidden sm:inline">Menu</span>
-          {/* Animated 2-bar menu icon */}
+          <span className="hidden sm:inline">{ui.menu}</span>
           <div className="w-4 h-3.5 flex flex-col justify-between items-end">
             <span
               className={`h-0.5 w-4 rounded-full transition-all duration-300 ${
@@ -396,6 +251,8 @@ export default function App() {
         onClose={() => setIsSidebarOpen(false)}
         isDark={isDark}
         onToggleTheme={() => setIsDark((prev) => !prev)}
+        lang={lang}
+        onToggleLang={toggleLang}
         activeSection={activeSection}
         logoSrc={isDark ? logoForNight : logoForDay}
         socialLinks={socialLinks}
@@ -428,17 +285,17 @@ export default function App() {
             <h1 className={`text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] transition-colors duration-500 ${
               isDark ? 'text-[#F5F3EE]' : 'text-[#231f1d]'
             }`}>
-              Hello, I am <span className="italic font-normal text-[#9A4C22]">Rikuto.</span>
+              {ui.heroGreeting} <span className="italic font-normal text-[#9A4C22]">{ui.heroName}</span>
             </h1>
             <p className="text-xs sm:text-sm md:text-base font-sans uppercase tracking-[0.22em] text-[#9A4C22] font-semibold">
-              Physical Infrastructure & Electrical Engineering • Full-Stack Development
+              {ui.heroBadge}
             </p>
           </div>
 
           <p className={`text-base sm:text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed font-sans font-light px-2 transition-colors duration-500 ${
             isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
           }`}>
-            Building a reliable real-world foundation in the AI era. Combining software skills with hands-on electrical engineering to understand and maintain the physical infrastructure behind digital systems.
+            {ui.heroLead}
           </p>
 
           {/* Bottom dashed divider */}
@@ -451,7 +308,7 @@ export default function App() {
         <div className={`text-center flex flex-col items-center gap-2 text-xs font-sans uppercase tracking-widest pt-6 transition-colors duration-500 ${
           isDark ? 'text-gray-400' : 'text-gray-500'
         }`}>
-          <span>Scroll to explore</span>
+          <span>{ui.scrollPrompt}</span>
           <div className="w-px h-8 bg-gradient-to-b from-[#9A4C22] to-transparent"></div>
         </div>
       </section>
@@ -490,10 +347,10 @@ export default function App() {
           <div className="lg:col-span-7 space-y-8">
             <div className="space-y-2">
               <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
-                Vision & Roadmap
+                {ui.aboutSectionBadge}
               </span>
               <h2 className="text-4xl md:text-5xl text-[#9A4C22] italic font-serif leading-tight">
-                About Rikuto Mikado
+                {ui.aboutHeading}
               </h2>
             </div>
 
@@ -504,7 +361,7 @@ export default function App() {
               <p className={`text-xl md:text-2xl font-serif italic leading-snug transition-colors duration-500 ${
                 isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
               }`}>
-                "My long-term goal is to pursue knowledge, eventually engage in agriculture, and help preserve human creativity."
+                {ui.aboutQuote}
               </p>
             </div>
 
@@ -512,17 +369,9 @@ export default function App() {
             <div className={`space-y-5 font-sans text-base md:text-lg leading-relaxed font-light transition-colors duration-500 ${
               isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
             }`}>
-              <p>
-                Although I originally trained in full-stack development, watching the rapid evolution of generative AI and large language models led me to build a dependable foundation in the physical world. I believe real-world resilience comes from understanding and working with the hands-on layer—the electrical equipment, power systems, and physical facilities that keep all digital technology running.
-              </p>
-
-              <p>
-                To make this transition, I will enter an advanced vocational technical institute in Electrical Engineering. I am methodically working toward essential Japanese national licenses, including <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Third-Class Chief Electrical Engineer</strong> and <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>First-Class Electrician</strong>, alongside networking credentials such as <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Cisco CCNP Enterprise</strong>. To keep international pathways open, I am also consistently preparing for the <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>IELTS Academic exam</strong>.
-              </p>
-
-              <p>
-                After vocational school, as I enter the industry to accumulate three years of practical field experience, I plan to concurrently advance through the <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>UK OTHM diploma pathway</strong> toward an accredited Bachelor’s degree, followed by Master’s studies. At the same time, full-stack development remains a versatile secondary skill, giving me a solid bridge between software logic and physical systems.
-              </p>
+              <p>{ui.aboutP1}</p>
+              <p>{ui.aboutP2}</p>
+              <p>{ui.aboutP3}</p>
             </div>
 
             {/* Focus Badges */}
@@ -532,14 +381,14 @@ export default function App() {
                   ? 'bg-[#22201D] text-[#E0A96D] border border-[#3A352F]'
                   : 'bg-[#eae4da] text-[#783515] border border-[#d6ccbd]'
               }`}>
-                ⚡ Electrical Engineering & Infrastructure
+                {ui.aboutBadge1}
               </span>
               <span className={`px-3.5 py-1.5 rounded-full text-xs font-sans font-medium transition-colors duration-500 ${
                 isDark
                   ? 'bg-[#22201D] text-[#E0A96D] border border-[#3A352F]'
                   : 'bg-[#eae4da] text-[#783515] border border-[#d6ccbd]'
               }`}>
-                💻 Full-Stack Development
+                {ui.aboutBadge2}
               </span>
             </div>
           </div>
@@ -550,7 +399,7 @@ export default function App() {
               {/* Outer decorative dashed frame */}
               <div className="absolute -inset-3 rounded-t-full border-2 border-dashed border-[#d4a373] pointer-events-none"></div>
 
-              {/* Arch container: compact on mobile, prominently enlarged on desktop */}
+              {/* Arch container */}
               <div className={`relative w-64 sm:w-72 lg:w-80 xl:w-[22rem] h-84 sm:h-96 lg:h-[28rem] xl:h-[31rem] rounded-t-full overflow-hidden shadow-2xl border-4 transition-all duration-500 ${
                 isDark ? 'border-[#2D2A26] bg-[#1E1C1A]' : 'border-white bg-gray-200'
               }`}>
@@ -565,28 +414,28 @@ export default function App() {
             <div className="mt-6 text-center space-y-1.5">
               <p className={`font-serif italic text-2xl transition-colors duration-500 ${
                 isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
-              }`}>Rikuto Mikado</p>
+              }`}>{ui.aboutPhotoName}</p>
               <p className="text-xs font-sans uppercase tracking-[0.2em] text-[#9A4C22] font-semibold">
-                Urakawa / Sapporo, Hokkaido, Japan
+                {ui.aboutPhotoPlace}
               </p>
               <p className={`font-sans text-xs font-light transition-colors duration-500 ${
                 isDark ? 'text-gray-400' : 'text-gray-500'
               }`}>
-                Physical Layer • Systems • Autonomous Learning
+                {ui.aboutPhotoDesc}
               </p>
             </div>
 
-            {/* Subtle Roots / Origin card connecting to the background scenery */}
+            {/* Subtle Roots / Origin card */}
             <div className={`mt-5 px-5 py-3 rounded-xl border text-center transition-colors duration-500 w-full max-w-[280px] sm:max-w-xs ${
               isDark
                 ? 'bg-[#181615]/85 border-[#2D2A26] text-gray-400'
                 : 'bg-[#ede8de]/80 border-[#dcd6c9] text-gray-600'
             }`}>
               <span className="block text-[11px] font-sans uppercase tracking-widest text-[#9A4C22] font-semibold">
-                Origin & Landscape
+                {ui.aboutOriginTitle}
               </span>
               <p className="text-xs font-sans font-light mt-0.5">
-                Hokkaido, Japan
+                {ui.aboutOriginDesc}
               </p>
             </div>
           </div>
@@ -601,15 +450,15 @@ export default function App() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
-              Trajectory
+              {ui.trajectoryBadge}
             </span>
             <h2 className="text-4xl md:text-5xl text-[#9A4C22] italic font-serif">
-              Experience & Milestones
+              {ui.trajectoryHeading}
             </h2>
             <p className={`text-base font-sans max-w-2xl mx-auto leading-relaxed transition-colors duration-500 ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              A transparent chronicle of self-directed learning, practical course corrections, and step-by-step milestones toward a grounded career.
+              {ui.trajectoryLead}
             </p>
           </div>
           
@@ -643,14 +492,14 @@ export default function App() {
                       <span className={`inline-block text-xs font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full transition-colors duration-500 ${
                         isDark ? 'text-emerald-300 bg-emerald-950/70 border border-emerald-800/60' : 'text-emerald-800 bg-emerald-100'
                       }`}>
-                        Current Focus
+                        {ui.statusCurrent}
                       </span>
                     )}
                     {item.isUpcoming && (
                       <span className={`inline-block text-xs font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full transition-colors duration-500 ${
                         isDark ? 'text-amber-300 bg-amber-950/70 border border-amber-800/60' : 'text-amber-800 bg-amber-100'
                       }`}>
-                        Roadmap
+                        {ui.statusRoadmap}
                       </span>
                     )}
                   </div>
@@ -701,15 +550,15 @@ export default function App() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
-              Skill Acquisition
+              {ui.coursesBadge}
             </span>
             <h2 className="text-4xl md:text-5xl text-[#9A4C22] italic font-serif">
-              Courses & Continuous Learning
+              {ui.coursesHeading}
             </h2>
             <p className={`text-base font-sans max-w-2xl mx-auto leading-relaxed transition-colors duration-500 ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Certified coursework completed through intensive independent study across software engineering, AI tooling, and essential life skills. Click any certificate to inspect credentials.
+              {ui.coursesLead}
             </p>
           </div>
 
@@ -730,14 +579,14 @@ export default function App() {
                   isDark ? 'bg-[#151413] border-[#2D2A26]' : 'bg-gray-100 border-[#ece6dd]'
                 }`}>
                   <img
-                    src={course.image}
+                    src={certImages[course.imageKey]}
                     alt={course.title}
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                   {/* Subtle hover overlay hint */}
                   <div className="absolute inset-0 bg-[#2b2623]/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <span className="px-4 py-2 rounded-full bg-white/95 text-gray-900 text-xs font-sans font-semibold tracking-wider uppercase shadow-md flex items-center gap-1.5">
-                      View Certificate 🔍
+                      {ui.viewCert}
                     </span>
                   </div>
                 </div>
@@ -778,7 +627,7 @@ export default function App() {
                     isDark ? 'border-[#262320] text-gray-400' : 'border-[#f0ebe3] text-gray-600'
                   }`}>
                     <span>
-                      Instructor: <strong className={`font-medium transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{course.instructor}</strong>
+                      {ui.instructor}: <strong className={`font-medium transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{course.instructor}</strong>
                     </span>
                     <span className={`px-2 py-0.5 rounded font-medium transition-colors duration-500 ${
                       isDark ? 'bg-[#262320] text-gray-300' : 'bg-gray-100 text-gray-800'
@@ -813,7 +662,7 @@ export default function App() {
             }`}>
               <div>
                 <span className="text-xs uppercase tracking-wider font-sans font-semibold text-[#9A4C22]">
-                  {selectedCert.platform} Certificate of Completion
+                  {selectedCert.platform} {ui.certCompletion}
                 </span>
                 <h3 className={`font-serif text-2xl font-bold mt-1 transition-colors duration-300 ${
                   isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
@@ -825,7 +674,7 @@ export default function App() {
                 type="button"
                 onClick={() => setSelectedCert(null)}
                 aria-label="Close modal"
-                className={`text-3xl font-light leading-none p-1 transition-colors ${
+                className={`text-3xl font-light leading-none p-1 transition-colors cursor-pointer ${
                   isDark ? 'text-gray-400 hover:text-white' : 'text-gray-400 hover:text-gray-800'
                 }`}
               >
@@ -838,7 +687,7 @@ export default function App() {
               isDark ? 'border-[#2E2B27] bg-[#121110]' : 'border-gray-200 bg-gray-50'
             }`}>
               <img
-                src={selectedCert.image}
+                src={certImages[selectedCert.imageKey]}
                 alt={selectedCert.title}
                 className="w-full h-auto object-contain"
               />
@@ -849,19 +698,19 @@ export default function App() {
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
               <div>
-                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Instructor</span>
+                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">{ui.instructor}</span>
                 <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{selectedCert.instructor}</span>
               </div>
               <div>
-                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Date</span>
+                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">{ui.date}</span>
                 <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{selectedCert.date}</span>
               </div>
               <div>
-                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Length</span>
+                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">{ui.length}</span>
                 <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{selectedCert.hours}</span>
               </div>
               <div>
-                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Certificate ID</span>
+                <span className="block text-gray-400 uppercase text-[10px] tracking-wider">{ui.certId}</span>
                 <span className={`font-mono truncate block transition-colors duration-300 ${isDark ? 'text-[#D4A373]' : 'text-gray-800'}`} title={selectedCert.certificateId}>
                   {selectedCert.certificateId.slice(0, 15)}...
                 </span>
@@ -877,75 +726,75 @@ export default function App() {
         <div className="relative z-10 max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#c29c6d] font-semibold block">
-              Strategic Progression
+              {ui.roadmapBadge}
             </span>
-            <h2 className="text-4xl md:text-5xl italic font-serif">Roadmap & Vision</h2>
+            <h2 className="text-4xl md:text-5xl italic font-serif">{ui.roadmapHeading}</h2>
             <p className="text-sm sm:text-base font-sans text-[#F5F4F0]/80 max-w-2xl mx-auto leading-relaxed font-light">
-              A practical, step-by-step roadmap connecting software skills with electrical engineering, hands-on field experience, and international degree pathways.
+              {ui.roadmapLead}
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 font-sans">
-            {/* Column 1: Vocational Years (2027–2029) */}
+            {/* Column 1: Vocational Years */}
             <div className="bg-white/5 p-8 sm:p-9 rounded-2xl border border-white/10 flex flex-col justify-between hover:bg-white/[0.07] transition-colors">
               <div className="space-y-5">
                 <div className="space-y-1">
                   <span className="text-xs uppercase tracking-wider font-semibold text-[#c29c6d] block font-sans">
-                    Years 2027 – 2029
+                    {ui.roadmapCol1Tag}
                   </span>
                   <h3 className="font-serif italic text-2xl sm:text-3xl text-[#d4a373] leading-snug">
-                    "Hands-on foundations"
+                    {ui.roadmapCol1Title}
                   </h3>
                 </div>
                 <div className="border-t border-[#c29c6d]/30 w-16 my-3"></div>
                 <p className="text-sm sm:text-base text-[#F5F4F0]/90 leading-relaxed font-light">
-                  Entering an advanced technical institute in Hokkaido to build practical electrical engineering competencies. Over these two years, I plan to secure the Second-Class and First-Class Electrician licenses, systematically complete subjects for Third-Class Chief Electrical Engineer, obtain safety qualifications (Fire Defense A4 & Assistant Management Engineer), and sit for the IELTS Academic exam.
+                  {ui.roadmapCol1Body}
                 </p>
               </div>
               <div className="pt-6 mt-6 border-t border-white/10 text-xs text-[#c29c6d] font-medium">
-                Focus: Electrician 1st & 2nd • Chief Electrical Eng. • IELTS
+                {ui.roadmapCol1Footer}
               </div>
             </div>
 
-            {/* Column 2: Field Experience & UK Degree (2029–2032) */}
+            {/* Column 2: Field Experience & UK Degree */}
             <div className="bg-white/5 p-8 sm:p-9 rounded-2xl border border-white/10 flex flex-col justify-between hover:bg-white/[0.07] transition-colors">
               <div className="space-y-5">
                 <div className="space-y-1">
                   <span className="text-xs uppercase tracking-wider font-semibold text-[#c29c6d] block font-sans">
-                    Years 2029 – 2032
+                    {ui.roadmapCol2Tag}
                   </span>
                   <h3 className="font-serif italic text-2xl sm:text-3xl text-[#d4a373] leading-snug">
-                    "Field practice & degree studies"
+                    {ui.roadmapCol2Title}
                   </h3>
                 </div>
                 <div className="border-t border-[#c29c6d]/30 w-16 my-3"></div>
                 <p className="text-sm sm:text-base text-[#F5F4F0]/90 leading-relaxed font-light">
-                  Beginning full-time electrical field employment to accumulate three years of required on-site experience. In parallel, I will study through the UK OTHM diploma program toward an accredited British Bachelor’s degree, sit for the Qualified Energy Manager and Building Manager exams, prepare for Cisco CCNP Enterprise, and maintain IELTS scores within the 2-year renewal window.
+                  {ui.roadmapCol2Body}
                 </p>
               </div>
               <div className="pt-6 mt-6 border-t border-white/10 text-xs text-[#c29c6d] font-medium">
-                Target: 3-Year Field Work • UK OTHM Degree • Facility Licenses
+                {ui.roadmapCol2Footer}
               </div>
             </div>
 
-            {/* Column 3: Career Leap & Research (2031 & Beyond) */}
+            {/* Column 3: Career Leap & Research */}
             <div className="bg-white/5 p-8 sm:p-9 rounded-2xl border border-white/10 flex flex-col justify-between hover:bg-white/[0.07] transition-colors">
               <div className="space-y-5">
                 <div className="space-y-1">
                   <span className="text-xs uppercase tracking-wider font-semibold text-[#c29c6d] block font-sans">
-                    2031 & Beyond
+                    {ui.roadmapCol3Tag}
                   </span>
                   <h3 className="font-serif italic text-2xl sm:text-3xl text-[#d4a373] leading-snug">
-                    "Data centers & graduate research"
+                    {ui.roadmapCol3Title}
                   </h3>
                 </div>
                 <div className="border-t border-[#c29c6d]/30 w-16 my-3"></div>
                 <p className="text-sm sm:text-base text-[#F5F4F0]/90 leading-relaxed font-light">
-                  Transitioning into mission-critical facilities, such as enterprise data centers or multinational corporations, leveraging platforms like LinkedIn to address Japan’s aging technical workforce shortage. Concurrently, I plan to enroll in an online or international Master’s program (UK or Australia) to pursue advanced graduate studies and engage in long-term engineering research.
+                  {ui.roadmapCol3Body}
                 </p>
               </div>
               <div className="pt-6 mt-6 border-t border-white/10 text-xs text-[#c29c6d] font-medium">
-                Goal: Data Centers • International Master’s • Long-Term Research
+                {ui.roadmapCol3Footer}
               </div>
             </div>
           </div>
@@ -959,7 +808,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row items-center justify-between w-full border-b border-[#c29c6d]/60 pb-10 gap-6">
             <div>
               <span className="text-xs uppercase tracking-widest text-[#eed6be] font-sans block mb-1">
-                Direct Contact
+                {ui.footerContact}
               </span>
               <a
                 href="mailto:mikadorikuto@gmail.com"
@@ -990,7 +839,7 @@ export default function App() {
           </div>
 
           <div className="text-center font-sans text-xs text-[#eed6be]/80 tracking-wide">
-            © 2026 Rikuto Mikado. All rights reserved.
+            {ui.copyright}
           </div>
         </div>
       </footer>
