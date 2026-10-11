@@ -160,6 +160,14 @@ function InstagramIcon({ className = 'w-6 h-6' }: { className?: string }) {
   )
 }
 
+function SpotifyIcon({ className = 'w-6 h-6' }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.495 17.297c-.214.351-.673.463-1.024.249-2.809-1.716-6.345-2.104-10.51-1.151-.4.092-.796-.157-.887-.557-.092-.4.157-.796.557-.887 4.567-1.044 8.49-.607 11.615 1.302.351.214.463.673.249 1.024zm1.465-3.262c-.27.439-.844.577-1.282.308-3.218-1.978-8.125-2.55-11.932-1.394-.494.15-1.02-.133-1.17-.626-.15-.494.133-1.02.626-1.17 4.355-1.321 9.778-.68 13.45 1.58.439.27.577.844.308 1.282zm.126-3.41c-3.858-2.29-10.222-2.502-13.896-1.387-.592.179-1.222-.158-1.401-.75-.179-.592.158-1.222.75-1.401 4.225-1.282 11.246-1.036 15.694 1.604.533.316.707 1.01.391 1.543-.316.533-1.01.707-1.543.391z"/>
+    </svg>
+  )
+}
+
 const socialLinks = [
   {
     name: 'GitHub',
@@ -175,6 +183,11 @@ const socialLinks = [
     name: 'Instagram',
     url: 'https://www.instagram.com/rikuto_jpn/',
     icon: InstagramIcon,
+  },
+  {
+    name: 'Spotify',
+    url: 'https://open.spotify.com/user/31ziidnuokqdfrdhwhyug37jxbli?si=4996df09eae84262',
+    icon: SpotifyIcon,
   },
 ]
 
@@ -299,21 +312,28 @@ export default function App() {
 
       {/* 2. About Section */}
       <section className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 overflow-hidden ${
-        isDark ? 'border-[#262320]' : 'border-[#e6e2d8]'
+        isDark ? 'bg-[#181614] border-[#262320]' : 'border-[#e6e2d8]'
       }`}>
         {/* Subtle Atmospheric Landscape Background Layer (Roots & Heritage) */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          {isDark && (
+            <div className="absolute inset-0 bg-gradient-to-r from-[#181614]/80 via-transparent to-[#221c17]/30 z-10 pointer-events-none" />
+          )}
           <img
             src={urakawaLandscape}
             alt=""
             className={`w-full h-full object-cover object-[85%_35%] transition-opacity duration-700 ${
               isDark
-                ? 'opacity-[0.14] filter contrast-125 brightness-75 saturate-[0.8]'
+                ? 'opacity-[0.30] filter contrast-110 brightness-100 saturate-[0.85]'
                 : 'opacity-[0.18] filter contrast-105 saturate-[0.9]'
             }`}
             style={{
-              maskImage: 'radial-gradient(ellipse 75% 85% at 80% 45%, black 25%, rgba(0,0,0,0.35) 65%, transparent 95%)',
-              WebkitMaskImage: 'radial-gradient(ellipse 75% 85% at 80% 45%, black 25%, rgba(0,0,0,0.35) 65%, transparent 95%)',
+              maskImage: isDark
+                ? 'radial-gradient(ellipse 85% 90% at 75% 45%, black 35%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.2) 100%)'
+                : 'radial-gradient(ellipse 75% 85% at 80% 45%, black 25%, rgba(0,0,0,0.35) 65%, transparent 95%)',
+              WebkitMaskImage: isDark
+                ? 'radial-gradient(ellipse 85% 90% at 75% 45%, black 35%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.2) 100%)'
+                : 'radial-gradient(ellipse 75% 85% at 80% 45%, black 25%, rgba(0,0,0,0.35) 65%, transparent 95%)',
             }}
           />
         </div>
