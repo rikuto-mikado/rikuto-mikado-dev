@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import LightTrails from './components/LightTrails'
 import certFullstackWeb from './assets/cert-fullstack-web.png'
 import certIndianCooking from './assets/cert-indian-cooking.png'
 import certPythonBootcamp from './assets/cert-python-bootcamp.png'
@@ -189,10 +190,12 @@ export default function App() {
   }, [])
 
   return (
-    <div className="flex flex-col min-h-screen font-serif text-gray-800 bg-[#F5F4F0] selection:bg-[#9A4C22] selection:text-white">
+    <div className="relative flex flex-col min-h-screen font-serif text-gray-800 bg-[#F5F4F0] selection:bg-[#9A4C22] selection:text-white">
+      {/* Background Light Trails & Flowing Particle Effect */}
+      <LightTrails />
       
       {/* 1. Hero Section */}
-      <section className="w-full min-h-[75vh] md:min-h-[85vh] flex flex-col justify-between items-center py-16 md:py-24 px-6 relative">
+      <section className="relative z-10 w-full min-h-[75vh] md:min-h-[85vh] flex flex-col justify-between items-center py-16 md:py-24 px-6">
         <div className="w-full"></div>
 
         {/* Hero content card */}
@@ -234,7 +237,7 @@ export default function App() {
       </section>
 
       {/* 2. About Section */}
-      <section className="w-full bg-[#F5F4F0] py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
+      <section className="relative z-10 w-full py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
           {/* Left: Detailed Narrative (7 cols on lg) */}
@@ -312,7 +315,7 @@ export default function App() {
       </section>
 
       {/* 3. Background & Experience Section */}
-      <section className="w-full bg-[#F5F4F0] py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
+      <section className="relative z-10 w-full py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
@@ -375,7 +378,7 @@ export default function App() {
       </section>
 
       {/* 4. Courses & Continuous Learning (Udemy Certificates) */}
-      <section className="w-full bg-[#F5F4F0] py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
+      <section className="relative z-10 w-full py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
@@ -516,8 +519,9 @@ export default function App() {
       )}
 
       {/* 5. Roadmap & Vision Section */}
-      <section className="w-full bg-[#344432] text-[#F5F4F0] py-28 px-6">
-        <div className="max-w-6xl mx-auto">
+      <section className="relative w-full text-[#F5F4F0] py-28 px-6">
+        <div className="absolute inset-0 bg-[#344432] z-0 pointer-events-none" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#c29c6d] font-semibold block">
               Strategic Progression
@@ -596,8 +600,9 @@ export default function App() {
       </section>
 
       {/* 6. Footer Section */}
-      <footer className="w-full bg-[#9A4C22] text-[#F5F4F0] py-20 px-6">
-        <div className="max-w-4xl mx-auto flex flex-col items-center space-y-10">
+      <footer className="relative w-full text-[#F5F4F0] py-20 px-6">
+        <div className="absolute inset-0 bg-[#9A4C22] z-0 pointer-events-none" />
+        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center space-y-10">
           <div className="flex flex-col md:flex-row items-center justify-between w-full border-b border-[#c29c6d]/60 pb-10 gap-6">
             <div>
               <span className="text-xs uppercase tracking-widest text-[#eed6be] font-sans block mb-1">
