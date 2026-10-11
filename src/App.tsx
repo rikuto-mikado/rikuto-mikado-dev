@@ -5,7 +5,9 @@ import certIndianCooking from './assets/cert-indian-cooking.png'
 import certPythonBootcamp from './assets/cert-python-bootcamp.png'
 import certPythonMega from './assets/cert-python-mega.png'
 import myfaceImg from './assets/myface.jpeg'
-import heroLogo from './assets/favicon-02.png'
+import logoForDay from './assets/favicon-02.png'  // Black circular badge for day
+import logoForNight from './assets/01-original.png' // Cream circular badge for night
+import urakawaLandscape from './assets/urakawa-landscape.png'
 
 interface TimelineItem {
   period: string
@@ -178,6 +180,30 @@ const socialLinks = [
 
 export default function App() {
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme')
+      if (saved) return saved === 'dark'
+      return window.matchMedia('(prefers-color-scheme: dark)').matches
+    }
+    return false
+  })
+
+  useEffect(() => {
+    localStorage.setItem('theme', isDark ? 'dark' : 'light')
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+
+    // Dynamically update browser tab favicon (swapped as requested)
+    const favicons = document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']")
+    favicons.forEach((favicon) => {
+      favicon.removeAttribute('media')
+      favicon.href = isDark ? '/favicon-light.png' : '/favicon-dark.png'
+    })
+  }, [isDark])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -190,7 +216,32 @@ export default function App() {
   }, [])
 
   return (
-    <div className="relative flex flex-col min-h-screen font-serif text-gray-800 bg-[#F5F4F0] selection:bg-[#9A4C22] selection:text-white">
+    <div
+      className={`relative flex flex-col min-h-screen font-serif transition-colors duration-500 selection:bg-[#9A4C22] selection:text-white ${
+        isDark ? 'bg-[#131211] text-[#E8E4DD]' : 'bg-[#F5F4F0] text-gray-800'
+      }`}
+    >
+      {/* Fixed Dark Mode Toggle Button */}
+      <button
+        onClick={() => setIsDark((prev) => !prev)}
+        aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+        className={`fixed top-5 right-5 sm:top-6 sm:right-6 z-50 p-2.5 sm:p-3 rounded-full border shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 backdrop-blur-md cursor-pointer ${
+          isDark
+            ? 'bg-[#1C1A18]/85 text-[#F5C563] border-[#3A352F] hover:bg-[#282522] hover:border-[#D4A373]'
+            : 'bg-[#F5F4F0]/85 text-[#9A4C22] border-[#d4a373]/60 hover:bg-white hover:border-[#9A4C22]'
+        }`}
+      >
+        {isDark ? (
+          <svg className="w-5 h-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5 -rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        )}
+      </button>
+
       {/* Background Light Trails & Flowing Particle Effect */}
       <LightTrails />
       
@@ -203,17 +254,21 @@ export default function App() {
           {/* Brand Logo */}
           <div className="flex justify-center items-center">
             <img
-              src={heroLogo}
+              src={isDark ? logoForNight : logoForDay}
               alt="RIKUTO"
               className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-sm hover:scale-105 transition-transform duration-300"
             />
           </div>
 
           {/* Top dashed divider */}
-          <div className="border-t-2 border-dashed border-[#d4a373] w-3/4 max-w-lg mx-auto"></div>
+          <div className={`border-t-2 border-dashed w-3/4 max-w-lg mx-auto transition-colors duration-500 ${
+            isDark ? 'border-[#d4a373]/50' : 'border-[#d4a373]'
+          }`}></div>
 
           <div className="space-y-4">
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-[#231f1d] leading-[1.08]">
+            <h1 className={`text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] transition-colors duration-500 ${
+              isDark ? 'text-[#F5F3EE]' : 'text-[#231f1d]'
+            }`}>
               Hello, I am <span className="italic font-normal text-[#9A4C22]">Rikuto.</span>
             </h1>
             <p className="text-xs sm:text-sm md:text-base font-sans uppercase tracking-[0.22em] text-[#9A4C22] font-semibold">
@@ -221,24 +276,49 @@ export default function App() {
             </p>
           </div>
 
-          <p className="text-base sm:text-lg md:text-2xl text-gray-700 max-w-2xl mx-auto leading-relaxed font-sans font-light px-2">
+          <p className={`text-base sm:text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed font-sans font-light px-2 transition-colors duration-500 ${
+            isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
+          }`}>
             Securing a physical insurance policy in the AI era. Anchoring software capabilities in the electrical and hardware infrastructure that powers modern civilization.
           </p>
 
           {/* Bottom dashed divider */}
-          <div className="border-t-2 border-dashed border-[#d4a373] w-3/4 max-w-lg mx-auto"></div>
+          <div className={`border-t-2 border-dashed w-3/4 max-w-lg mx-auto transition-colors duration-500 ${
+            isDark ? 'border-[#d4a373]/50' : 'border-[#d4a373]'
+          }`}></div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="text-center flex flex-col items-center gap-2 text-xs font-sans text-gray-500 uppercase tracking-widest pt-6">
+        <div className={`text-center flex flex-col items-center gap-2 text-xs font-sans uppercase tracking-widest pt-6 transition-colors duration-500 ${
+          isDark ? 'text-gray-400' : 'text-gray-500'
+        }`}>
           <span>Scroll to explore</span>
           <div className="w-px h-8 bg-gradient-to-b from-[#9A4C22] to-transparent"></div>
         </div>
       </section>
 
       {/* 2. About Section */}
-      <section className="relative z-10 w-full py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <section className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 overflow-hidden ${
+        isDark ? 'border-[#262320]' : 'border-[#e6e2d8]'
+      }`}>
+        {/* Subtle Atmospheric Landscape Background Layer (Roots & Heritage) */}
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          <img
+            src={urakawaLandscape}
+            alt=""
+            className={`w-full h-full object-cover object-[85%_35%] transition-opacity duration-700 ${
+              isDark
+                ? 'opacity-[0.14] filter contrast-125 brightness-75 saturate-[0.8]'
+                : 'opacity-[0.18] filter contrast-105 saturate-[0.9]'
+            }`}
+            style={{
+              maskImage: 'radial-gradient(ellipse 75% 85% at 80% 45%, black 25%, rgba(0,0,0,0.35) 65%, transparent 95%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 75% 85% at 80% 45%, black 25%, rgba(0,0,0,0.35) 65%, transparent 95%)',
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
           {/* Left: Detailed Narrative (7 cols on lg) */}
           <div className="lg:col-span-7 space-y-8">
@@ -252,46 +332,62 @@ export default function App() {
             </div>
 
             {/* Core Mission Statement */}
-            <div className="p-6 rounded-2xl bg-[#ede8de] border-l-4 border-[#9A4C22] space-y-2">
-              <p className="text-xl md:text-2xl font-serif italic text-gray-900 leading-snug">
+            <div className={`p-6 rounded-2xl border-l-4 border-[#9A4C22] space-y-2 transition-colors duration-500 ${
+              isDark ? 'bg-[#1E1C1A]' : 'bg-[#ede8de]'
+            }`}>
+              <p className={`text-xl md:text-2xl font-serif italic leading-snug transition-colors duration-500 ${
+                isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
+              }`}>
                 "My long-term goal is to pursue knowledge, eventually engage in agriculture, and help preserve human creativity."
               </p>
             </div>
 
             {/* Detailed Body Paragraphs */}
-            <div className="space-y-5 font-sans text-gray-700 text-base md:text-lg leading-relaxed font-light">
+            <div className={`space-y-5 font-sans text-base md:text-lg leading-relaxed font-light transition-colors duration-500 ${
+              isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
+            }`}>
               <p>
-                Although I originally trained in full-stack development, observing the rapid trajectory of large language models and generative AI convinced me to secure a <strong className="font-semibold text-gray-900">"physical insurance policy."</strong> True resilience lies in understanding and operating the physical layer—the electrical grids, circuitry, and physical infrastructure that underpin all digital systems.
+                Although I originally trained in full-stack development, observing the rapid trajectory of large language models and generative AI convinced me to secure a <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>"physical insurance policy."</strong> True resilience lies in understanding and operating the physical layer—the electrical grids, circuitry, and physical infrastructure that underpin all digital systems.
               </p>
 
               <p>
-                To realize this transition, I plan to pursue advanced technical institute training in Electrical Engineering. I am actively working toward key national licenses, including <strong className="font-semibold text-gray-900">Third-Class Chief Electrical Engineer</strong> and <strong className="font-semibold text-gray-900">First-Class Electrician</strong>, alongside global network credentials such as <strong className="font-semibold text-gray-900">Cisco CCNP Enterprise</strong>. To support my mid-term international opportunities, I am targeting an <strong className="font-semibold text-gray-900">IELTS Academic score of 6.5+</strong>.
+                To realize this transition, I plan to pursue advanced technical institute training in Electrical Engineering. I am actively working toward key national licenses, including <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Third-Class Chief Electrical Engineer</strong> and <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>First-Class Electrician</strong>, alongside global network credentials such as <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Cisco CCNP Enterprise</strong>. To support my mid-term international opportunities, I am targeting an <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>IELTS Academic score of 6.5+</strong>.
               </p>
 
               <p>
-                In two years, as I enter the industry to accumulate at least 3 years of hands-on field experience, I plan to concurrently advance through the <strong className="font-semibold text-gray-900">OTHM Diploma pathway</strong> toward an accredited UK Bachelor’s degree. Meanwhile, full-stack development remains a high-leverage additional tool, giving me unique cross-disciplinary adaptability.
+                In two years, as I enter the industry to accumulate at least 3 years of hands-on field experience, I plan to concurrently advance through the <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>OTHM Diploma pathway</strong> toward an accredited UK Bachelor’s degree. Meanwhile, full-stack development remains a high-leverage additional tool, giving me unique cross-disciplinary adaptability.
               </p>
             </div>
 
             {/* Focus Badges */}
             <div className="pt-2 flex flex-wrap gap-2.5">
-              <span className="px-3.5 py-1.5 rounded-full text-xs font-sans bg-[#eae4da] text-[#783515] border border-[#d6ccbd] font-medium">
+              <span className={`px-3.5 py-1.5 rounded-full text-xs font-sans font-medium transition-colors duration-500 ${
+                isDark
+                  ? 'bg-[#22201D] text-[#E0A96D] border border-[#3A352F]'
+                  : 'bg-[#eae4da] text-[#783515] border border-[#d6ccbd]'
+              }`}>
                 ⚡ Electrical Engineering & Infrastructure
               </span>
-              <span className="px-3.5 py-1.5 rounded-full text-xs font-sans bg-[#eae4da] text-[#783515] border border-[#d6ccbd] font-medium">
+              <span className={`px-3.5 py-1.5 rounded-full text-xs font-sans font-medium transition-colors duration-500 ${
+                isDark
+                  ? 'bg-[#22201D] text-[#E0A96D] border border-[#3A352F]'
+                  : 'bg-[#eae4da] text-[#783515] border border-[#d6ccbd]'
+              }`}>
                 💻 Full-Stack Development
               </span>
             </div>
           </div>
 
           {/* Right: Arch Profile Photo */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:sticky lg:top-12">
+          <div className="lg:col-span-5 flex flex-col items-center lg:sticky lg:top-16">
             <div className="relative group">
               {/* Outer decorative dashed frame */}
-              <div className="absolute -inset-2.5 rounded-t-full border-2 border-dashed border-[#d4a373] pointer-events-none"></div>
+              <div className="absolute -inset-3 rounded-t-full border-2 border-dashed border-[#d4a373] pointer-events-none"></div>
 
-              {/* Arch container */}
-              <div className="relative w-64 sm:w-72 h-88 sm:h-96 rounded-t-full overflow-hidden shadow-2xl border-4 border-white bg-gray-200">
+              {/* Arch container: compact on mobile, prominently enlarged on desktop */}
+              <div className={`relative w-64 sm:w-72 lg:w-80 xl:w-[22rem] h-84 sm:h-96 lg:h-[28rem] xl:h-[31rem] rounded-t-full overflow-hidden shadow-2xl border-4 transition-all duration-500 ${
+                isDark ? 'border-[#2D2A26] bg-[#1E1C1A]' : 'border-white bg-gray-200'
+              }`}>
                 <img
                   src={myfaceImg}
                   alt="Rikuto Mikado"
@@ -300,13 +396,31 @@ export default function App() {
               </div>
             </div>
 
-            <div className="mt-6 text-center space-y-1">
-              <p className="font-serif italic text-xl text-gray-900">Rikuto Mikado</p>
-              <p className="font-sans text-xs uppercase tracking-wider text-[#9A4C22] font-semibold">
+            <div className="mt-6 text-center space-y-1.5">
+              <p className={`font-serif italic text-2xl transition-colors duration-500 ${
+                isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
+              }`}>Rikuto Mikado</p>
+              <p className="text-xs font-sans uppercase tracking-[0.2em] text-[#9A4C22] font-semibold">
                 Urakawa / Sapporo, Hokkaido, Japan
               </p>
-              <p className="font-sans text-xs text-gray-500 font-light">
+              <p className={`font-sans text-xs font-light transition-colors duration-500 ${
+                isDark ? 'text-gray-400' : 'text-gray-500'
+              }`}>
                 Physical Layer • Systems • Autonomous Learning
+              </p>
+            </div>
+
+            {/* Subtle Roots / Origin card connecting to the background scenery */}
+            <div className={`mt-5 px-5 py-3 rounded-xl border text-center transition-colors duration-500 w-full max-w-[280px] sm:max-w-xs ${
+              isDark
+                ? 'bg-[#181615]/85 border-[#2D2A26] text-gray-400'
+                : 'bg-[#ede8de]/80 border-[#dcd6c9] text-gray-600'
+            }`}>
+              <span className="block text-[11px] font-sans uppercase tracking-widest text-[#9A4C22] font-semibold">
+                Origin & Landscape
+              </span>
+              <p className="text-xs font-sans font-light mt-0.5">
+                Hidaka Coastal Region • Hokkaido, Japan
               </p>
             </div>
           </div>
@@ -315,7 +429,9 @@ export default function App() {
       </section>
 
       {/* 3. Background & Experience Section */}
-      <section className="relative z-10 w-full py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
+      <section className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 ${
+        isDark ? 'border-[#262320]' : 'border-[#e6e2d8]'
+      }`}>
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
@@ -324,7 +440,9 @@ export default function App() {
             <h2 className="text-4xl md:text-5xl text-[#9A4C22] italic font-serif">
               Experience & Milestones
             </h2>
-            <p className="text-base font-sans text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className={`text-base font-sans max-w-2xl mx-auto leading-relaxed transition-colors duration-500 ${
+              isDark ? 'text-gray-400' : 'text-gray-600'
+            }`}>
               A transparent chronicle of self-directed exploration, strategic recalibrations, and proactive skill acquisition.
             </p>
           </div>
@@ -338,36 +456,48 @@ export default function App() {
 
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-block text-xs font-sans font-semibold uppercase tracking-wider text-[#9A4C22] bg-[#eae4da] px-3 py-0.5 rounded-full border border-[#d6ccbd]">
+                    <span className={`inline-block text-xs font-sans font-semibold uppercase tracking-wider px-3 py-0.5 rounded-full transition-colors duration-500 ${
+                      isDark
+                        ? 'text-[#E0A96D] bg-[#22201D] border border-[#3A352F]'
+                        : 'text-[#9A4C22] bg-[#eae4da] border border-[#d6ccbd]'
+                    }`}>
                       {item.period}
                     </span>
                     {item.duration && (
-                      <span className="text-xs font-sans text-gray-500">
+                      <span className={`text-xs font-sans transition-colors duration-500 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                         • {item.duration}
                       </span>
                     )}
                     {item.location && (
-                      <span className="text-xs font-sans text-gray-400">
+                      <span className={`text-xs font-sans transition-colors duration-500 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
                         • {item.location}
                       </span>
                     )}
                     {item.isCurrent && (
-                      <span className="inline-block text-xs font-sans font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                      <span className={`inline-block text-xs font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full transition-colors duration-500 ${
+                        isDark ? 'text-emerald-300 bg-emerald-950/70 border border-emerald-800/60' : 'text-emerald-800 bg-emerald-100'
+                      }`}>
                         Current Focus
                       </span>
                     )}
                     {item.isUpcoming && (
-                      <span className="inline-block text-xs font-sans font-semibold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                      <span className={`inline-block text-xs font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full transition-colors duration-500 ${
+                        isDark ? 'text-amber-300 bg-amber-950/70 border border-amber-800/60' : 'text-amber-800 bg-amber-100'
+                      }`}>
                         Roadmap
                       </span>
                     )}
                   </div>
 
-                  <h3 className="font-serif italic text-xl md:text-2xl text-gray-900 font-semibold leading-snug">
+                  <h3 className={`font-serif italic text-xl md:text-2xl font-semibold leading-snug transition-colors duration-500 ${
+                    isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
+                  }`}>
                     {item.title}
                   </h3>
 
-                  <p className="font-sans text-sm md:text-base text-gray-700 leading-relaxed font-light">
+                  <p className={`font-sans text-sm md:text-base leading-relaxed font-light transition-colors duration-500 ${
+                    isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
+                  }`}>
                     {item.narrative}
                   </p>
                 </div>
@@ -378,7 +508,9 @@ export default function App() {
       </section>
 
       {/* 4. Courses & Continuous Learning (Udemy Certificates) */}
-      <section className="relative z-10 w-full py-24 md:py-32 px-6 border-t border-[#e6e2d8]">
+      <section className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 ${
+        isDark ? 'border-[#262320]' : 'border-[#e6e2d8]'
+      }`}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
@@ -387,7 +519,9 @@ export default function App() {
             <h2 className="text-4xl md:text-5xl text-[#9A4C22] italic font-serif">
               Courses & Continuous Learning
             </h2>
-            <p className="text-base font-sans text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className={`text-base font-sans max-w-2xl mx-auto leading-relaxed transition-colors duration-500 ${
+              isDark ? 'text-gray-400' : 'text-gray-600'
+            }`}>
               Certified coursework completed through intensive independent study across software engineering, AI tooling, and essential life skills. Click any certificate to inspect credentials.
             </p>
           </div>
@@ -398,10 +532,16 @@ export default function App() {
               <div
                 key={idx}
                 onClick={() => setSelectedCert(course)}
-                className="group cursor-pointer bg-white rounded-2xl overflow-hidden border border-[#e5ded4] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1"
+                className={`group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1 ${
+                  isDark
+                    ? 'bg-[#1C1A18] border border-[#2D2A26] shadow-md hover:shadow-2xl hover:border-[#D4A373]/50'
+                    : 'bg-white border border-[#e5ded4] shadow-sm hover:shadow-xl hover:border-[#d4a373]'
+                }`}
               >
                 {/* Certificate image preview container */}
-                <div className="relative aspect-[16/10] bg-gray-100 overflow-hidden border-b border-[#ece6dd]">
+                <div className={`relative aspect-[16/10] overflow-hidden border-b transition-colors duration-500 ${
+                  isDark ? 'bg-[#151413] border-[#2D2A26]' : 'bg-gray-100 border-[#ece6dd]'
+                }`}>
                   <img
                     src={course.image}
                     alt={course.title}
@@ -419,29 +559,43 @@ export default function App() {
                 <div className="p-6 md:p-7 space-y-4 flex-1 flex flex-col justify-between">
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between text-xs font-sans font-semibold">
-                      <span className="uppercase tracking-wider text-[#9A4C22] bg-[#F5F4F0] px-2.5 py-1 rounded-md border border-[#e3dbcd]">
+                      <span className={`uppercase tracking-wider px-2.5 py-1 rounded-md transition-colors duration-500 ${
+                        isDark
+                          ? 'text-[#E0A96D] bg-[#24211D] border border-[#3A352F]'
+                          : 'text-[#9A4C22] bg-[#F5F4F0] border border-[#e3dbcd]'
+                      }`}>
                         {course.category}
                       </span>
-                      <span className="text-gray-500">{course.date}</span>
+                      <span className={`transition-colors duration-500 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{course.date}</span>
                     </div>
 
-                    <h3 className="font-serif text-lg md:text-xl font-bold text-gray-900 leading-snug group-hover:text-[#9A4C22] transition-colors">
+                    <h3 className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 ${
+                      isDark
+                        ? 'text-[#F5F3EE] group-hover:text-[#E0A96D]'
+                        : 'text-gray-900 group-hover:text-[#9A4C22]'
+                    }`}>
                       {course.title}
                     </h3>
 
                     {course.note && (
-                      <p className="font-sans text-xs sm:text-sm text-gray-600 leading-relaxed font-light">
+                      <p className={`font-sans text-xs sm:text-sm leading-relaxed font-light transition-colors duration-500 ${
+                        isDark ? 'text-[#C4BEB4]' : 'text-gray-600'
+                      }`}>
                         {course.note}
                       </p>
                     )}
                   </div>
 
                   {/* Metadata footer */}
-                  <div className="pt-3 border-t border-[#f0ebe3] flex items-center justify-between text-xs font-sans text-gray-600">
+                  <div className={`pt-3 border-t flex items-center justify-between text-xs font-sans transition-colors duration-500 ${
+                    isDark ? 'border-[#262320] text-gray-400' : 'border-[#f0ebe3] text-gray-600'
+                  }`}>
                     <span>
-                      Instructor: <strong className="font-medium text-gray-800">{course.instructor}</strong>
+                      Instructor: <strong className={`font-medium transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{course.instructor}</strong>
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-gray-100 font-medium">
+                    <span className={`px-2 py-0.5 rounded font-medium transition-colors duration-500 ${
+                      isDark ? 'bg-[#262320] text-gray-300' : 'bg-gray-100 text-gray-800'
+                    }`}>
                       {course.hours}
                     </span>
                   </div>
@@ -461,16 +615,22 @@ export default function App() {
           onClick={() => setSelectedCert(null)}
         >
           <div
-            className="relative bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 sm:p-8 space-y-5"
+            className={`relative rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 sm:p-8 space-y-5 transition-colors duration-300 ${
+              isDark ? 'bg-[#181615] text-[#E8E4DD]' : 'bg-white text-gray-800'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header with close button */}
-            <div className="flex items-start justify-between border-b border-gray-200 pb-4">
+            <div className={`flex items-start justify-between border-b pb-4 transition-colors duration-300 ${
+              isDark ? 'border-[#2E2B27]' : 'border-gray-200'
+            }`}>
               <div>
                 <span className="text-xs uppercase tracking-wider font-sans font-semibold text-[#9A4C22]">
                   {selectedCert.platform} Certificate of Completion
                 </span>
-                <h3 className="font-serif text-2xl font-bold text-gray-900 mt-1">
+                <h3 className={`font-serif text-2xl font-bold mt-1 transition-colors duration-300 ${
+                  isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
+                }`}>
                   {selectedCert.title}
                 </h3>
               </div>
@@ -478,14 +638,18 @@ export default function App() {
                 type="button"
                 onClick={() => setSelectedCert(null)}
                 aria-label="Close modal"
-                className="text-gray-400 hover:text-gray-800 text-3xl font-light leading-none p-1 transition-colors"
+                className={`text-3xl font-light leading-none p-1 transition-colors ${
+                  isDark ? 'text-gray-400 hover:text-white' : 'text-gray-400 hover:text-gray-800'
+                }`}
               >
                 &times;
               </button>
             </div>
 
             {/* Full certificate image */}
-            <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 shadow-inner">
+            <div className={`rounded-xl overflow-hidden border shadow-inner transition-colors duration-300 ${
+              isDark ? 'border-[#2E2B27] bg-[#121110]' : 'border-gray-200 bg-gray-50'
+            }`}>
               <img
                 src={selectedCert.image}
                 alt={selectedCert.title}
@@ -494,22 +658,24 @@ export default function App() {
             </div>
 
             {/* Footer metadata */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2 text-xs font-sans text-gray-600">
+            <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2 text-xs font-sans transition-colors duration-300 ${
+              isDark ? 'text-gray-400' : 'text-gray-600'
+            }`}>
               <div>
                 <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Instructor</span>
-                <span className="font-semibold text-gray-800">{selectedCert.instructor}</span>
+                <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{selectedCert.instructor}</span>
               </div>
               <div>
                 <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Date</span>
-                <span className="font-semibold text-gray-800">{selectedCert.date}</span>
+                <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{selectedCert.date}</span>
               </div>
               <div>
                 <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Length</span>
-                <span className="font-semibold text-gray-800">{selectedCert.hours}</span>
+                <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{selectedCert.hours}</span>
               </div>
               <div>
                 <span className="block text-gray-400 uppercase text-[10px] tracking-wider">Certificate ID</span>
-                <span className="font-mono text-gray-800 truncate block" title={selectedCert.certificateId}>
+                <span className={`font-mono truncate block transition-colors duration-300 ${isDark ? 'text-[#D4A373]' : 'text-gray-800'}`} title={selectedCert.certificateId}>
                   {selectedCert.certificateId.slice(0, 15)}...
                 </span>
               </div>
