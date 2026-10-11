@@ -1,4 +1,4 @@
-import{ useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LightTrails from './components/LightTrails'
 import Sidebar from './components/Sidebar'
 import type { Language, CourseItem } from './data/translations'
@@ -75,14 +75,16 @@ const socialLinks = [
 ]
 
 export default function App() {
+  // Set to true once Japanese translation review is finalized
+  const isJapaneseAvailable = false
+
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('about')
   const [lang, setLang] = useState<Language>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('preferred_lang')
-      if (saved === 'ja' || saved === 'en') return saved
-      return navigator.language.startsWith('ja') ? 'ja' : 'en'
+      if (isJapaneseAvailable && (saved === 'ja' || saved === 'en')) return saved
     }
     return 'en'
   })
@@ -94,6 +96,28 @@ export default function App() {
     }
     return false
   })
+
+  // Coming Soon Toast notification state
+  const [toastMessage, setToastMessage] = useState<{ main: string; sub: string } | null>(null)
+  const toastTimeoutRef = useRef<number | null>(null)
+
+  const triggerToast = (main: string, sub: string) => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current)
+    }
+    setToastMessage({ main, sub })
+    toastTimeoutRef.current = window.setTimeout(() => {
+      setToastMessage(null)
+    }, 2800)
+  }
+
+  const toggleLang = () => {
+    if (!isJapaneseAvailable) {
+      triggerToast('日本語版は現在精査中です (近日公開予定)', 'Japanese translation is currently under review.')
+      return
+    }
+    setLang((prev) => (prev === 'en' ? 'ja' : 'en'))
+  }
 
   const ui = uiText[lang]
   const timelineEvents = timelineEventsData[lang]
@@ -119,10 +143,6 @@ export default function App() {
     localStorage.setItem('preferred_lang', lang)
     document.documentElement.lang = lang
   }, [lang])
-
-  const toggleLang = () => {
-    setLang((prev) => (prev === 'en' ? 'ja' : 'en'))
-  }
 
   // Scrollspy: update active section during scroll
   useEffect(() => {
@@ -245,6 +265,48 @@ export default function App() {
         </button>
       </div>
 
+      {/* Floating Coming Soon Toast Notification */}
+      {toastMessage && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-16 right-4 sm:top-20 sm:right-6 z-50 max-w-sm px-4 py-3 rounded-2xl border shadow-2xl backdrop-blur-md transition-all duration-300 ${
+            isDark
+              ? 'bg-[#1C1A18]/95 border-[#E0A96D]/50 text-[#F5F3EE]'
+              : 'bg-[#FAF8F5]/95 border-[#9A4C22]/50 text-gray-900'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div
+              className={`p-1.5 rounded-full mt-0.5 shrink-0 ${
+                isDark ? 'bg-[#E0A96D]/15 text-[#E0A96D]' : 'bg-[#9A4C22]/15 text-[#9A4C22]'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1 pr-1">
+              <p className="font-sans text-xs sm:text-sm font-semibold leading-snug">
+                {toastMessage.main}
+              </p>
+              <p className={`font-sans text-[11px] sm:text-xs mt-0.5 leading-snug ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                {toastMessage.sub}
+              </p>
+            </div>
+            <button
+              onClick={() => setToastMessage(null)}
+              className={`p-1 rounded-md text-xs opacity-60 hover:opacity-100 transition-opacity cursor-pointer ${
+                isDark ? 'hover:bg-white/10' : 'hover:bg-black/5'
+              }`}
+              aria-label="Close notification"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Slide-over Navigation Sidebar Drawer */}
       <Sidebar
         isOpen={isSidebarOpen}
@@ -253,6 +315,7 @@ export default function App() {
         onToggleTheme={() => setIsDark((prev) => !prev)}
         lang={lang}
         onToggleLang={toggleLang}
+        isJapaneseAvailable={isJapaneseAvailable}
         activeSection={activeSection}
         logoSrc={isDark ? logoForNight : logoForDay}
         socialLinks={socialLinks}

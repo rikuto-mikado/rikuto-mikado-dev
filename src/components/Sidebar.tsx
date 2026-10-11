@@ -9,6 +9,7 @@ interface SidebarProps {
   onToggleTheme: () => void
   lang: Language
   onToggleLang: () => void
+  isJapaneseAvailable?: boolean
   activeSection: string
   logoSrc: string
   socialLinks: {
@@ -25,6 +26,7 @@ export default function Sidebar({
   onToggleTheme,
   lang,
   onToggleLang,
+  isJapaneseAvailable = false,
   activeSection,
   logoSrc,
   socialLinks,
@@ -330,7 +332,11 @@ export default function Sidebar({
                   {lang === 'en' ? 'English' : '日本語'}
                 </p>
                 <span className="text-[10px] font-sans text-gray-400">
-                  {lang === 'en' ? 'Switch to Japanese' : '英語表示に切り替え'}
+                  {!isJapaneseAvailable
+                    ? '日本語版は準備中 (Under Review)'
+                    : lang === 'en'
+                    ? 'Switch to Japanese'
+                    : '英語表示に切り替え'}
                 </span>
               </div>
             </div>
@@ -344,7 +350,7 @@ export default function Sidebar({
                   : 'bg-white hover:bg-gray-50 text-[#9A4C22] border border-[#d4a373]/60 shadow-xs'
               }`}
             >
-              {ui.langToggle}
+              {!isJapaneseAvailable ? '準備中 (Soon)' : ui.langToggle}
             </button>
           </div>
 
