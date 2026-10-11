@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import LightTrails from './components/LightTrails'
+import Sidebar from './components/Sidebar'
 import certFullstackWeb from './assets/cert-fullstack-web.png'
 import certIndianCooking from './assets/cert-indian-cooking.png'
 import certPythonBootcamp from './assets/cert-python-bootcamp.png'
@@ -16,6 +17,7 @@ interface TimelineItem {
   category: string
   title: string
   narrative: string
+  details?: string[]
   isCurrent?: boolean
   isUpcoming?: boolean
 }
@@ -34,22 +36,90 @@ interface CourseItem {
 
 const timelineEvents: TimelineItem[] = [
   {
-    period: 'Spring 2027',
-    category: 'Future Enrollment',
-    location: 'Hokkaido, Japan',
-    title: 'Advanced Vocational Technical Institute (Electrical Engineering)',
+    period: '2031 & Beyond',
+    category: 'Career Transition & Research',
+    location: 'Sapporo / Kanto / Global',
+    title: 'Career Transition: Mission-Critical Data Centers, Global Enterprises & Master’s Degree',
     narrative:
-      'Planned enrollment in an advanced polytechnic institute to master both theoretical foundations and hands-on industrial competencies in electrical engineering.',
+      'After establishing a proven track record in field engineering, I plan to transition into mission-critical facilities, such as enterprise data centers or global multinational firms, utilizing platforms like LinkedIn. Given Japan’s aging technical workforce and the ongoing expansion of digital infrastructure, this career approach is grounded in strong, structural market demand. Alongside professional work, I plan to enroll in an accredited online or international Master’s program (such as in the UK or Australia) to pursue graduate-level research over the long term.',
+    details: [
+      'Transition to multinational corporations, major domestic enterprises, or mission-critical data centers in Sapporo or the Kanto metropolitan area.',
+      'Take and pass the second-stage practical examination for 2nd-Class Electrical Construction Management Engineer after completing 3 years of verified field experience.',
+      'Concurrently enroll in an overseas Master’s degree program (UK or Australia, considering online/distance formats) to engage in advanced technical studies and long-term academic research.',
+    ],
+    isUpcoming: true,
+  },
+  {
+    period: 'Apr 2031 – Mar 2032',
+    duration: 'Field Year 3',
+    category: 'Professional Milestone',
+    location: 'Hokkaido / Kanto, Japan',
+    title: 'Third-Year Field Capstone: Facility Management & Network Credentials',
+    narrative:
+      'My third year of field experience focuses on acquiring key qualifications widely respected across Japan’s facilities management industry, while reinforcing networking capabilities to connect physical electrical systems with data networks.',
+    details: [
+      'Take and obtain the Building Environmental Hygiene Management Engineer (Building Manager) license in October upon completing the required two years of practical experience, a vital credential in Japan’s qualification-driven facility market.',
+      'Target Cisco Certified Network Professional (CCNP Enterprise) during this third year to solidify network and systems competencies, maintaining alternative plans if adjustments are necessary.',
+      'Retake the IELTS exam as the two-year validity period approaches, aiming to maintain or improve upon my initial benchmark score.',
+      'Submit the formal application for the First-Class Electrician license upon fulfilling the full three years of practical on-site experience.',
+    ],
+    isUpcoming: true,
+  },
+  {
+    period: 'Apr 2029 – Mar 2031',
+    duration: 'Field Years 1–2',
+    category: 'Employment & Degree Studies',
+    location: 'Japan & UK (Distance)',
+    title: 'Industry Employment & Concurrent UK OTHM Degree Pathway',
+    narrative:
+      'Entering full-time industry employment as an electrical engineer, I will accumulate mandatory hands-on field experience while simultaneously advancing through an accredited British degree pathway through distance learning.',
+    details: [
+      'Begin the UK OTHM Level 4/5 Diploma program, equivalent to the first two years of an accredited British Bachelor’s degree, with the long-term plan of completing a full Bachelor’s via a Top-up year and continuing toward a Master’s.',
+      'Sit for the Qualified Energy Manager examination around August of my second year of practical experience, taking advantage of curriculum overlap with the Chief Electrical Engineer syllabus.',
+      'Maintain disciplined, daily English study routines to stay prepared for the 2-year IELTS renewal cycle.',
+    ],
+    isUpcoming: true,
+  },
+  {
+    period: 'Apr 2028 – Mar 2029',
+    duration: 'Vocational Year 2',
+    category: 'Advanced Vocational Studies',
+    location: 'Hokkaido, Japan',
+    title: 'Vocational Year 2: Advanced Electrical Licenses & Examination Milestones',
+    narrative:
+      'My second vocational institute year is dedicated to passing advanced electrical and facility certifications, balancing study loads carefully to manage examination pressure effectively.',
+    details: [
+      'Sit for the First-Class Electrician examination around October, allocating generous study time to ensure thorough preparation without undue stress.',
+      'Take the first-stage exam of 2nd-Class Electrical Construction Management Engineer around June to earn the official Assistant Management Engineer qualification.',
+      'Take and obtain the Fire Defense Equipment Officer Category A4 certification during the winter term.',
+      'Complete all remaining subject requirements for Third-Class Chief Electrical Engineer within these two vocational years (with flexibility to adapt later targets like Energy Manager if extra focus is needed).',
+      'Continue consistent English learning in preparation for my second IELTS sitting.',
+    ],
+    isUpcoming: true,
+  },
+  {
+    period: 'Apr 2027 – Mar 2028',
+    duration: 'Vocational Year 1',
+    category: 'Vocational Enrollment',
+    location: 'Hokkaido, Japan',
+    title: 'Vocational Institute Entry: Foundations, 2nd-Class License & English Benchmark',
+    narrative:
+      'Beginning formal vocational education in electrical engineering, establishing foundational theory, hands-on workshop competencies, and securing early licensing and language milestones.',
+    details: [
+      'Take my first official IELTS exam in the second half of Year 1 (targeting a testing venue in Tokyo) to establish an academic proficiency benchmark.',
+      'Sit for and obtain the Second-Class Electrician license near the end of Year 1.',
+      'Leverage the twice-yearly exam schedule for Third-Class Chief Electrical Engineer, methodically passing subjects as preparation matures.',
+    ],
     isUpcoming: true,
   },
   {
     period: 'Sep 2026 - Present',
     duration: 'Current',
-    category: 'Strategic Pivot & Preparation',
+    category: 'Hands-On Transition & Preparation',
     location: 'Urakawa, Hokkaido, Japan',
-    title: 'Physical Infrastructure Pivot & Core Certification Studies',
+    title: 'Transition to Physical Infrastructure & Core Exam Preparation',
     narrative:
-      'Briefly relocated to Latvia for a Computer Science bachelor’s program, but returned to Japan within weeks after reassessing local living costs and the rapid acceleration of AI technologies. Observing the structural shifts driven by LLMs, strategically pivoted to secure a "physical insurance policy." Transitioned focus to physical infrastructure and electrical engineering—actively preparing for core national licenses including Third-Class Chief Electrical Engineer—while maintaining full-stack development skills as a high-leverage tool for long-term adaptability.',
+      'Briefly relocated to Latvia for a Computer Science bachelor’s program, but returned to Japan within weeks after reassessing local living costs and the rapid acceleration of AI technologies. Seeing the fast changes driven by LLMs, I decided to build a dependable foundation in the physical world. I redirected my focus toward electrical engineering and infrastructure—actively preparing for core national licenses including Third-Class Chief Electrical Engineer—while keeping full-stack development as a valuable skill that keeps me flexible for the future.',
     isCurrent: true,
   },
   {
@@ -68,7 +138,7 @@ const timelineEvents: TimelineItem[] = [
     location: 'Urakawa, Hokkaido, Japan',
     title: 'Academic Exploration, AI Literacy & Software Initiation',
     narrative:
-      'Following early high school graduation, utilized the Sophia learning platform with the initial goal of enrolling in a US distance-learning university. Read research papers, tracked global developments, and used cutting-edge generative AI to accelerate information gathering while gaining hands-on understanding of both AI power and hallucination risks. Shifted from the US distance-degree plan to commit fully to full-stack development, establishing a strict self-management routine.',
+      'Following early high school graduation, utilized the Sophia learning platform with the initial goal of enrolling in a US distance-learning university. Read research papers, tracked global developments, and used generative AI tools to accelerate information gathering while gaining hands-on understanding of both AI power and hallucination risks. Shifted from the US distance-degree plan to commit fully to full-stack development, establishing a strict self-management routine.',
   },
   {
     period: 'Jun 2024 - Feb 2025',
@@ -193,6 +263,8 @@ const socialLinks = [
 
 export default function App() {
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('about')
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme')
@@ -218,6 +290,28 @@ export default function App() {
     })
   }, [isDark])
 
+  // Scrollspy: update active section during scroll
+  useEffect(() => {
+    const sectionIds = ['about', 'trajectory', 'courses', 'roadmap', 'contact']
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight * 0.35
+      for (const id of sectionIds) {
+        const el = document.getElementById(id)
+        if (el) {
+          const top = el.offsetTop
+          const height = el.offsetHeight
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(id)
+            break
+          }
+        }
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -234,32 +328,84 @@ export default function App() {
         isDark ? 'bg-[#131211] text-[#E8E4DD]' : 'bg-[#F5F4F0] text-gray-800'
       }`}
     >
-      {/* Fixed Dark Mode Toggle Button */}
-      <button
-        onClick={() => setIsDark((prev) => !prev)}
-        aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-        className={`fixed top-5 right-5 sm:top-6 sm:right-6 z-50 p-2.5 sm:p-3 rounded-full border shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 backdrop-blur-md cursor-pointer ${
+      {/* Floating Header Dock (Dark Mode Toggle & Navigation Menu) */}
+      <div
+        className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-40 flex items-center p-1 sm:p-1.5 rounded-full border shadow-xl backdrop-blur-md transition-all duration-300 ${
           isDark
-            ? 'bg-[#1C1A18]/85 text-[#F5C563] border-[#3A352F] hover:bg-[#282522] hover:border-[#D4A373]'
-            : 'bg-[#F5F4F0]/85 text-[#9A4C22] border-[#d4a373]/60 hover:bg-white hover:border-[#9A4C22]'
+            ? 'bg-[#1C1A18]/85 border-[#3A352F] text-[#E8E4DD]'
+            : 'bg-[#F5F4F0]/85 border-[#d4a373]/60 text-gray-800'
         }`}
       >
-        {isDark ? (
-          <svg className="w-5 h-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        ) : (
-          <svg className="w-5 h-5 -rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-        )}
-      </button>
+        {/* Dark Mode Toggle Button */}
+        <button
+          onClick={() => setIsDark((prev) => !prev)}
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          className={`p-2 sm:p-2.5 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer ${
+            isDark
+              ? 'text-[#F5C563] hover:bg-[#282522]'
+              : 'text-[#9A4C22] hover:bg-white/80'
+          }`}
+        >
+          {isDark ? (
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 -rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          )}
+        </button>
+
+        {/* Elegant Separator */}
+        <div className={`h-4 w-px mx-1 ${isDark ? 'bg-[#3A352F]' : 'bg-[#d4a373]/50'}`} />
+
+        {/* Sidebar Menu Trigger Button */}
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          aria-label="Open navigation menu"
+          aria-expanded={isSidebarOpen}
+          aria-controls="side-navigation"
+          className={`flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full font-sans text-xs font-semibold tracking-wider uppercase transition-all duration-300 transform active:scale-95 cursor-pointer ${
+            isDark
+              ? 'hover:bg-[#282522] text-[#F5F3EE]'
+              : 'hover:bg-white text-gray-800'
+          }`}
+        >
+          <span className="hidden sm:inline">Menu</span>
+          {/* Animated 2-bar menu icon */}
+          <div className="w-4 h-3.5 flex flex-col justify-between items-end">
+            <span
+              className={`h-0.5 w-4 rounded-full transition-all duration-300 ${
+                isDark ? 'bg-current' : 'bg-current'
+              }`}
+            />
+            <span
+              className={`h-0.5 w-2.5 rounded-full transition-all duration-300 group-hover:w-4 ${
+                isDark ? 'bg-[#E0A96D]' : 'bg-[#9A4C22]'
+              }`}
+            />
+          </div>
+        </button>
+      </div>
+
+      {/* Slide-over Navigation Sidebar Drawer */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        isDark={isDark}
+        onToggleTheme={() => setIsDark((prev) => !prev)}
+        activeSection={activeSection}
+        logoSrc={isDark ? logoForNight : logoForDay}
+        socialLinks={socialLinks}
+      />
 
       {/* Background Light Trails & Flowing Particle Effect */}
       <LightTrails />
       
       {/* 1. Hero Section */}
-      <section className="relative z-10 w-full min-h-[75vh] md:min-h-[85vh] flex flex-col justify-between items-center py-16 md:py-24 px-6">
+      <section id="hero" className="relative z-10 w-full min-h-[75vh] md:min-h-[85vh] flex flex-col justify-between items-center py-16 md:py-24 px-6">
         <div className="w-full"></div>
 
         {/* Hero content card */}
@@ -292,7 +438,7 @@ export default function App() {
           <p className={`text-base sm:text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed font-sans font-light px-2 transition-colors duration-500 ${
             isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
           }`}>
-            Securing a physical insurance policy in the AI era. Anchoring software capabilities in the electrical and hardware infrastructure that powers modern civilization.
+            Building a reliable real-world foundation in the AI era. Combining software skills with hands-on electrical engineering to understand and maintain the physical infrastructure behind digital systems.
           </p>
 
           {/* Bottom dashed divider */}
@@ -311,7 +457,7 @@ export default function App() {
       </section>
 
       {/* 2. About Section */}
-      <section className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 overflow-hidden ${
+      <section id="about" className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 overflow-hidden scroll-mt-6 ${
         isDark ? 'bg-[#181614] border-[#262320]' : 'border-[#e6e2d8]'
       }`}>
         {/* Subtle Atmospheric Landscape Background Layer (Roots & Heritage) */}
@@ -367,15 +513,15 @@ export default function App() {
               isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
             }`}>
               <p>
-                Although I originally trained in full-stack development, observing the rapid trajectory of large language models and generative AI convinced me to secure a <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>"physical insurance policy."</strong> True resilience lies in understanding and operating the physical layer—the electrical grids, circuitry, and physical infrastructure that underpin all digital systems.
+                Although I originally trained in full-stack development, watching the rapid evolution of generative AI and large language models led me to build a dependable foundation in the physical world. I believe real-world resilience comes from understanding and working with the hands-on layer—the electrical equipment, power systems, and physical facilities that keep all digital technology running.
               </p>
 
               <p>
-                To realize this transition, I plan to pursue advanced technical institute training in Electrical Engineering. I am actively working toward key national licenses, including <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Third-Class Chief Electrical Engineer</strong> and <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>First-Class Electrician</strong>, alongside global network credentials such as <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Cisco CCNP Enterprise</strong>. To support my mid-term international opportunities, I am targeting an <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>IELTS Academic score of 6.5+</strong>.
+                To make this transition, I will enter an advanced vocational technical institute in Electrical Engineering. I am methodically working toward essential Japanese national licenses, including <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Third-Class Chief Electrical Engineer</strong> and <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>First-Class Electrician</strong>, alongside networking credentials such as <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>Cisco CCNP Enterprise</strong>. To keep international pathways open, I am also consistently preparing for the <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>IELTS Academic exam</strong>.
               </p>
 
               <p>
-                In two years, as I enter the industry to accumulate at least 3 years of hands-on field experience, I plan to concurrently advance through the <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>OTHM Diploma pathway</strong> toward an accredited UK Bachelor’s degree. Meanwhile, full-stack development remains a high-leverage additional tool, giving me unique cross-disciplinary adaptability.
+                After vocational school, as I enter the industry to accumulate three years of practical field experience, I plan to concurrently advance through the <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-900'}`}>UK OTHM diploma pathway</strong> toward an accredited Bachelor’s degree, followed by Master’s studies. At the same time, full-stack development remains a versatile secondary skill, giving me a solid bridge between software logic and physical systems.
               </p>
             </div>
 
@@ -440,7 +586,7 @@ export default function App() {
                 Origin & Landscape
               </span>
               <p className="text-xs font-sans font-light mt-0.5">
-                Hidaka Coastal Region • Hokkaido, Japan
+                Hokkaido, Japan
               </p>
             </div>
           </div>
@@ -449,7 +595,7 @@ export default function App() {
       </section>
 
       {/* 3. Background & Experience Section */}
-      <section className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 ${
+      <section id="trajectory" className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 scroll-mt-6 ${
         isDark ? 'border-[#262320]' : 'border-[#e6e2d8]'
       }`}>
         <div className="max-w-4xl mx-auto">
@@ -463,7 +609,7 @@ export default function App() {
             <p className={`text-base font-sans max-w-2xl mx-auto leading-relaxed transition-colors duration-500 ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              A transparent chronicle of self-directed exploration, strategic recalibrations, and proactive skill acquisition.
+              A transparent chronicle of self-directed learning, practical course corrections, and step-by-step milestones toward a grounded career.
             </p>
           </div>
           
@@ -520,6 +666,27 @@ export default function App() {
                   }`}>
                     {item.narrative}
                   </p>
+
+                  {item.details && item.details.length > 0 && (
+                    <ul className="mt-3.5 space-y-2 font-sans text-xs sm:text-sm pl-0.5">
+                      {item.details.map((detail, dIdx) => (
+                        <li key={dIdx} className="flex items-start gap-2.5">
+                          <span
+                            className={`mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full ${
+                              isDark ? 'bg-[#E0A96D]' : 'bg-[#9A4C22]'
+                            }`}
+                          />
+                          <span
+                            className={`leading-relaxed font-light ${
+                              isDark ? 'text-[#C4BEB4]' : 'text-gray-700'
+                            }`}
+                          >
+                            {detail}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             ))}
@@ -528,7 +695,7 @@ export default function App() {
       </section>
 
       {/* 4. Courses & Continuous Learning (Udemy Certificates) */}
-      <section className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 ${
+      <section id="courses" className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 scroll-mt-6 ${
         isDark ? 'border-[#262320]' : 'border-[#e6e2d8]'
       }`}>
         <div className="max-w-6xl mx-auto">
@@ -705,7 +872,7 @@ export default function App() {
       )}
 
       {/* 5. Roadmap & Vision Section */}
-      <section className="relative w-full text-[#F5F4F0] py-28 px-6">
+      <section id="roadmap" className="relative w-full text-[#F5F4F0] py-28 px-6 scroll-mt-6">
         <div className="absolute inset-0 bg-[#344432] z-0 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-3">
@@ -714,71 +881,71 @@ export default function App() {
             </span>
             <h2 className="text-4xl md:text-5xl italic font-serif">Roadmap & Vision</h2>
             <p className="text-sm sm:text-base font-sans text-[#F5F4F0]/80 max-w-2xl mx-auto leading-relaxed font-light">
-              A phased progression connecting software logic with physical electrical expertise, targeting high-stakes infrastructure and long-term facility mastery.
+              A practical, step-by-step roadmap connecting software skills with electrical engineering, hands-on field experience, and international degree pathways.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 font-sans">
-            {/* Column 1: Current Focus */}
+            {/* Column 1: Vocational Years (2027–2029) */}
             <div className="bg-white/5 p-8 sm:p-9 rounded-2xl border border-white/10 flex flex-col justify-between hover:bg-white/[0.07] transition-colors">
               <div className="space-y-5">
                 <div className="space-y-1">
                   <span className="text-xs uppercase tracking-wider font-semibold text-[#c29c6d] block font-sans">
-                    Current Phase
+                    Years 2027 – 2029
                   </span>
                   <h3 className="font-serif italic text-2xl sm:text-3xl text-[#d4a373] leading-snug">
-                    "Bridging digital and physical"
+                    "Hands-on foundations"
                   </h3>
                 </div>
                 <div className="border-t border-[#c29c6d]/30 w-16 my-3"></div>
                 <p className="text-sm sm:text-base text-[#F5F4F0]/90 leading-relaxed font-light">
-                  Building upon the structured logical thinking cultivated through full-stack development (React, Django, and modern web architectures), I am currently focused on foundational electrical engineering principles and intensive IELTS English preparation. This phase establishes a grounded baseline to seamlessly understand both the digital software layer and the physical systems beneath it.
+                  Entering an advanced technical institute in Hokkaido to build practical electrical engineering competencies. Over these two years, I plan to secure the Second-Class and First-Class Electrician licenses, systematically complete subjects for Third-Class Chief Electrical Engineer, obtain safety qualifications (Fire Defense A4 & Assistant Management Engineer), and sit for the IELTS Academic exam.
                 </p>
               </div>
               <div className="pt-6 mt-6 border-t border-white/10 text-xs text-[#c29c6d] font-medium">
-                Focus: Electrical Fundamentals • IELTS Academic
+                Focus: Electrician 1st & 2nd • Chief Electrical Eng. • IELTS
               </div>
             </div>
 
-            {/* Column 2: Next 2 Years */}
+            {/* Column 2: Field Experience & UK Degree (2029–2032) */}
             <div className="bg-white/5 p-8 sm:p-9 rounded-2xl border border-white/10 flex flex-col justify-between hover:bg-white/[0.07] transition-colors">
               <div className="space-y-5">
                 <div className="space-y-1">
                   <span className="text-xs uppercase tracking-wider font-semibold text-[#c29c6d] block font-sans">
-                    Next 2 Years
+                    Years 2029 – 2032
                   </span>
                   <h3 className="font-serif italic text-2xl sm:text-3xl text-[#d4a373] leading-snug">
-                    "Deepening domain expertise"
+                    "Field practice & degree studies"
                   </h3>
                 </div>
                 <div className="border-t border-[#c29c6d]/30 w-16 my-3"></div>
                 <p className="text-sm sm:text-base text-[#F5F4F0]/90 leading-relaxed font-light">
-                  Over the next two years in advanced vocational training, I will systematically acquire practical electrical engineering and infrastructure competencies. I aim to secure both First-Class Electrician and Third-Class Chief Electrical Engineer licenses while attaining an IELTS score of 6.0–6.5, unlocking direct access to global technical documentation and worldwide engineering networks.
+                  Beginning full-time electrical field employment to accumulate three years of required on-site experience. In parallel, I will study through the UK OTHM diploma program toward an accredited British Bachelor’s degree, sit for the Qualified Energy Manager and Building Manager exams, prepare for Cisco CCNP Enterprise, and maintain IELTS scores within the 2-year renewal window.
                 </p>
               </div>
               <div className="pt-6 mt-6 border-t border-white/10 text-xs text-[#c29c6d] font-medium">
-                Target: Chief Electrical Engineer • 1st-Class Electrician
+                Target: 3-Year Field Work • UK OTHM Degree • Facility Licenses
               </div>
             </div>
 
-            {/* Column 3: Long-Term Vision */}
+            {/* Column 3: Career Leap & Research (2031 & Beyond) */}
             <div className="bg-white/5 p-8 sm:p-9 rounded-2xl border border-white/10 flex flex-col justify-between hover:bg-white/[0.07] transition-colors">
               <div className="space-y-5">
                 <div className="space-y-1">
                   <span className="text-xs uppercase tracking-wider font-semibold text-[#c29c6d] block font-sans">
-                    Long-Term Vision
+                    2031 & Beyond
                   </span>
                   <h3 className="font-serif italic text-2xl sm:text-3xl text-[#d4a373] leading-snug">
-                    "Expanding the horizon"
+                    "Data centers & graduate research"
                   </h3>
                 </div>
                 <div className="border-t border-[#c29c6d]/30 w-16 my-3"></div>
                 <p className="text-sm sm:text-base text-[#F5F4F0]/90 leading-relaxed font-light">
-                  Upon entering the industry, while accumulating field experience in high-reliability environments, I will advance continuous engineering studies through international online degree pathways. Targeting advanced credentials such as Qualified Energy Manager and Cisco CCNP Enterprise, my ultimate aspiration is to become a trusted Critical Facility Engineer managing vital industrial and computational infrastructure.
+                  Transitioning into mission-critical facilities, such as enterprise data centers or multinational corporations, leveraging platforms like LinkedIn to address Japan’s aging technical workforce shortage. Concurrently, I plan to enroll in an online or international Master’s program (UK or Australia) to pursue advanced graduate studies and engage in long-term engineering research.
                 </p>
               </div>
               <div className="pt-6 mt-6 border-t border-white/10 text-xs text-[#c29c6d] font-medium">
-                Goal: Critical Facility Engineer • UK Degree • Energy Manager
+                Goal: Data Centers • International Master’s • Long-Term Research
               </div>
             </div>
           </div>
@@ -786,7 +953,7 @@ export default function App() {
       </section>
 
       {/* 6. Footer Section */}
-      <footer className="relative w-full text-[#F5F4F0] py-20 px-6">
+      <footer id="contact" className="relative w-full text-[#F5F4F0] py-20 px-6 scroll-mt-6">
         <div className="absolute inset-0 bg-[#9A4C22] z-0 pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center space-y-10">
           <div className="flex flex-col md:flex-row items-center justify-between w-full border-b border-[#c29c6d]/60 pb-10 gap-6">
