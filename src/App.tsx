@@ -798,7 +798,7 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 font-sans">
-            {/* Column 1: Vocational Years */}
+            {/* Column 1: Technical Institution Period */}
             <div className="bg-white/5 p-8 sm:p-9 rounded-2xl border border-white/10 flex flex-col justify-between hover:bg-white/[0.07] transition-colors">
               <div className="space-y-5">
                 <div className="space-y-1">

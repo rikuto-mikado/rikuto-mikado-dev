@@ -73,29 +73,29 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
     },
     {
       period: 'Apr 2028 – Mar 2029',
-      duration: 'Vocational Year 2',
-      category: 'Advanced Vocational Studies',
+      duration: 'Technical Institution (Year 2)',
+      category: 'Advanced Technical Training',
       location: 'Hokkaido, Japan',
-      title: 'Vocational Year 2: Advanced Electrical Licenses & Examination Milestones',
+      title: 'Technical Institution Year 2: Advanced Electrical Licenses & Examination Milestones',
       narrative:
-        'My second vocational institute year is dedicated to passing advanced electrical and facility certifications, balancing study loads carefully to manage examination pressure effectively.',
+        'My second year at the technical institution is dedicated to passing advanced electrical and facility certifications, balancing study loads carefully to manage examination pressure effectively.',
       details: [
         'Sit for the First-Class Electrician examination around October, allocating generous study time to ensure thorough preparation without undue stress.',
         'Take the first-stage exam of 2nd-Class Electrical Construction Management Engineer around June to earn the official Assistant Management Engineer qualification.',
         'Take and obtain the Fire Defense Equipment Officer Category A4 certification during the winter term.',
-        'Complete all remaining subject requirements for Third-Class Chief Electrical Engineer within these two vocational years (with flexibility to adapt later targets like Energy Manager if extra focus is needed).',
+        'Complete all remaining subject requirements for Third-Class Chief Electrical Engineer across these two years of institutional training (with flexibility to adapt later targets like Energy Manager if extra focus is needed).',
         'Continue consistent English learning in preparation for my second IELTS sitting.',
       ],
       isUpcoming: true,
     },
     {
       period: 'Apr 2027 – Mar 2028',
-      duration: 'Vocational Year 1',
-      category: 'Vocational Enrollment',
+      duration: 'Technical Institution (Year 1)',
+      category: 'Technical Institution Enrollment',
       location: 'Hokkaido, Japan',
-      title: 'Vocational Institute Entry: Foundations, 2nd-Class License & English Benchmark',
+      title: 'Technical Institution Enrollment: Foundations, 2nd-Class License & English Benchmark',
       narrative:
-        'Beginning formal vocational education in electrical engineering, establishing foundational theory, hands-on workshop competencies, and securing early licensing and language milestones.',
+        'Entering a specialized technical training institution in electrical engineering, establishing foundational theory, hands-on workshop competencies, and securing early licensing and language milestones.',
       details: [
         'Take my first official IELTS exam in the second half of Year 1 (targeting a testing venue in Tokyo) to establish an academic proficiency benchmark.',
         'Sit for and obtain the Second-Class Electrician license near the end of Year 1.',
@@ -197,12 +197,12 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
     },
     {
       period: '2028年4月 – 2029年3月',
-      duration: '専門校 2年目',
-      category: '高度専門教育',
+      duration: '技術専門校 2年目',
+      category: '高度専門技術研修',
       location: '北海道',
-      title: '専門学校2年目：第一種電工・電験三種完遂・施工管理技士補・消防設備士',
+      title: '技術専門校 2年目：第一種電工・電験三種完遂・施工管理技士補・消防設備士',
       narrative:
-        '専門学校の2年目は、上位の国家資格や施工管理資格の合格に集中します。学習負荷とプレッシャーを考慮し、余裕を持ったスケジュールで着実に合格を狙います。',
+        '技術専門機関での2年目は、上位の国家資格や施工管理資格の合格に集中します。学習負荷とプレッシャーを考慮し、余裕を持ったスケジュールで着実に合格を狙います。',
       details: [
         '10月頃に「第一種電気工事士」を受験・取得（精神的なプレッシャーを考慮して多めに時間を確保）',
         '6月頃に「2級電気工事施工管理技士」の第一次検定を受験し、「技士補」資格を取得',
@@ -214,12 +214,12 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
     },
     {
       period: '2027年4月 – 2028年3月',
-      duration: '専門校 1年目',
-      category: '専門校入学',
+      duration: '技術専門校 1年目',
+      category: '技術研修機関への入学',
       location: '北海道',
-      title: '高等専門校入学：電気工学の基礎・第二種電工取得・IELTS初挑戦',
+      title: '技術専門機関への入学：電気工学の基礎・第二種電工取得・IELTS初挑戦',
       narrative:
-        '北海道の高等専門校（職業訓練校）に入学し、電気工学の理論と実践技術の習得を開始。早い段階から国家資格と英語の基準スコア取得に挑みます。',
+        '北海道の技術専門校（公設の技術研修機関）に入学し、電気工学の理論と実践技術の習得を開始。早い段階から国家資格と英語の基準スコア取得に挑みます。',
       details: [
         '1年目の後半に1回目のIELTSを受験（東京を想定）、目標スコアの取得を目指す',
         '1年目の修了時期に「第二種電気工事士」の試験を受けて取得',
@@ -417,9 +417,9 @@ export const uiText = {
     aboutP1:
       'Although I originally trained in full-stack development, watching the rapid evolution of generative AI and large language models led me to build a dependable foundation in the physical world. I believe real-world resilience comes from understanding and working with the hands-on layer—the electrical equipment, power systems, and physical facilities that keep all digital technology running.',
     aboutP2:
-      'To make this transition, I will enter an advanced vocational technical institute in Electrical Engineering. I am methodically working toward essential Japanese national licenses, including Third-Class Chief Electrical Engineer and First-Class Electrician, alongside networking credentials such as Cisco CCNP Enterprise. To keep international pathways open, I am also consistently preparing for the IELTS Academic exam.',
+      'To make this transition, I will enter a specialized technical institution in Electrical Engineering. I am methodically working toward essential Japanese national licenses, including Third-Class Chief Electrical Engineer and First-Class Electrician, alongside networking credentials such as Cisco CCNP Enterprise. To keep international pathways open, I am also consistently preparing for the IELTS Academic exam.',
     aboutP3:
-      'After vocational school, as I enter the industry to accumulate three years of practical field experience, I plan to concurrently advance through the UK OTHM diploma pathway toward an accredited Bachelor’s degree, followed by Master’s studies. At the same time, full-stack development remains a versatile secondary skill, giving me a solid bridge between software logic and physical systems.',
+      'Following this institutional training period, as I enter the industry to accumulate three years of practical field experience, I plan to concurrently advance through the UK OTHM diploma pathway toward an accredited Bachelor’s degree, followed by Master’s studies. At the same time, full-stack development remains a versatile secondary skill, giving me a solid bridge between software logic and physical systems.',
     aboutBadge1: '⚡ Electrical Engineering & Infrastructure',
     aboutBadge2: '💻 Full-Stack Development',
     aboutPhotoName: 'Rikuto Mikado',
@@ -558,10 +558,10 @@ export const uiText = {
     roadmapLead:
       'ソフトウェアスキル、電気工学、現場実務、そして海外学位プログラムを繋ぐ、地に足のついた3段階のキャリアロードマップ。',
 
-    roadmapCol1Tag: '2027年 – 2029年（専門校期）',
+    roadmapCol1Tag: '2027年 – 2029年（技術専門機関期）',
     roadmapCol1Title: '「確かな基礎と資格の習得」',
     roadmapCol1Body:
-      '高等専門校にて、電気工学の理論と現場技術の基礎を徹底的に体得します。この2年間で第一種電気工事士や電験三種の科目合格など、インフラエンジニアとしての必須資格を戦略的に取得し、同時にIELTSのスコアメイクを行うことで、デジタルと物理を繋ぐ強固な基盤を構築します。',
+      '技術専門機関にて、電気工学の理論と現場技術の基礎を徹底的に体得します。この2年間で第一種電気工事士や電験三種の科目合格など、インフラエンジニアとしての必須資格を戦略的に取得し、同時にIELTSのスコアメイクを行うことで、デジタルと物理を繋ぐ強固な基盤を構築します。',
     roadmapCol1Footer: '重点: 電気工事士第1種・2種 • 電験三種 • IELTS',
 
     roadmapCol2Tag: '2029年 – 2032年（実務＆大学並行期）',
