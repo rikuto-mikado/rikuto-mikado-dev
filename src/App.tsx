@@ -8,8 +8,6 @@ import certIndianCooking from './assets/cert-indian-cooking.png'
 import certPythonBootcamp from './assets/cert-python-bootcamp.png'
 import certPythonMega from './assets/cert-python-mega.png'
 import myfaceImg from './assets/myface.jpeg'
-import logoForDay from './assets/favicon-02.png'
-import logoForNight from './assets/01-original.png'
 import urakawaLandscape from './assets/urakawa-landscape.png'
 
 const certImages: Record<string, string> = {
@@ -130,13 +128,6 @@ export default function App() {
     } else {
       document.documentElement.classList.remove('dark')
     }
-
-    // Dynamically update browser tab favicon
-    const favicons = document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']")
-    favicons.forEach((favicon) => {
-      favicon.removeAttribute('media')
-      favicon.href = isDark ? '/favicon-light.png' : '/favicon-dark.png'
-    })
   }, [isDark])
 
   useEffect(() => {
@@ -317,7 +308,7 @@ export default function App() {
         onToggleLang={toggleLang}
         isJapaneseAvailable={isJapaneseAvailable}
         activeSection={activeSection}
-        logoSrc={isDark ? logoForNight : logoForDay}
+        logoSrc="/site_icon.svg"
         socialLinks={socialLinks}
       />
 
@@ -333,9 +324,9 @@ export default function App() {
           {/* Brand Logo */}
           <div className="flex justify-center items-center">
             <img
-              src={isDark ? logoForNight : logoForDay}
+              src="/site_icon.svg"
               alt="RIKUTO"
-              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-sm hover:scale-105 transition-transform duration-300"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover shadow-sm hover:scale-105 transition-transform duration-300"
             />
           </div>
 

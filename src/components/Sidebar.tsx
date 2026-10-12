@@ -142,7 +142,7 @@ export default function Sidebar({
             <img
               src={logoSrc}
               alt="Rikuto Mikado"
-              className="w-10 h-10 rounded-full object-cover shadow-sm group-hover:rotate-6 transition-transform duration-300"
+              className="w-10 h-10 rounded-xl object-cover shadow-sm group-hover:rotate-6 transition-transform duration-300"
             />
             <div>
               <p

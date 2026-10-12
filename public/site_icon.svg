@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 背景の角丸四角（クリーム色） -->
+  <rect width="512" height="512" rx="128" fill="#F5F4F0" />
+  
+  <!-- アーチ（ダークグリーン） -->
+  <path 
+    d="M 176 352 L 176 256 A 80 80 0 0 1 336 256 L 336 352" 
+    fill="none" 
+    stroke="#344432" 
+    stroke-width="32" 
+  />
+  
+  <!-- コアとなるドット（ブラウン） -->
+  <circle cx="256" cy="256" r="32" fill="#9A4C22" />
+</svg>
