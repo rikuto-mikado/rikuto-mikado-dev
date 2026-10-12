@@ -30,13 +30,13 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       period: '2031 & Beyond',
       category: 'Career Transition & Research',
       location: 'Sapporo / Kanto / Global',
-      title: 'Career Transition: Mission-Critical Data Centers, Global Enterprises & Master’s Degree',
+      title: 'Career Transition: Mission-Critical Data Centers & Global Enterprises',
       narrative:
-        'After establishing a proven track record in field engineering, I plan to transition into mission-critical facilities, such as enterprise data centers or global multinational firms, utilizing platforms like LinkedIn. Given Japan’s aging technical workforce and the ongoing expansion of digital infrastructure, this career approach is grounded in strong, structural market demand. Alongside professional work, I plan to enroll in an accredited online or international Master’s program (such as in the UK or Australia) to pursue graduate-level research over the long term.',
+        'After establishing a proven track record in field engineering, I plan to transition into mission-critical facilities, such as enterprise data centers or global multinational firms, utilizing platforms like LinkedIn. Given Japan’s aging technical workforce and the ongoing expansion of digital infrastructure, this career approach is grounded in strong, structural market demand. In the longer run, I also maintain a personal aspiration to explore graduate studies internationally as a future horizon for deeper academic inquiry.',
       details: [
         'Transition to multinational corporations, major domestic enterprises, or mission-critical data centers in Sapporo or the Kanto metropolitan area.',
         'Take and pass the second-stage practical examination for 2nd-Class Electrical Construction Management Engineer after completing 3 years of verified field experience.',
-        'Concurrently enroll in an overseas Master’s degree program (UK or Australia, considering online/distance formats) to engage in advanced technical studies and long-term academic research.',
+        'Keep open the possibility of pursuing overseas graduate studies over the longer term to broaden academic and personal horizons.',
       ],
       isUpcoming: true,
     },
@@ -65,7 +65,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       narrative:
         'Entering full-time industry employment as an electrical engineer, I will accumulate mandatory hands-on field experience while simultaneously advancing through an accredited British degree pathway through distance learning.',
       details: [
-        'Begin the UK OTHM Level 4/5 Diploma program, equivalent to the first two years of an accredited British Bachelor’s degree, with the long-term plan of completing a full Bachelor’s via a Top-up year and continuing toward a Master’s.',
+        'Begin the UK OTHM Level 4/5 Diploma program, equivalent to the first two years of an accredited British Bachelor’s degree, aiming to complete a full Bachelor’s via a Top-up year while keeping further academic study as a potential future aspiration.',
         'Sit for the Qualified Energy Manager examination around August of my second year of practical experience, taking advantage of curriculum overlap with the Chief Electrical Engineer syllabus.',
         'Maintain disciplined, daily English study routines to stay prepared for the 2-year IELTS renewal cycle.',
       ],
@@ -156,7 +156,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '札幌 / 関東 / 海外',
       title: '大企業・データセンターへの転職と海外大学院（修士）進学',
       narrative:
-        '現場エンジニアとしての実績を築いたのち、LinkedIn等を活用して札幌や関東圏の大企業、ミッションクリティカルなデータセンター、外資系企業への転職を実行します。日本の技術者の高齢化とデジタルインフラ需要の急増を背景に、この転職アプローチは極めて再現性が高いと分析しています。転職後のキャリアと並行して、イギリスやオーストラリア等の大学院（オンライン通信制も視野）に進学し、修士号（マスター）を取得して長期的な研究にも携わることを目指します。',
+        '現場エンジニアとしての実績を築いたのち、LinkedIn等を活用して札幌や関東圏の大企業、ミッションクリティカルなデータセンター、外資系企業への転職を実行する。日本の技術者の高齢化とデジタルインフラ需要の急増を背景に、このアプローチは現時点では再現性が高いと考えている。転職後のキャリアと並行して、イギリスやオーストラリア等の大学院（オンライン通信制も視野）に進学し、修士号（マスター）を取得して長期的な研究にも携わることを目指す。',
       details: [
         'LinkedInを活用し、札幌または関東圏の大手企業、データセンター、外資系企業への転職を実行',
         '実務経験3年を満たした段階で、2級電気工事施工管理技士の第二次検定を受験・取得',
@@ -171,7 +171,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '北海道 / 関東',
       title: '実務3年目の総仕上げ：ビル管理士・CCNP・第一種電工免状交付',
       narrative:
-        '実務経験3年目では、資格至上主義的な日本の施設管理市場において極めて重宝される資格の取得を完了させるとともに、物理的な電気設備とデータ通信網を繋ぐネットワーク技術の習得を進めます。',
+        '実務経験3年目では、日本の施設管理市場において極めて重宝される資格の取得を完了させるとともに、物理的な電気設備とデータ通信網を繋ぐネットワーク技術の習得を進める。',
       details: [
         '実務経験2年を満たした10月に「建築物環境衛生管理技術者（ビル管理士）」を受験・取得（日本の施設管理市場において必須級の資格）',
         '実務3年目の段階で「CCNP Enterprise」の取得を目指し、ネットワークスキルを強化（難航した場合の代替案も準備）',
@@ -187,7 +187,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '日本国内 ＆ 英国（通信）',
       title: '電気業界への就職（実務開始）と英国OTHM学士課程の並行履修',
       narrative:
-        '電気エンジニアとして企業に就職し、必須の実務経験を蓄積しながら、通信教育を活用して英国の正規学士号を目指すプログラムを並行して開始します。',
+        '電気エンジニアとして企業に就職し、必須の実務経験を蓄積しながら、通信教育を活用して英国の正規学士号を目指すプログラムを並行して開始する。',
       details: [
         '英国大学の1〜2年次に相当する「OTHM Level 4/5」プログラムを開始。将来的にTop-up制度で学士号を取得し、修士課程へ進む計画',
         '電験と学習範囲が重なる「エネルギー管理士」を、実務2年目の8月頃に受験・取得',
@@ -202,7 +202,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '北海道',
       title: '技術専門校 2年目：第一種電工・電験三種完遂・施工管理技士補・消防設備士',
       narrative:
-        '技術専門機関での2年目は、上位の国家資格や施工管理資格の合格に集中します。学習負荷とプレッシャーを考慮し、余裕を持ったスケジュールで着実に合格を狙います。',
+        '技術専門機関での2年目は、上位の国家資格や施工管理資格の合格に集中。学習負荷とプレッシャーを考慮し、余裕を持ったスケジュールで着実に合格を狙う。',
       details: [
         '10月頃に「第一種電気工事士」を受験・取得（精神的なプレッシャーを考慮して多めに時間を確保）',
         '6月頃に「2級電気工事施工管理技士」の第一次検定を受験し、「技士補」資格を取得',
@@ -219,7 +219,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '北海道',
       title: '技術専門機関への入学：電気工学の基礎・第二種電工取得・IELTS初挑戦',
       narrative:
-        '北海道の技術専門校（公設の技術研修機関）に入学し、電気工学の理論と実践技術の習得を開始。早い段階から国家資格と英語の基準スコア取得に挑みます。',
+        '北海道の技術専門校（公設の技術研修機関）に入学し、電気工学の理論と実践技術の習得を開始。早い段階から国家資格と英語の基準スコア取得に挑む。',
       details: [
         '1年目の後半に1回目のIELTSを受験（東京を想定）、目標スコアの取得を目指す',
         '1年目の修了時期に「第二種電気工事士」の試験を受けて取得',
@@ -234,7 +234,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '北海道 浦河町',
       title: '物理インフラへの転換と中核国家資格の準備',
       narrative:
-        'ラトビアの大学コンピュータサイエンス学科への進学準備のため一時渡航したものの、現地の物価やAIの急激な進化を直視して数週間で帰国。LLMがもたらす構造変化を踏まえ、地に足のついた「物理的な保険」を確保すべく方針を転換しました。ソフトウェアの論理的思考を武器として保持しながら、電験三種をはじめとする国家資格の取得準備を開始し、社会を動かす電気・ハードウェアインフラの習得へ舵を切りました。',
+        'ラトビアの大学コンピュータサイエンス学科への進学準備のため一時渡航したものの、現地の物価やAIの急激な進化を直視して数週間で帰国。LLMがもたらす構造変化を踏まえ、地に足のついた「物理的な保険」を確保すべく方針を転換した。電験三種をはじめとする国家資格の取得準備を開始し、電気関係の市場で必要な知識と技術の習得へ舵を切りました。',
       isCurrent: true,
     },
     {
@@ -244,7 +244,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '北海道 札幌市',
       title: '札幌での自立生活とフルスタック開発の集中特訓',
       narrative:
-        '家族の支援を得ながら札幌で一人暮らしを経験。自炊や自己規律といった生活の自立力を高めつつ、Udemyを活用して毎日フルスタックWeb開発の学習に没頭しました。人に頼らず自走して学び続ける力と、自身の価値観を明確に確立した期間です。',
+        '家族の支援を得ながら札幌で一人暮らしを経験。自炊や自己規律といった生活の自立力を高めつつ、Udemyを活用して毎日フルスタックWeb開発の学習に没頭。人に頼らず自走して学び続ける力と、自身の価値観を明確に確立した期間だった。',
     },
     {
       period: '2025年1月 – 2025年6月',
@@ -253,7 +253,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '北海道 浦河町',
       title: '学術探求、AIリテラシーの獲得とソフトウェア開発への着手',
       narrative:
-        '高校早期卒業後、当初は米国のオンライン大学進学を目指してSophiaプラットフォームで学習。論文講読や情報収集に生成AIをフル活用し、その利便性とハルシネーションリスクの双方を体感しました。その後、米国大学進学からフルスタック開発への一本化を決断し、厳格な生活習慣を確立しました。',
+        '高校早期卒業後、当初は米国のオンライン大学進学を目指してSophiaプラットフォームで学習。論文講読や情報収集に生成AIをフル活用し、その利便性とハルシネーションリスクの双方を体感。その後、米国大学進学を検討していたが、フルスタック開発への一本化を決断し、厳格な生活習慣を確立した。',
     },
     {
       period: '2024年6月 – 2025年2月',
@@ -262,7 +262,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: 'オンライン（米国認定）',
       title: 'Penn Foster Group — 米国正規高校卒業資格の早期取得',
       narrative:
-        '地元の高校から米国認可の通信制教育機関Penn Foster Groupへ転校。学習を前倒しで進め、正規の米国高校卒業資格を早期取得しました。',
+        '地元の高校から米国認可の通信制教育機関Penn Foster Groupへ転校。学習を前倒しで進め、正規の米国高校卒業資格を早期取得した。',
     },
     {
       period: '2023年4月 – 2024年5月',
@@ -270,7 +270,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       category: '中等教育',
       location: '北海道 浦河町',
       title: '北海道浦河高等学校',
-      narrative: '地元の高校に入学し、基礎的な学業と生活習慣の基盤を築きました。',
+      narrative: '地元の高校に入学し、基礎的な学業と生活習慣の基盤を築いた。',
     },
   ],
 }
@@ -399,6 +399,8 @@ export const uiText = {
     navLearningSub: 'Courses & Certifications',
     navRoadmap: 'Roadmap',
     navRoadmapSub: 'Strategic 3-Phase Plan',
+    navBlog: 'Blog',
+    navBlogSub: 'Essays on AI & Society',
     navContact: 'Contact',
     navContactSub: 'Get in Touch & Socials',
 
@@ -419,7 +421,7 @@ export const uiText = {
     aboutP2:
       'To make this transition, I will enter a specialized technical institution in Electrical Engineering. I am methodically working toward essential Japanese national licenses, including Third-Class Chief Electrical Engineer and First-Class Electrician, alongside networking credentials such as Cisco CCNP Enterprise. To keep international pathways open, I am also consistently preparing for the IELTS Academic exam.',
     aboutP3:
-      'Following this institutional training period, as I enter the industry to accumulate three years of practical field experience, I plan to concurrently advance through the UK OTHM diploma pathway toward an accredited Bachelor’s degree, followed by Master’s studies. At the same time, full-stack development remains a versatile secondary skill, giving me a solid bridge between software logic and physical systems.',
+      'Following this institutional training period, as I enter the industry to accumulate three years of practical field experience, I plan to concurrently advance through the UK OTHM diploma pathway toward an accredited Bachelor’s degree, with future graduate studies remaining an open long-term aspiration. At the same time, full-stack development remains a versatile secondary skill, giving me a solid bridge between software logic and physical systems.',
     aboutBadge1: '⚡ Electrical Engineering & Infrastructure',
     aboutBadge2: '💻 Full-Stack Development',
     aboutPhotoName: 'Rikuto Mikado',
@@ -441,7 +443,7 @@ export const uiText = {
     coursesHeading: 'Courses & Continuous Learning',
     coursesLead:
       'Certified coursework completed through intensive independent study across software engineering, AI tooling, and essential life skills. Click any certificate to inspect credentials.',
-    viewCert: 'View Certificate 🔍',
+    viewCert: 'View Certificate',
     instructor: 'Instructor',
     date: 'Date',
     length: 'Length',
@@ -467,10 +469,21 @@ export const uiText = {
     roadmapCol2Footer: 'Target: 3-Year Field Work • UK OTHM Degree • Facility Licenses',
 
     roadmapCol3Tag: '2031 & Beyond',
-    roadmapCol3Title: '"Data centers & graduate research"',
+    roadmapCol3Title: '"Data centers & future horizons"',
     roadmapCol3Body:
-      'Transitioning into mission-critical facilities, such as enterprise data centers or multinational corporations, leveraging platforms like LinkedIn to address Japan’s aging technical workforce shortage. Concurrently, I plan to enroll in an online or international Master’s program (UK or Australia) to pursue advanced graduate studies and engage in long-term engineering research.',
-    roadmapCol3Footer: 'Goal: Data Centers • International Master’s • Long-Term Research',
+      'Transitioning into mission-critical facilities, such as enterprise data centers or multinational corporations, leveraging platforms like LinkedIn to address Japan’s aging technical workforce shortage. Over the long horizon, I also hold an aspiration to explore graduate-level study internationally as a future milestone for lifelong intellectual pursuit.',
+    roadmapCol3Footer: 'Goal: Data Centers • Infrastructure Leadership • Future Graduate Horizons',
+
+    // Blog
+    blogBadge: 'Perspectives & Essays',
+    blogHeading: 'Essays & Observations',
+    blogLead:
+      'Long-form reflections on emerging intelligence, identity, and practical career resilience in the physical layer.',
+    blogReadTime: 'min read',
+    readEssay: 'Read Essay',
+    authorBy: 'By Rikuto Mikado',
+    shareArticle: 'Share',
+    linkCopied: 'Link Copied! ✓',
 
     // Footer
     footerContact: 'Direct Contact',
@@ -503,6 +516,8 @@ export const uiText = {
     navLearningSub: 'Udemy修了証と学習実績',
     navRoadmap: 'ロードマップ',
     navRoadmapSub: '3段階の中長期キャリア戦略',
+    navBlog: 'ブログ',
+    navBlogSub: '思考録とエッセイ',
     navContact: '連絡先',
     navContactSub: 'お問い合わせ・SNSリンク',
 
@@ -517,15 +532,15 @@ export const uiText = {
     aboutSectionBadge: 'ビジョンと方向性',
     aboutHeading: 'About Rikuto Mikado',
     aboutQuote:
-      '「生涯を通じて知を探求し、将来的には農業を営みながら無形文化などからアプローチする形で、人類の創造性の存続に貢献したい。」',
+      '「生涯を通じて知の探求を深め、将来は自ら農業を営みながら、無形文化という視点から人類の創造性を未来へ継承していくことに貢献したい」',
     aboutP1:
-      '当初はフルスタックWeb開発を学んでいましたが、生成AIの指数関数的な進化を目の当たりにし、私自身まだ若いことから(来年で二十歳）一つの市場への依存を減らし、まずは第一として「物理的な保険（Physical insurance policy）」を確保すべきだと確信しました。既存のLLMsが数年後に社会に浸透するだけでも大きな社会的変動は避けられないことからも、早めに動いて先行者利益を得るために動くことを決断した。',
+      '2年間ほどフルスタックWeb開発を学んでいましたが、生成AIの指数関数的な進化を目の当たりにし、私自身まだ若いことから（来年で20歳）一つの市場への依存を減らし、まずは第一として「物理的な保険（Physical insurance policy）」を確保すべきだと考えました。既存のLLMsが数年後に社会に浸透するだけでも大きな社会的変動は避けられないことからも、早めに動いて先行者利益を得るために動くことを決断しました。',
     aboutP2:
       '自身の客観的な考えに従い、私は電気工学を専門的に学ぶための進学を決定しました。現在は電験三種や第一種電気工事士といった中核となる国家資格の学習を本格化させています。また、将来的なグローバルネットワークへのアクセスを担保するため、IELTS AcademicやCisco CCNP Enterpriseの取得に向けた準備も並行して進めています。',
     aboutP3:
       'インフラエンジニアとして絶対的な安全圏を築くことは、最終的な目標である「農業や創造性の追求」を自由に行うための手段でもあります。現場での実務経験を積みながら英国大学の学位（OTHMプログラム）を取得し、長期的には修士課程への進学も見据えています。ソフトウェアの論理と物理設備の双方を理解する独自の強みを武器に、自身のキャリアをデザインしていきます。',
     aboutBadge1: '⚡ 電気工学・社会基盤インフラ',
-    aboutBadge2: '💻 フルスタック開発',
+    aboutBadge2: 'フルスタック開発',
     aboutPhotoName: '三角 陸人(Rikuto Mikado)',
     aboutPhotoPlace: '日本、北海道',
     aboutPhotoDesc: '物理レイヤー • システム • 独学と実践',
@@ -545,7 +560,7 @@ export const uiText = {
     coursesHeading: '受講コースと修得スキル',
     coursesLead:
       'ソフトウェアエンジニアリングからAIツールの活用、さらには自立生活を支える実践的スキルに至るまで、徹底した独学によって修了した認定コース群。クリックして修了証の詳細を確認できます。',
-    viewCert: '修了証を確認 🔍',
+    viewCert: '修了証を確認',
     instructor: '講師',
     date: '取得時期',
     length: '総学習時間',
@@ -573,8 +588,19 @@ export const uiText = {
     roadmapCol3Tag: '2031年 以降（キャリアの飛躍）',
     roadmapCol3Title: '「データセンター転職と大学院研究」',
     roadmapCol3Body:
-      '実務経験と資格を武器に、日本の技術者高齢化による構造的需要を捉え、大手データセンターや外資系企業へアクセスします。さらに海外大学院の修士課程へ進学し、生涯にわたる知の探求と技術研究を継続。最終的には「自身の創造性と自由」を完全に保護できる、揺るぎないポジションの確立を目指します。',
+      '実務経験と資格を武器に、日本の技術者高齢化による構造的需要を捉え、大手データセンターや外資系企業へアクセスします。さらに将来的には海外大学院の修士課程へ進学し、生涯にわたる知の探求と技術研究を継続。最終的には「自身の創造性と自由」を完全に保護できる、揺るぎないポジションの確立を目指します。',
     roadmapCol3Footer: '展望: データセンター • 海外大学院修士 • 長期研究',
+
+    // Blog
+    blogBadge: '思考録 ＆ エッセイ',
+    blogHeading: '思考録・エッセイ',
+    blogLead:
+      '急速に変化するAI環境、人間の存在意義、そして物理インフラを軸とした生存戦略に関する個人的な考察録。',
+    blogReadTime: '分で読めます',
+    readEssay: '記事を読む',
+    authorBy: '執筆: 三角 陸人',
+    shareArticle: '共有',
+    linkCopied: 'リンクをコピーしました ✓',
 
     // Footer
     footerContact: 'お問い合わせ',

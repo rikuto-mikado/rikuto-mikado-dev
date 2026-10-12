@@ -53,14 +53,20 @@ export default function Sidebar({
       subtitle: ui.navLearningSub,
     },
     {
-      id: 'roadmap',
+      id: 'blog',
       num: '04',
+      label: ui.navBlog,
+      subtitle: ui.navBlogSub,
+    },
+    {
+      id: 'roadmap',
+      num: '05',
       label: ui.navRoadmap,
       subtitle: ui.navRoadmapSub,
     },
     {
       id: 'contact',
-      num: '05',
+      num: '06',
       label: ui.navContact,
       subtitle: ui.navContactSub,
     },
@@ -108,7 +114,7 @@ export default function Sidebar({
       <div
         onClick={onClose}
         aria-hidden="true"
-        className={`fixed inset-0 z-40 transition-opacity duration-500 ease-out ${
+        className={`fixed inset-0 z-[65] transition-opacity duration-500 ease-out ${
           isOpen
             ? 'opacity-100 pointer-events-auto bg-black/60 backdrop-blur-sm'
             : 'opacity-0 pointer-events-none'
@@ -121,7 +127,7 @@ export default function Sidebar({
         role="dialog"
         aria-label="Navigation Menu"
         aria-modal={isOpen}
-        className={`fixed top-0 right-0 bottom-0 z-50 w-full max-w-[340px] sm:max-w-[420px] shadow-2xl flex flex-col justify-between overflow-y-auto transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed top-0 right-0 bottom-0 z-[70] w-full max-w-[340px] sm:max-w-[420px] shadow-2xl flex flex-col justify-between overflow-y-auto transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         } ${
           isDark

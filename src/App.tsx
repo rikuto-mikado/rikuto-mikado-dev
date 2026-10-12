@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import LightTrails from './components/LightTrails'
 import Sidebar from './components/Sidebar'
+import BlogSection from './components/BlogSection'
 import type { Language, CourseItem } from './data/translations'
 import { timelineEventsData, coursesData, uiText } from './data/translations'
 import certFullstackWeb from './assets/cert-fullstack-web.png'
@@ -74,7 +75,7 @@ const socialLinks = [
 
 export default function App() {
   // Set to true once Japanese translation review is finalized
-  const isJapaneseAvailable = false
+  const isJapaneseAvailable = true
 
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -111,7 +112,7 @@ export default function App() {
 
   const toggleLang = () => {
     if (!isJapaneseAvailable) {
-      triggerToast('日本語版は現在精査中です (近日公開予定)', 'Japanese translation is currently under review.')
+      triggerToast('日本語版は現在更新中です', 'Japanese translation is currently under review.')
       return
     }
     setLang((prev) => (prev === 'en' ? 'ja' : 'en'))
@@ -137,7 +138,7 @@ export default function App() {
 
   // Scrollspy: update active section during scroll
   useEffect(() => {
-    const sectionIds = ['about', 'trajectory', 'courses', 'roadmap', 'contact']
+    const sectionIds = ['about', 'trajectory', 'courses', 'blog', 'roadmap', 'contact']
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight * 0.35
       for (const id of sectionIds) {
@@ -175,7 +176,7 @@ export default function App() {
     >
       {/* Floating Header Dock (Dark Mode Toggle, Language Switcher & Navigation Menu) */}
       <div
-        className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-40 flex items-center p-1 sm:p-1.5 rounded-full border shadow-xl backdrop-blur-md transition-all duration-300 ${
+        className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-[60] flex items-center p-1 sm:p-1.5 rounded-full border shadow-xl backdrop-blur-md transition-all duration-300 ${
           isDark
             ? 'bg-[#1C1A18]/85 border-[#3A352F] text-[#E8E4DD]'
             : 'bg-[#F5F4F0]/85 border-[#d4a373]/60 text-gray-800'
@@ -774,7 +775,10 @@ export default function App() {
         </div>
       )}
 
-      {/* 5. Roadmap & Vision Section */}
+      {/* 5. Blog & Perspectives Section */}
+      <BlogSection lang={lang} isDark={isDark} />
+
+      {/* 6. Roadmap & Vision Section */}
       <section id="roadmap" className="relative w-full text-[#F5F4F0] py-28 px-6 scroll-mt-6">
         <div className="absolute inset-0 bg-[#344432] z-0 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
@@ -855,7 +859,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. Footer Section */}
+      {/* 7. Footer Section */}
       <footer id="contact" className="relative w-full text-[#F5F4F0] py-20 px-6 scroll-mt-6">
         <div className="absolute inset-0 bg-[#9A4C22] z-0 pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center space-y-10">
