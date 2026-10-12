@@ -170,7 +170,7 @@ export default function BlogSection({
                       isDark ? 'text-[#C4BEB4]' : 'text-gray-600'
                     }`}
                   >
-                    {post.excerpt}
+                    {post.paragraphs[0] || post.excerpt}
                   </p>
                 </div>
 
@@ -376,30 +376,9 @@ export default function BlogSection({
                     isDark ? 'text-[#D8D3CA]' : 'text-gray-700'
                   }`}
                 >
-                  {selectedPost.paragraphs.map((p, idx) => {
-                    // Callout block for core identity thesis
-                    if (
-                      p.startsWith(
-                        "The core issue isn't just whether AGI will be created"
-                      ) ||
-                      p.startsWith('核心的な問題は、AGIが誕生するかどうかや')
-                    ) {
-                      return (
-                        <blockquote
-                          key={idx}
-                          className={`border-l-3 border-[#9A4C22] pl-5 sm:pl-6 py-3.5 my-3 rounded-r-xl font-serif italic text-base sm:text-lg leading-relaxed ${
-                            isDark
-                              ? 'bg-white/[0.04] text-[#F5F3EE]'
-                              : 'bg-[#9A4C22]/5 text-gray-900'
-                          }`}
-                        >
-                          {p}
-                        </blockquote>
-                      )
-                    }
-
-                    return <p key={idx}>{p}</p>
-                  })}
+                  {selectedPost.paragraphs.map((p, idx) => (
+                    <p key={idx}>{p}</p>
+                  ))}
                 </div>
 
                 {/* Footer metadata & Bottom Close Button */}

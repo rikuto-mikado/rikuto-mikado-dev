@@ -17,7 +17,7 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
       id: 'why-our-generation-cannot-ignore-agi',
       title: 'Why Our Generation Cannot Ignore AGI',
       excerpt:
-        'Young people today should not blindly trust optimistic claims. The core threat of AGI is not just whether jobs will be lost, but a fundamental attack on human self-esteem and identity.',
+        'This might be a personal take, but I strongly believe that young people today should not blindly trust the optimistic voices claiming, "AGI (Artificial General Intelligence) won\'t happen anytime soon" or "AI won\'t take our jobs."',
       date: 'Oct 2026',
       readTime: '3 min read',
       category: 'AI & Strategic Horizons',
@@ -37,7 +37,7 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
       id: 'why-masses-happier-without-ai',
       title: 'Why I Believe the Masses Would Be Happier Without AI',
       excerpt:
-        'While popular mantras claim that mastering AI is mandatory to survive, I argue the antithesis: uncritical validation, subtle hallucinations, and psychological dependency suggest most people would actually be happier living without it.',
+        "You’ve probably heard the prevalent mantra: 'Those who master AI will win,' or 'Adapting to AI is the only way to survive.' What I am about to share is an antithesis to this narrative.",
       date: 'Oct 2026',
       readTime: '3 min read',
       category: 'AI & Human Nature',
@@ -56,7 +56,7 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
       id: 'why-our-generation-cannot-ignore-agi',
       title: 'なぜ私たちの世代はAGIを無視できないのか',
       excerpt:
-        '「AGIはすぐには来ない」「AIに仕事を奪われない」という楽観論を盲信すべきではない。核心的な脅威は、職の喪失以上に私たちの自尊心とアイデンティティに向けられている。',
+        '個人的な見解かもしれないが、今日の若者は「AGI（汎用人工知能）はすぐには実現しない」「AIに仕事を奪われることはない」といった楽観的な声を盲信すべきではないと強く思っている。',
       date: '2026年10月',
       readTime: '読了目安 3分',
       category: 'AI・戦略的展望',
@@ -76,7 +76,7 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
       id: 'why-masses-happier-without-ai',
       title: '大衆はAIを使わない方が幸せであると信じる理由',
       excerpt:
-        '「AIを使いこなす者が勝つ」という言説に対するアンチテーゼ。無批判な肯定、巧妙なハルシネーション、人格を歪めかねない心理的影響を鑑みれば、大多数の人々はAIに触れない方が幸せであると信じる理由。',
+        '「AIを使いこなす者が勝つ」「AIに適応することこそが生き残る道だ」といった決まり文句を、おそらく一度は耳にしたことがあるだろう。これから私が語るのは、こうした言説に対するアンチテーゼである。',
       date: '2026年10月',
       readTime: '読了目安 3分',
       category: 'AIと人間性',
