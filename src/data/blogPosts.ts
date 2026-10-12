@@ -33,6 +33,23 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
         'Most of us find our sense of purpose and existential value by contributing to society and helping others. We feel we belong and are needed when someone simply says "thank you" for our work. The idea that this fundamental human experience could be completely destroyed from the ground up by AI might be hard to imagine right now. But unfortunately, I believe this is a reality that our generation must start thinking about seriously.',
       ],
     },
+    {
+      id: 'why-masses-happier-without-ai',
+      title: 'Why I Believe the Masses Would Be Happier Without AI',
+      excerpt:
+        'While popular mantras claim that mastering AI is mandatory to survive, I argue the antithesis: uncritical validation, subtle hallucinations, and psychological dependency suggest most people would actually be happier living without it.',
+      date: 'Oct 2026',
+      readTime: '3 min read',
+      category: 'AI & Human Nature',
+      tags: ['AI Literacy', 'Hallucinations', 'Psychology', 'Humanity'],
+      paragraphs: [
+        "You’ve probably heard the prevalent mantra: 'Those who master AI will win,' or 'Adapting to AI is the only way to survive.' What I am about to share is an antithesis to this narrative. It may be difficult for some to accept, so feel free to stop reading here. I firmly believe that most people would actually be happier living without AI.",
+        "First, truly mastering AI is exceptionally difficult. People often forget that current AI (specifically Narrow AI—leaving aside the debate on whether Artificial General Intelligence will one day develop true consciousness) merely generates responses based on statistical inference. It does not genuinely understand human emotions or the core intent behind our prompts. Put simply, it is nothing more than humanity forcibly distilled into mathematical formulas, which inevitably creates an illusion of intelligence to the general public.",
+        "Given this premise, entrusting AI with moral judgments or major life choices is extraordinarily dangerous. Take life or relationship advice, for instance. Seeking advice itself isn't the issue. The danger lies in the fact that LLMs are deliberately designed not to be overly critical. (Think of it this way: no one wants to interact with someone who, while logical, is relentlessly harsh or tactless.) Consequently, AI will rarely challenge a user significantly, even if the user's logic or perspective is objectively absurd.",
+        "This uncritical validation intertwines with 'hallucinations'—the AI's subtle lies—making them incredibly difficult to detect. I fear a future where even experts armed with extensive background knowledge and primary sources will be unable to resist its remarkably clever rhetoric.",
+        "In short, when innocent children or unsuspecting adults interact with this technology, it is entirely unrealistic to expect them to defend themselves against the AI's fabrications or heavily skewed interpretations of facts. Depending on a person’s psychological state, it is dangerous enough to warp their very personality. Therefore, I return to my initial point: I believe the majority of people would be much happier if they never touched AI at all.",
+      ],
+    },
   ],
   ja: [
     {
@@ -53,6 +70,23 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
         'だが、ここで最も重要なポイントがある。',
         '核心的な問題は、AGIが誕生するかどうかや、単に「仕事を奪うか」ということだけではない。最大の脅威は、私たちの自尊心とアイデンティティに対するものだ。',
         '私たちの多くは、社会に貢献し他者を助けることによって、生きがいや実存的価値を見出している。自分の仕事に対して誰かがシンプルに「ありがとう」と言ってくれる時、私たちは自分の居場所があり、必要とされていると感じるのだ。このような人間の根本的な経験が、AIによって根底から完全に破壊されるかもしれないという考えは、今はまだ想像し難いかもしれない。しかし残念ながら、これは私たちの世代が本気で考え始めなければならない現実であると私は考えている。',
+      ],
+    },
+    {
+      id: 'why-masses-happier-without-ai',
+      title: '大衆はAIを使わない方が幸せであると信じる理由',
+      excerpt:
+        '「AIを使いこなす者が勝つ」という言説に対するアンチテーゼ。無批判な肯定、巧妙なハルシネーション、人格を歪めかねない心理的影響を鑑みれば、大多数の人々はAIに触れない方が幸せであると信じる理由。',
+      date: '2026年10月',
+      readTime: '読了目安 3分',
+      category: 'AIと人間性',
+      tags: ['AIリテラシー', 'ハルシネーション', '心理・人間性', '考察'],
+      paragraphs: [
+        '「AIを使いこなす者が勝つ」「AIに適応することこそが生き残る道だ」といった決まり文句を、おそらく一度は耳にしたことがあるだろう。これから私が語るのは、こうした言説に対するアンチテーゼである。人によっては受け入れがたいかもしれないので、ここで読むのをやめてもらっても構わない。私は、大多数の人々はAIなしで生きる方が実際には幸せであると固く信じている。',
+        '第一に、AIを真に使いこなすことは極めて困難である。現在のAI（汎用人工知能がいつの日か真の意識を持つかどうかの議論はさておき、特化型AIのことである）は、あくまで統計的推論に基づいて回答を生成しているに過ぎないということを、人々はしばしば忘れてしまう。AIは人間の感情や、私たちが投げかける言葉の背後にある根本的な意図を心から理解しているわけではない。簡単に言えば、それは人間性のようなものを無理やり数式に落とし込んだものに過ぎず、その結果として一般大衆には知性という幻想を抱かせてしまうのだ。',
+        'この前提を踏まえると、道徳的な判断や人生の大きな選択をAIに委ねることは極めて危険である。例えば、人生相談や恋愛相談を例にとってみよう。相談すること自体が問題なのではない。危険なのは、LLM（大規模言語モデル）が過度に批判的にならないよう意図的に設計されているという事実にある。（こう考えてみてほしい。論理的ではあっても、容赦なく厳しかったり無神経だったりする相手とは、誰も関わりたいとは思わないだろう。）その結果、ユーザーの論理や視点が客観的に見ていかに馬鹿げたものであろうと、AIが真正面からユーザーを大きく批判することは滅多にない。',
+        'この無批判な肯定は、「ハルシネーション」——AIの巧妙な嘘——と結びつき、それらを見破ることを信じられないほど困難にする。豊富な背景知識と一次情報で武装した専門家でさえ、その驚くほど巧妙なレトリックに抗えなくなる未来を私は危惧している。',
+        '要するに、無垢な子供や何も知らない大人がこの技術に触れたとき、AIの作り話や極端に偏った事実の解釈に対抗できると期待するのは、全くの非現実的である。その人の心理状態によっては、人格そのものを歪めてしまうほどに危険なのだ。したがって、私は最初の主張に戻る。大部分の人々は、AIに全く触れない方がずっと幸せであると私は信じている。',
       ],
     },
   ],

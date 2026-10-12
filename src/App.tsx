@@ -75,7 +75,7 @@ const socialLinks = [
 
 export default function App() {
   // Set to true once Japanese translation review is finalized
-  const isJapaneseAvailable = true
+  const isJapaneseAvailable = false
 
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)

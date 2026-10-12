@@ -200,7 +200,7 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
           >
             <div className="space-y-3">
               <span className="text-[10px] uppercase font-sans font-semibold tracking-widest text-[#9A4C22]">
-                {lang === 'ja' ? '次回執筆中' : 'Upcoming'}
+                {lang === 'ja' ? '次回執筆予定' : 'Upcoming'}
               </span>
               <h4
                 className={`font-serif italic text-base sm:text-lg ${
@@ -208,17 +208,12 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
                 }`}
               >
                 {lang === 'ja'
-                  ? '物理インフラと自動化の現場'
-                  : 'Physical Infrastructure & Automation'}
+                  ? '私は残念ながら若者だ'
+                  : 'Unfortunately, I Am Young'}
               </h4>
-              <p className="font-sans text-xs leading-relaxed font-light">
-                {lang === 'ja'
-                  ? '電気工学、現場実務、そして自律AIとの境界線に関する考察を順次執筆予定です。'
-                  : 'Upcoming reflections on electrical systems, hands-on field resilience, and autonomous AI.'}
-              </p>
             </div>
             <div className="pt-4 mt-6 border-t border-dashed border-gray-300/30 text-[11px] font-sans">
-              {lang === 'ja' ? '執筆中 (In Progress)' : 'In Progress • Soon'}
+              {lang === 'ja' ? '執筆予定 (In Progress)' : 'In Progress • Soon'}
             </div>
           </div>
         </div>
