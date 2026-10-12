@@ -356,7 +356,7 @@ export default function Sidebar({
                   : 'bg-white hover:bg-gray-50 text-[#9A4C22] border border-[#d4a373]/60 shadow-xs'
               }`}
             >
-              {!isJapaneseAvailable ? '準備中 (Soon)' : ui.langToggle}
+              {!isJapaneseAvailable ? '準備中' : ui.langToggle}
             </button>
           </div>
 

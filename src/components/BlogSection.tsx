@@ -8,6 +8,7 @@ interface BlogSectionProps {
   lang: Language
   isDark: boolean
   onToggleLang?: () => void
+  isJapaneseAvailable?: boolean
   onModalStateChange?: (isOpen: boolean) => void
 }
 
@@ -15,6 +16,7 @@ export default function BlogSection({
   lang,
   isDark,
   onToggleLang,
+  isJapaneseAvailable = false,
   onModalStateChange,
 }: BlogSectionProps) {
   const ui = uiText[lang]
@@ -276,7 +278,16 @@ export default function BlogSection({
                         onToggleLang()
                       }}
                       aria-label={
-                        lang === 'en'
+                        !isJapaneseAvailable
+                          ? '日本語版は準備中です (Under Review)'
+                          : lang === 'en'
+                          ? '日本語に切り替える'
+                          : 'Switch to English'
+                      }
+                      title={
+                        !isJapaneseAvailable
+                          ? '日本語版は現在更新中です (Japanese translation is currently under review)'
+                          : lang === 'en'
                           ? '日本語に切り替える'
                           : 'Switch to English'
                       }
@@ -300,6 +311,11 @@ export default function BlogSection({
                         />
                       </svg>
                       <span>{lang === 'en' ? 'JA' : 'EN'}</span>
+                      {!isJapaneseAvailable && (
+                        <span className="text-[10px] opacity-75 font-normal ml-0.5 whitespace-nowrap">
+                          (Soon)
+                        </span>
+                      )}
                     </button>
                   )}
 

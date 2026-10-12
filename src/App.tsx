@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import LightTrails from './components/LightTrails'
 import Sidebar from './components/Sidebar'
 import BlogSection from './components/BlogSection'
@@ -75,7 +76,7 @@ const socialLinks = [
 
 export default function App() {
   // Enabled: Japanese translation review guard lifted
-  const isJapaneseAvailable = true
+  const isJapaneseAvailable = false
 
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false)
@@ -262,47 +263,50 @@ export default function App() {
         </button>
       </div>
 
-      {/* Floating Coming Soon Toast Notification */}
-      {toastMessage && (
-        <div
-          role="status"
-          aria-live="polite"
-          className={`fixed top-16 right-4 sm:top-20 sm:right-6 z-50 max-w-sm px-4 py-3 rounded-2xl border shadow-2xl backdrop-blur-md transition-all duration-300 ${
-            isDark
-              ? 'bg-[#1C1A18]/95 border-[#E0A96D]/50 text-[#F5F3EE]'
-              : 'bg-[#FAF8F5]/95 border-[#9A4C22]/50 text-gray-900'
-          }`}
-        >
-          <div className="flex items-start gap-3">
-            <div
-              className={`p-1.5 rounded-full mt-0.5 shrink-0 ${
-                isDark ? 'bg-[#E0A96D]/15 text-[#E0A96D]' : 'bg-[#9A4C22]/15 text-[#9A4C22]'
-              }`}
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+      {/* Floating Coming Soon Toast Notification (Portalled to document.body at z-[120] so it appears over all modals) */}
+      {toastMessage &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            role="status"
+            aria-live="polite"
+            className={`fixed top-4 left-4 right-4 sm:left-auto sm:right-6 sm:top-6 sm:max-w-sm z-[120] px-4 py-3 rounded-2xl border shadow-2xl backdrop-blur-md transition-all duration-300 animate-fade-in ${
+              isDark
+                ? 'bg-[#1C1A18]/95 border-[#E0A96D]/50 text-[#F5F3EE]'
+                : 'bg-[#FAF8F5]/95 border-[#9A4C22]/50 text-gray-900'
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div
+                className={`p-1.5 rounded-full mt-0.5 shrink-0 ${
+                  isDark ? 'bg-[#E0A96D]/15 text-[#E0A96D]' : 'bg-[#9A4C22]/15 text-[#9A4C22]'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1 pr-1">
+                <p className="font-sans text-xs sm:text-sm font-semibold leading-snug">
+                  {toastMessage.main}
+                </p>
+                <p className={`font-sans text-[11px] sm:text-xs mt-0.5 leading-snug ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {toastMessage.sub}
+                </p>
+              </div>
+              <button
+                onClick={() => setToastMessage(null)}
+                className={`p-1 rounded-md text-xs opacity-60 hover:opacity-100 transition-opacity cursor-pointer ${
+                  isDark ? 'hover:bg-white/10' : 'hover:bg-black/5'
+                }`}
+                aria-label="Close notification"
+              >
+                ✕
+              </button>
             </div>
-            <div className="flex-1 pr-1">
-              <p className="font-sans text-xs sm:text-sm font-semibold leading-snug">
-                {toastMessage.main}
-              </p>
-              <p className={`font-sans text-[11px] sm:text-xs mt-0.5 leading-snug ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {toastMessage.sub}
-              </p>
-            </div>
-            <button
-              onClick={() => setToastMessage(null)}
-              className={`p-1 rounded-md text-xs opacity-60 hover:opacity-100 transition-opacity cursor-pointer ${
-                isDark ? 'hover:bg-white/10' : 'hover:bg-black/5'
-              }`}
-              aria-label="Close notification"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
 
       {/* Slide-over Navigation Sidebar Drawer */}
       <Sidebar
@@ -800,6 +804,7 @@ export default function App() {
         lang={lang}
         isDark={isDark}
         onToggleLang={toggleLang}
+        isJapaneseAvailable={isJapaneseAvailable}
         onModalStateChange={setIsBlogModalOpen}
       />
 
