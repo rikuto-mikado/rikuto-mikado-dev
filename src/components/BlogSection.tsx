@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import type { Language } from '../data/translations'
 import { uiText } from '../data/translations'
 import { blogPostsData } from '../data/blogPosts'
@@ -6,15 +7,27 @@ import { blogPostsData } from '../data/blogPosts'
 interface BlogSectionProps {
   lang: Language
   isDark: boolean
+  onToggleLang?: () => void
+  onModalStateChange?: (isOpen: boolean) => void
 }
 
-export default function BlogSection({ lang, isDark }: BlogSectionProps) {
+export default function BlogSection({
+  lang,
+  isDark,
+  onToggleLang,
+  onModalStateChange,
+}: BlogSectionProps) {
   const ui = uiText[lang]
   const posts = blogPostsData[lang]
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null)
   const selectedPost = selectedPostId
     ? posts.find((p) => p.id === selectedPostId) ?? null
     : null
+
+  // Notify parent of modal open/close state
+  useEffect(() => {
+    onModalStateChange?.(Boolean(selectedPostId))
+  }, [selectedPostId, onModalStateChange])
 
   // Close modal on ESC key
   useEffect(() => {
@@ -49,10 +62,10 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16 space-y-3">
-          <span className="text-xs font-sans uppercase tracking-widest text-[#9A4C22] font-semibold block">
+          <span className="text-xs font-sans uppercase tracking-[0.22em] text-[#9A4C22] font-semibold block">
             {ui.blogBadge}
           </span>
-          <h2 className="text-4xl md:text-5xl text-[#9A4C22] italic font-serif">
+          <h2 className="text-4xl md:text-5xl text-[#9A4C22] italic font-serif tracking-tight">
             {ui.blogHeading}
           </h2>
           <p
@@ -64,7 +77,7 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
           </p>
         </div>
 
-        {/* 4-Column Grid on Desktop (Similar to Skill Acquisition Cards) */}
+        {/* 4-Column Grid on Desktop (Matching Skill Acquisition Cards) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {posts.map((post) => (
             <article
@@ -84,7 +97,7 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
                     : 'bg-gradient-to-br from-[#F5F4F0] via-[#EFECE6] to-[#E5E0D5] border-[#ece6dd]'
                 }`}
               >
-                {/* Decorative background watermark / geometry */}
+                {/* Decorative background watermark */}
                 <div className="absolute -right-4 -bottom-4 w-28 h-28 rounded-full border border-[#9A4C22]/15 pointer-events-none" />
                 <div className="absolute right-6 bottom-6 w-16 h-16 rounded-full border border-dashed border-[#9A4C22]/20 pointer-events-none" />
 
@@ -100,7 +113,7 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
                   </span>
                 </div>
 
-                {/* Subtle hover overlay hint (Matching Course Cards) */}
+                {/* Subtle hover overlay hint */}
                 <div className="absolute inset-0 bg-[#2b2623]/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20 backdrop-blur-[1px]">
                   <span className="px-4 py-2 rounded-full bg-white/95 text-gray-900 text-xs font-sans font-semibold tracking-wider uppercase shadow-md flex items-center gap-1.5">
                     {ui.readEssay}
@@ -190,7 +203,7 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
             </article>
           ))}
 
-          {/* Coming Soon Card (Maintains grid visual balance on 4-column desktop display) */}
+          {/* Upcoming Card (Maintains grid visual balance on 4-column desktop display) */}
           <div
             className={`rounded-2xl p-6 border border-dashed flex flex-col justify-between transition-colors duration-500 opacity-60 hover:opacity-80 ${
               isDark
@@ -219,118 +232,205 @@ export default function BlogSection({ lang, isDark }: BlogSectionProps) {
         </div>
       </div>
 
-      {/* Reading Modal (Detailed Full Article Viewer, Matching Certificate Modal UX) */}
-      {selectedPost && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm animate-fade-in"
-          onClick={() => setSelectedPostId(null)}
-        >
+      {/* Reading Modal rendered through React Portal to document.body (Immune to parent section stacking contexts) */}
+      {typeof document !== 'undefined' &&
+        selectedPost &&
+        createPortal(
           <div
-            className={`relative rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 sm:p-10 space-y-6 transition-colors duration-300 ${
-              isDark ? 'bg-[#181615] text-[#E8E4DD]' : 'bg-white text-gray-800'
-            }`}
-            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in"
+            onClick={() => setSelectedPostId(null)}
           >
-            {/* Header with close button */}
             <div
-              className={`flex items-start justify-between border-b pb-5 transition-colors duration-300 ${
-                isDark ? 'border-[#2E2B27]' : 'border-gray-200'
+              className={`relative rounded-2xl sm:rounded-3xl max-w-3xl w-full max-h-[90dvh] sm:max-h-[92vh] overflow-y-auto overscroll-contain shadow-2xl transition-colors duration-300 flex flex-col ${
+                isDark ? 'bg-[#181615] text-[#E8E4DD]' : 'bg-white text-gray-800'
               }`}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="space-y-1.5 pr-4">
-                <div className="flex items-center gap-3 text-xs font-sans">
-                  <span className="uppercase tracking-wider font-semibold text-[#9A4C22]">
-                    {selectedPost.category}
-                  </span>
-                  <span className="text-gray-400">•</span>
-                  <span className="text-gray-400">{selectedPost.date}</span>
-                  <span className="text-gray-400">•</span>
-                  <span className="text-[#9A4C22] font-medium">
-                    {selectedPost.readTime}
-                  </span>
-                </div>
-                <h3
-                  className={`font-serif italic text-2xl sm:text-3xl font-bold leading-snug transition-colors duration-300 ${
-                    isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
-                  }`}
-                >
-                  {selectedPost.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedPostId(null)}
-                aria-label="Close modal"
-                className={`text-3xl font-light leading-none p-1 transition-colors cursor-pointer shrink-0 ${
+              {/* Sticky Modal Header (Always visible when scrolling on phones & desktops) */}
+              <div
+                className={`sticky top-0 z-20 px-4 sm:px-8 py-3.5 sm:py-4 border-b backdrop-blur-xl flex items-center justify-between gap-3 transition-colors duration-300 ${
                   isDark
-                    ? 'text-gray-400 hover:text-white'
-                    : 'text-gray-400 hover:text-gray-800'
+                    ? 'bg-[#181615]/95 border-[#2E2B27]'
+                    : 'bg-white/95 border-gray-200'
                 }`}
               >
-                &times;
-              </button>
-            </div>
+                <div className="flex items-center gap-2 min-w-0 pr-1">
+                  <span className="uppercase tracking-wider font-semibold text-xs text-[#9A4C22] truncate">
+                    {selectedPost.category}
+                  </span>
+                  <span className="text-gray-400 hidden sm:inline">•</span>
+                  <span className="text-gray-400 text-xs hidden sm:inline whitespace-nowrap">
+                    {selectedPost.date}
+                  </span>
+                </div>
 
-            {/* Article Content Paragraphs */}
-            <div
-              className={`space-y-6 text-sm sm:text-base md:text-[17px] leading-relaxed sm:leading-loose font-light font-sans transition-colors duration-300 ${
-                isDark ? 'text-[#D8D3CA]' : 'text-gray-700'
-              }`}
-            >
-              {selectedPost.paragraphs.map((p, idx) => {
-
-                // Callout block for core identity thesis (Paragraph 7)
-                if (
-                  p.startsWith(
-                    "The core issue isn't just whether AGI will be created"
-                  ) ||
-                  p.startsWith('核心的な問題は、AGIが誕生するかどうかや')
-                ) {
-                  return (
-                    <blockquote
-                      key={idx}
-                      className={`border-l-3 border-[#9A4C22] pl-5 sm:pl-6 py-3.5 my-3 rounded-r-xl font-serif italic text-base sm:text-lg leading-relaxed ${
+                {/* Right controls: Language Switcher & Generous 44px Touch-Target Close Button */}
+                <div className="flex items-center gap-2 shrink-0">
+                  {onToggleLang && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onToggleLang()
+                      }}
+                      aria-label={
+                        lang === 'en'
+                          ? '日本語に切り替える'
+                          : 'Switch to English'
+                      }
+                      className={`flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-full font-sans text-xs font-semibold tracking-wider transition-all duration-200 transform active:scale-95 cursor-pointer touch-manipulation ${
                         isDark
-                          ? 'bg-white/[0.04] text-[#F5F3EE]'
-                          : 'bg-[#9A4C22]/5 text-gray-900'
+                          ? 'bg-[#25221F] hover:bg-[#302B27] text-[#E0A96D] border border-[#3A352F]'
+                          : 'bg-[#F5F4F0] hover:bg-white text-[#9A4C22] border border-[#e3dbcd]'
                       }`}
                     >
-                      {p}
-                    </blockquote>
-                  )
-                }
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.8}
+                          d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0c2.5 0 4.5-4 4.5-9s-2-9-4.5-9-4.5 4-4.5 9 2 9 4.5 9zm-9-9h18"
+                        />
+                      </svg>
+                      <span>{lang === 'en' ? 'JA' : 'EN'}</span>
+                    </button>
+                  )}
 
-                return <p key={idx}>{p}</p>
-              })}
-            </div>
-
-            {/* Footer metadata & actions */}
-            <div
-              className={`pt-6 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-sans transition-colors duration-300 ${
-                isDark ? 'border-[#2E2B27]' : 'border-gray-200'
-              }`}
-            >
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {selectedPost.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className={`px-2.5 py-1 rounded-md text-[11px] font-medium tracking-wider ${
+                  {/* 44px Touch Target Close Button (Guaranteed thumb-friendly on all phones) */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedPostId(null)
+                    }}
+                    aria-label={lang === 'ja' ? '閉じる' : 'Close modal'}
+                    className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer touch-manipulation active:scale-90 ${
                       isDark
-                        ? 'bg-white/[0.06] text-[#E0A96D]'
-                        : 'bg-gray-100 text-gray-700'
+                        ? 'bg-white/10 hover:bg-white/20 text-[#F5F3EE]'
+                        : 'bg-black/5 hover:bg-black/10 text-gray-800'
                     }`}
                   >
-                    #{tag}
-                  </span>
-                ))}
-              </div>     
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 sm:p-10 space-y-6">
+                {/* Title & Metadata */}
+                <div className="space-y-2 border-b pb-6 border-dashed border-gray-300/30">
+                  <div className="flex items-center gap-2 text-xs font-sans sm:hidden">
+                    <span className="text-gray-400">{selectedPost.date}</span>
+                    <span className="text-gray-400">•</span>
+                    <span className="text-[#9A4C22] font-medium">
+                      {selectedPost.readTime}
+                    </span>
+                  </div>
+                  <h3
+                    className={`font-serif italic text-2xl sm:text-3xl md:text-4xl font-bold leading-snug transition-colors duration-300 ${
+                      isDark ? 'text-[#F5F3EE]' : 'text-gray-900'
+                    }`}
+                  >
+                    {selectedPost.title}
+                  </h3>
+                </div>
+
+                {/* Article Content Paragraphs */}
+                <div
+                  className={`space-y-6 text-sm sm:text-base md:text-[17px] leading-relaxed sm:leading-loose font-light font-sans transition-colors duration-300 ${
+                    isDark ? 'text-[#D8D3CA]' : 'text-gray-700'
+                  }`}
+                >
+                  {selectedPost.paragraphs.map((p, idx) => {
+                    // Callout block for core identity thesis
+                    if (
+                      p.startsWith(
+                        "The core issue isn't just whether AGI will be created"
+                      ) ||
+                      p.startsWith('核心的な問題は、AGIが誕生するかどうかや')
+                    ) {
+                      return (
+                        <blockquote
+                          key={idx}
+                          className={`border-l-3 border-[#9A4C22] pl-5 sm:pl-6 py-3.5 my-3 rounded-r-xl font-serif italic text-base sm:text-lg leading-relaxed ${
+                            isDark
+                              ? 'bg-white/[0.04] text-[#F5F3EE]'
+                              : 'bg-[#9A4C22]/5 text-gray-900'
+                          }`}
+                        >
+                          {p}
+                        </blockquote>
+                      )
+                    }
+
+                    return <p key={idx}>{p}</p>
+                  })}
+                </div>
+
+                {/* Footer metadata & Bottom Close Button */}
+                <div
+                  className={`pt-6 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-sans transition-colors duration-300 ${
+                    isDark ? 'border-[#2E2B27]' : 'border-gray-200'
+                  }`}
+                >
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2">
+                    {selectedPost.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`px-2.5 py-1 rounded-md text-[11px] font-medium tracking-wider ${
+                          isDark
+                            ? 'bg-white/[0.06] text-[#E0A96D]'
+                            : 'bg-gray-100 text-gray-700'
+                        }`}
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Bottom Close Button for effortless dismissal after finishing read */}
+                  <div className="flex items-center gap-3 w-full sm:w-auto justify-end pt-2 sm:pt-0">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setSelectedPostId(null)
+                      }}
+                      className={`px-6 py-2.5 rounded-full text-xs font-sans font-semibold transition-all duration-200 cursor-pointer touch-manipulation active:scale-95 ${
+                        isDark
+                          ? 'bg-white/10 hover:bg-white/20 text-[#F5F3EE]'
+                          : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
+                      }`}
+                    >
+                      {lang === 'ja' ? '閉じる' : 'Close Article'}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </section>
   )
 }

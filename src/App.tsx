@@ -74,10 +74,11 @@ const socialLinks = [
 ]
 
 export default function App() {
-  // Set to true once Japanese translation review is finalized
-  const isJapaneseAvailable = false
+  // Enabled: Japanese translation review guard lifted
+  const isJapaneseAvailable = true
 
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
+  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('about')
   const [lang, setLang] = useState<Language>(() => {
@@ -177,6 +178,10 @@ export default function App() {
       {/* Floating Header Dock (Dark Mode Toggle, Language Switcher & Navigation Menu) */}
       <div
         className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-[60] flex items-center p-1 sm:p-1.5 rounded-full border shadow-xl backdrop-blur-md transition-all duration-300 ${
+          isBlogModalOpen || selectedCert
+            ? 'opacity-0 pointer-events-none -translate-y-2'
+            : 'opacity-100'
+        } ${
           isDark
             ? 'bg-[#1C1A18]/85 border-[#3A352F] text-[#E8E4DD]'
             : 'bg-[#F5F4F0]/85 border-[#d4a373]/60 text-gray-800'
@@ -648,30 +653,45 @@ export default function App() {
 
                 {/* Card details */}
                 <div className="p-6 md:p-7 space-y-4 flex-1 flex flex-col justify-between">
-                  <div className="space-y-2.5">
-                    <div className="flex items-center justify-between text-xs font-sans font-semibold">
-                      <span className={`uppercase tracking-wider px-2.5 py-1 rounded-md transition-colors duration-500 ${
-                        isDark
-                          ? 'text-[#E0A96D] bg-[#24211D] border border-[#3A352F]'
-                          : 'text-[#9A4C22] bg-[#F5F4F0] border border-[#e3dbcd]'
-                      }`}>
-                        {course.category}
-                      </span>
-                      <span className={`transition-colors duration-500 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{course.date}</span>
+                  <div className="space-y-3">
+                    {/* Meta row: Date */}
+                    <div
+                      className={`flex items-center justify-between text-[11px] font-sans ${
+                        isDark ? 'text-gray-400' : 'text-gray-500'
+                      }`}
+                    >
+                      <span className="font-medium">{course.date}</span>
                     </div>
 
-                    <h3 className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 ${
-                      isDark
-                        ? 'text-[#F5F3EE] group-hover:text-[#E0A96D]'
-                        : 'text-gray-900 group-hover:text-[#9A4C22]'
-                    }`}>
+                    {/* Category Badge (Standalone line with whitespace-nowrap matching Essays & Observations) */}
+                    <div>
+                      <span
+                        className={`inline-block uppercase tracking-wider px-2.5 py-0.5 rounded-md transition-colors duration-500 text-[10px] font-semibold font-sans whitespace-nowrap truncate max-w-full ${
+                          isDark
+                            ? 'text-[#E0A96D] bg-[#24211D] border border-[#3A352F]'
+                            : 'text-[#9A4C22] bg-[#F5F4F0] border border-[#e3dbcd]'
+                        }`}
+                      >
+                        {course.category}
+                      </span>
+                    </div>
+
+                    <h3
+                      className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 ${
+                        isDark
+                          ? 'text-[#F5F3EE] group-hover:text-[#E0A96D]'
+                          : 'text-gray-900 group-hover:text-[#9A4C22]'
+                      }`}
+                    >
                       {course.title}
                     </h3>
 
                     {course.note && (
-                      <p className={`font-sans text-xs sm:text-sm leading-relaxed font-light transition-colors duration-500 ${
-                        isDark ? 'text-[#C4BEB4]' : 'text-gray-600'
-                      }`}>
+                      <p
+                        className={`font-sans text-xs sm:text-sm leading-relaxed font-light transition-colors duration-500 ${
+                          isDark ? 'text-[#C4BEB4]' : 'text-gray-600'
+                        }`}
+                      >
                         {course.note}
                       </p>
                     )}
@@ -776,7 +796,12 @@ export default function App() {
       )}
 
       {/* 5. Blog & Perspectives Section */}
-      <BlogSection lang={lang} isDark={isDark} />
+      <BlogSection
+        lang={lang}
+        isDark={isDark}
+        onToggleLang={toggleLang}
+        onModalStateChange={setIsBlogModalOpen}
+      />
 
       {/* 6. Roadmap & Vision Section */}
       <section id="roadmap" className="relative w-full text-[#F5F4F0] py-28 px-6 scroll-mt-6">
