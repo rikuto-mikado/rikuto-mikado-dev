@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import type { Language } from '../data/translations'
 import { uiText } from '../data/translations'
-import { blogPostsData } from '../data/blogPosts'
+import { blogPostsData, upcomingPostData } from '../data/blogPosts'
 import whyOurGenerationImg from '../assets/whyourgeneration.png'
 import whyMassesImg from '../assets/whyIbelievethemasses.png'
 import onExistentialCrisisImg from '../assets/onexistentialcrisis.png'
@@ -30,6 +30,7 @@ export default function BlogSection({
 }: BlogSectionProps) {
   const ui = uiText[lang]
   const posts = blogPostsData[lang]
+  const upcomingPost = upcomingPostData[lang]
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null)
   const selectedPost = selectedPostId
     ? posts.find((p) => p.id === selectedPostId) ?? null
@@ -214,32 +215,32 @@ export default function BlogSection({
             )
           })}
 
-          {/* Upcoming Card (Maintains grid visual balance on 4-column desktop display) */}
-          <div
-            className={`rounded-2xl p-6 border border-dashed flex flex-col justify-between transition-colors duration-500 opacity-60 hover:opacity-80 ${
-              isDark
-                ? 'border-[#2D2A26] bg-[#161413]/50 text-gray-400'
-                : 'border-[#d8d1c5] bg-[#F5F4F0]/50 text-gray-500'
-            }`}
-          >
-            <div className="space-y-3">
-              <span className="text-[10px] uppercase font-sans font-semibold tracking-widest text-[#9A4C22]">
-                {lang === 'ja' ? '次回執筆予定' : 'Upcoming'}
-              </span>
-              <h4
-                className={`font-serif italic text-base sm:text-lg ${
-                  isDark ? 'text-gray-300' : 'text-gray-700'
-                }`}
-              >
-                {lang === 'ja'
-                  ? '私は残念ながら若者だ'
-                  : 'Unfortunately, I Am Young'}
-              </h4>
+          {/* Upcoming Card (Rendered only when an upcoming post is defined) */}
+          {upcomingPost && (
+            <div
+              className={`rounded-2xl p-6 border border-dashed flex flex-col justify-between transition-colors duration-500 opacity-60 hover:opacity-80 ${
+                isDark
+                  ? 'border-[#2D2A26] bg-[#161413]/50 text-gray-400'
+                  : 'border-[#d8d1c5] bg-[#F5F4F0]/50 text-gray-500'
+              }`}
+            >
+              <div className="space-y-3">
+                <span className="text-[10px] uppercase font-sans font-semibold tracking-widest text-[#9A4C22]">
+                  {lang === 'ja' ? '次回執筆予定' : 'Upcoming'}
+                </span>
+                <h4
+                  className={`font-serif italic text-base sm:text-lg ${
+                    isDark ? 'text-gray-300' : 'text-gray-700'
+                  }`}
+                >
+                  {upcomingPost.title}
+                </h4>
+              </div>
+              <div className="pt-4 mt-6 border-t border-dashed border-gray-300/30 text-[11px] font-sans">
+                {upcomingPost.status || (lang === 'ja' ? '執筆予定 (In Progress)' : 'In Progress • Soon')}
+              </div>
             </div>
-            <div className="pt-4 mt-6 border-t border-dashed border-gray-300/30 text-[11px] font-sans">
-              {lang === 'ja' ? '執筆予定 (In Progress)' : 'In Progress • Soon'}
-            </div>
-          </div>
+          )}
         </div>
       </div>
 

@@ -76,7 +76,7 @@ const socialLinks = [
 
 export default function App() {
   // Enabled: Japanese translation review guard lifted
-  const isJapaneseAvailable = false
+  const isJapaneseAvailable = true
 
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false)

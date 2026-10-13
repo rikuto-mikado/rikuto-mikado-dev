@@ -317,7 +317,7 @@ export const coursesData: Record<Language, CourseItem[]> = {
       platform: 'Udemy',
       date: 'Oct 2026',
       category: 'Life Skills & Culinary Craft',
-      note: 'Culinary self-reliance mastered during independent living in Sapporo.',
+      note: 'Pursued out of genuine interest in Indian cuisine, mastering authentic spices and restaurant-style cooking techniques.',
       imageKey: 'indianCooking',
       certificateId: 'UC-6290b034-8ffd-48a0-b549-9c08c6f18786',
     },
@@ -363,7 +363,7 @@ export const coursesData: Record<Language, CourseItem[]> = {
       platform: 'Udemy',
       date: '2026年10月',
       category: '生活技術＆料理の技法',
-      note: '札幌での一人暮らし中に修得した、毎日の健康と生活の自立を支える本格料理スキル。',
+      note: 'インド料理への純粋な興味から受講。本格的なスパイス使いとレストランスタイルの調理技法を修得。',
       imageKey: 'indianCooking',
       certificateId: 'UC-6290b034-8ffd-48a0-b549-9c08c6f18786',
     },
@@ -409,7 +409,7 @@ export const uiText = {
     heroName: 'Rikuto.',
     heroBadge: 'Physical Infrastructure & Electrical Engineering • Full-Stack Development',
     heroLead:
-      'Building a reliable real-world foundation in the AI era. Combining software skills with hands-on electrical engineering to understand and maintain the physical infrastructure behind digital systems.',
+      "Securing a 'physical insurance policy' in the AI era. Establishing electrical and hardware infrastructure as my absolute foundation, while keeping software engineering as a standalone tool for long-term adaptability.",
 
     // About
     aboutSectionBadge: 'Vision & Roadmap',
@@ -525,7 +525,7 @@ export const uiText = {
     heroName: 'Rikuto.',
     heroBadge: '電気工学・社会基盤インフラ • フルスタック開発',
     heroLead:
-      'AI時代に通用する、実践的で揺るぎない基盤を築く。ソフトウェアのスキルと実践的な電気工学を融合させ、デジタルシステムを支える物理的インフラの理解とメンテナンス能力を身に付ける。',
+      'AI時代における『物理的な保険』を確保する。社会を支える電気・ハードウェアインフラの運用能力を最優先の基盤として獲得し、ソフトウェア構築のスキルは、自身の長期的適応力を高めるための独立した武器として保持し続ける。',
 
     // About
     aboutSectionBadge: 'ビジョンと方向性',
