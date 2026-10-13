@@ -479,7 +479,6 @@ export const uiText = {
     blogHeading: 'Essays & Observations',
     blogLead:
       'Long-form reflections on emerging intelligence, identity, and practical career resilience in the physical layer.',
-    blogReadTime: 'min read',
     readEssay: 'Read Essay',
     authorBy: 'By Rikuto Mikado',
     shareArticle: 'Share',
@@ -596,7 +595,6 @@ export const uiText = {
     blogHeading: '思考録・エッセイ',
     blogLead:
       '急速に変化するAI環境、人間の存在意義、そして物理インフラを軸とした生存戦略に関する個人的な考察録。',
-    blogReadTime: '分で読めます',
     readEssay: '記事を読む',
     authorBy: '執筆: 三角 陸人',
     shareArticle: '共有',

@@ -3,6 +3,15 @@ import { createPortal } from 'react-dom'
 import type { Language } from '../data/translations'
 import { uiText } from '../data/translations'
 import { blogPostsData } from '../data/blogPosts'
+import whyOurGenerationImg from '../assets/whyourgeneration.png'
+import whyMassesImg from '../assets/whyIbelievethemasses.png'
+import onExistentialCrisisImg from '../assets/onexistentialcrisis.png'
+
+const blogCoverImages: Record<string, string> = {
+  'why-our-generation-cannot-ignore-agi': whyOurGenerationImg,
+  'why-masses-happier-without-ai': whyMassesImg,
+  'on-existential-crisis': onExistentialCrisisImg,
+}
 
 interface BlogSectionProps {
   lang: Language
@@ -81,129 +90,129 @@ export default function BlogSection({
 
         {/* 4-Column Grid on Desktop (Matching Skill Acquisition Cards) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {posts.map((post) => (
-            <article
-              key={post.id}
-              onClick={() => setSelectedPostId(post.id)}
-              className={`group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1 ${
-                isDark
-                  ? 'bg-[#1C1A18] border border-[#2D2A26] shadow-md hover:shadow-2xl hover:border-[#D4A373]/50'
-                  : 'bg-white border border-[#e5ded4] shadow-sm hover:shadow-xl hover:border-[#d4a373]'
-              }`}
-            >
-              {/* Cover visual with aspect ratio */}
-              <div
-                className={`relative aspect-[16/10] overflow-hidden border-b transition-colors duration-500 flex flex-col justify-between p-5 ${
+          {posts.map((post) => {
+            const coverImg = blogCoverImages[post.id]
+            return (
+              <article
+                key={post.id}
+                onClick={() => setSelectedPostId(post.id)}
+                className={`group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1 ${
                   isDark
-                    ? 'bg-gradient-to-br from-[#25221E] via-[#1E1C19] to-[#161413] border-[#2D2A26]'
-                    : 'bg-gradient-to-br from-[#F5F4F0] via-[#EFECE6] to-[#E5E0D5] border-[#ece6dd]'
+                    ? 'bg-[#1C1A18] border border-[#2D2A26] shadow-md hover:shadow-2xl hover:border-[#D4A373]/50'
+                    : 'bg-white border border-[#e5ded4] shadow-sm hover:shadow-xl hover:border-[#d4a373]'
                 }`}
               >
-                {/* Decorative background watermark */}
-                <div className="absolute -right-4 -bottom-4 w-28 h-28 rounded-full border border-[#9A4C22]/15 pointer-events-none" />
-                <div className="absolute right-6 bottom-6 w-16 h-16 rounded-full border border-dashed border-[#9A4C22]/20 pointer-events-none" />
-
-                <div className="relative z-10 text-[11px] font-sans">
-                  <span
-                    className={`font-mono uppercase tracking-widest px-2 py-0.5 rounded text-[10px] inline-block ${
-                      isDark
-                        ? 'bg-black/30 text-[#E0A96D]'
-                        : 'bg-white/80 text-[#9A4C22] shadow-xs'
-                    }`}
-                  >
-                    Essay
-                  </span>
-                </div>
-
-                {/* Subtle hover overlay hint */}
-                <div className="absolute inset-0 bg-[#2b2623]/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20 backdrop-blur-[1px]">
-                  <span className="px-4 py-2 rounded-full bg-white/95 text-gray-900 text-xs font-sans font-semibold tracking-wider uppercase shadow-md flex items-center gap-1.5">
-                    {ui.readEssay}
-                  </span>
-                </div>
-              </div>
-
-              {/* Card details */}
-              <div className="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between">
-                <div className="space-y-3">
-                  {/* Meta row: Date & Read Time */}
-                  <div
-                    className={`flex items-center justify-between text-[11px] font-sans ${
-                      isDark ? 'text-gray-400' : 'text-gray-500'
-                    }`}
-                  >
-                    <span className="font-medium">{post.date}</span>
-                    <span
-                      className={`font-medium ${
-                        isDark ? 'text-[#E0A96D]' : 'text-[#9A4C22]'
-                      }`}
-                    >
-                      {post.readTime}
-                    </span>
-                  </div>
-
-                  {/* Category Badge (Standalone line with whitespace-nowrap to guarantee it never wraps) */}
-                  <div>
-                    <span
-                      className={`inline-block uppercase tracking-wider px-2.5 py-0.5 rounded-md transition-colors duration-500 text-[10px] font-semibold font-sans whitespace-nowrap truncate max-w-full ${
-                        isDark
-                          ? 'text-[#E0A96D] bg-[#24211D] border border-[#3A352F]'
-                          : 'text-[#9A4C22] bg-[#F5F4F0] border border-[#e3dbcd]'
-                      }`}
-                    >
-                      {post.category}
-                    </span>
-                  </div>
-
-                  <h3
-                    className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 line-clamp-2 ${
-                      isDark
-                        ? 'text-[#F5F3EE] group-hover:text-[#E0A96D]'
-                        : 'text-gray-900 group-hover:text-[#9A4C22]'
-                    }`}
-                  >
-                    {post.title}
-                  </h3>
-
-                  <p
-                    className={`font-sans text-xs sm:text-sm leading-relaxed font-light transition-colors duration-500 line-clamp-3 ${
-                      isDark ? 'text-[#C4BEB4]' : 'text-gray-600'
-                    }`}
-                  >
-                    {post.paragraphs[0] || post.excerpt}
-                  </p>
-                </div>
-
-                {/* Metadata footer */}
+                {/* Cover visual with aspect ratio */}
                 <div
-                  className={`pt-3 border-t flex items-center justify-between text-xs font-sans transition-colors duration-500 ${
+                  className={`relative aspect-[16/10] overflow-hidden border-b transition-colors duration-500 flex flex-col justify-between p-5 ${
                     isDark
-                      ? 'border-[#262320] text-gray-400'
-                      : 'border-[#f0ebe3] text-gray-600'
+                      ? 'bg-gradient-to-br from-[#25221E] via-[#1E1C19] to-[#161413] border-[#2D2A26]'
+                      : 'bg-gradient-to-br from-[#F5F4F0] via-[#EFECE6] to-[#E5E0D5] border-[#ece6dd]'
                   }`}
                 >
-                  <span className="truncate pr-2">
-                    <strong
-                      className={`font-medium transition-colors duration-500 ${
-                        isDark ? 'text-[#F5F3EE]' : 'text-gray-800'
+                  {/* Background cover image if present */}
+                  {coverImg ? (
+                    <>
+                      <img
+                        src={coverImg}
+                        alt=""
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.78] contrast-[1.05] group-hover:scale-105 group-hover:brightness-[0.88] transition-all duration-700 ease-out"
+                      />
+                      {/* Atmospheric gradient overlay for contrast & editorial mood */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/20 pointer-events-none" />
+                    </>
+                  ) : (
+                    <>
+                      {/* Decorative background watermark */}
+                      <div className="absolute -right-4 -bottom-4 w-28 h-28 rounded-full border border-[#9A4C22]/15 pointer-events-none" />
+                      <div className="absolute right-6 bottom-6 w-16 h-16 rounded-full border border-dashed border-[#9A4C22]/20 pointer-events-none" />
+                    </>
+                  )}
+
+                  {/* Subtle hover overlay hint */}
+                  <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20 backdrop-blur-[2px]">
+                    <span className="px-4 py-2 rounded-full bg-white/95 text-gray-900 text-xs font-sans font-semibold tracking-wider uppercase shadow-md flex items-center gap-1.5 transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+                      {ui.readEssay}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card details */}
+                <div className="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    {/* Meta row: Date */}
+                    <div
+                      className={`text-[11px] font-sans ${
+                        isDark ? 'text-gray-400' : 'text-gray-500'
                       }`}
                     >
-                      {post.tags[0] ? `#${post.tags[0]}` : '#Essay'}
-                    </strong>
-                  </span>
-                  <span
-                    className={`inline-flex items-center gap-1 font-semibold transition-colors duration-300 ${
+                      <span className="font-medium">{post.date}</span>
+                    </div>
+
+                    {/* Category Badge (Standalone line with whitespace-nowrap to guarantee it never wraps) */}
+                    <div>
+                      <span
+                        className={`inline-block uppercase tracking-wider px-2.5 py-0.5 rounded-md transition-colors duration-500 text-[10px] font-semibold font-sans whitespace-nowrap truncate max-w-full ${
+                          isDark
+                            ? 'text-[#E0A96D] bg-[#24211D] border border-[#3A352F]'
+                            : 'text-[#9A4C22] bg-[#F5F4F0] border border-[#e3dbcd]'
+                        }`}
+                      >
+                        {post.category}
+                      </span>
+                    </div>
+
+                    <h3
+                      className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 line-clamp-2 ${
+                        isDark
+                          ? 'text-[#F5F3EE] group-hover:text-[#E0A96D]'
+                          : 'text-gray-900 group-hover:text-[#9A4C22]'
+                      }`}
+                    >
+                      {post.title}
+                    </h3>
+
+                    <p
+                      className={`font-sans text-xs sm:text-sm leading-relaxed font-light transition-colors duration-500 line-clamp-3 ${
+                        isDark ? 'text-[#C4BEB4]' : 'text-gray-600'
+                      }`}
+                    >
+                      {post.paragraphs[0] || post.excerpt}
+                    </p>
+                  </div>
+
+                  {/* Metadata footer */}
+                  <div
+                    className={`pt-3 border-t flex items-center justify-between text-xs font-sans transition-colors duration-500 ${
                       isDark
-                        ? 'text-[#E0A96D] group-hover:translate-x-0.5'
-                        : 'text-[#9A4C22] group-hover:translate-x-0.5'
+                        ? 'border-[#262320] text-gray-400'
+                        : 'border-[#f0ebe3] text-gray-600'
                     }`}
                   >
-                    {lang === 'ja' ? '読む' : 'Read'} &rarr;
-                  </span>
+                    <span className="truncate pr-2">
+                      <strong
+                        className={`font-medium transition-colors duration-500 ${
+                          isDark ? 'text-[#F5F3EE]' : 'text-gray-800'
+                        }`}
+                      >
+                        {post.tags[0] ? `#${post.tags[0]}` : ''}
+                      </strong>
+                    </span>
+                    <span
+                      className={`inline-flex items-center gap-1 font-semibold transition-colors duration-300 ${
+                        isDark
+                          ? 'text-[#E0A96D] group-hover:translate-x-0.5'
+                          : 'text-[#9A4C22] group-hover:translate-x-0.5'
+                      }`}
+                    >
+                      {lang === 'ja' ? '読む' : 'Read'} &rarr;
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            )
+          })}
 
           {/* Upcoming Card (Maintains grid visual balance on 4-column desktop display) */}
           <div
@@ -356,10 +365,6 @@ export default function BlogSection({
                 <div className="space-y-2 border-b pb-6 border-dashed border-gray-300/30">
                   <div className="flex items-center gap-2 text-xs font-sans sm:hidden">
                     <span className="text-gray-400">{selectedPost.date}</span>
-                    <span className="text-gray-400">•</span>
-                    <span className="text-[#9A4C22] font-medium">
-                      {selectedPost.readTime}
-                    </span>
                   </div>
                   <h3
                     className={`font-serif italic text-2xl sm:text-3xl md:text-4xl font-bold leading-snug transition-colors duration-300 ${
