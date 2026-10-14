@@ -489,19 +489,6 @@ export default function App() {
               </p>
             </div>
 
-            {/* Subtle Roots / Origin card */}
-            <div className={`mt-5 px-5 py-3 rounded-xl border text-center transition-colors duration-500 w-full max-w-[280px] sm:max-w-xs ${
-              isDark
-                ? 'bg-[#181615]/85 border-[#2D2A26] text-gray-400'
-                : 'bg-[#ede8de]/80 border-[#dcd6c9] text-gray-600'
-            }`}>
-              <span className="block text-[11px] font-sans uppercase tracking-widest text-[#9A4C22] font-semibold">
-                {ui.aboutOriginTitle}
-              </span>
-              <p className="text-xs font-sans font-light mt-0.5">
-                {ui.aboutOriginDesc}
-              </p>
-            </div>
           </div>
 
         </div>

@@ -422,13 +422,11 @@ export const uiText = {
       'To make this transition, I will enter a specialized technical institution in Electrical Engineering. I am methodically working toward essential Japanese national licenses, including Third-Class Chief Electrical Engineer and First-Class Electrician, alongside networking credentials such as Cisco CCNP Enterprise. To keep international pathways open, I am also consistently preparing for the IELTS Academic exam.',
     aboutP3:
       'Following this institutional training period, as I enter the industry to accumulate three years of practical field experience, I plan to concurrently advance through the UK OTHM diploma pathway toward an accredited Bachelor’s degree, with future graduate studies remaining an open long-term aspiration. At the same time, full-stack development remains a versatile secondary skill, giving me a solid bridge between software logic and physical systems.',
-    aboutBadge1: '⚡ Electrical Engineering & Infrastructure',
-    aboutBadge2: '💻 Full-Stack Development',
+    aboutBadge1: 'Electrical Engineering & Infrastructure',
+    aboutBadge2: 'Full-Stack Development',
     aboutPhotoName: 'Rikuto Mikado',
     aboutPhotoPlace: 'Urakawa / Sapporo, Hokkaido, Japan',
     aboutPhotoDesc: 'Physical Layer • Systems • Autonomous Learning',
-    aboutOriginTitle: 'Origin & Landscape',
-    aboutOriginDesc: 'Hokkaido, Japan',
 
     // Trajectory
     trajectoryBadge: 'Trajectory',
@@ -538,13 +536,11 @@ export const uiText = {
       '自身の客観的な考えに従い、私は電気工学を専門的に学ぶための進学を決定しました。現在は電験三種や第一種電気工事士といった中核となる国家資格の学習を本格化させています。また、将来的なグローバルネットワークへのアクセスを担保するため、IELTS AcademicやCisco CCNP Enterpriseの取得に向けた準備も並行して進めています。',
     aboutP3:
       'インフラエンジニアとして絶対的な安全圏を築くことは、最終的な目標である「農業や創造性の追求」を自由に行うための手段でもあります。現場での実務経験を積みながら英国大学の学位（OTHMプログラム）を取得し、長期的には修士課程への進学も見据えています。ソフトウェアの論理と物理設備の双方を理解する独自の強みを武器に、自身のキャリアをデザインしていきます。',
-    aboutBadge1: '⚡ 電気工学・社会基盤インフラ',
+    aboutBadge1: '電気工学・社会基盤インフラ',
     aboutBadge2: 'フルスタック開発',
     aboutPhotoName: '三角 陸人(Rikuto Mikado)',
     aboutPhotoPlace: '日本、北海道',
     aboutPhotoDesc: '物理レイヤー • システム • 独学と実践',
-    aboutOriginTitle: '出身地',
-    aboutOriginDesc: '北海道・日本',
 
     // Trajectory
     trajectoryBadge: '経歴と歩み',
