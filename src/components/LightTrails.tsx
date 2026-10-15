@@ -158,6 +158,35 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       return bestY
     }
 
+    // Helper to pre-calculate movement and satellite history for seamless rendering without pop-in
+    const prewarmHistory = (p: Particle) => {
+      p.history = []
+      for (let h = 0; h < p.maxHistory; h++) {
+        const pastX = p.x - p.speedX * h
+        const pastWave =
+          Math.sin(pastX * p.wobbleFreq + p.phase) * p.wobbleAmp
+        p.history.push({ x: pastX, y: p.baseY + pastWave })
+      }
+
+      p.satellites.forEach((sat) => {
+        sat.history = []
+        for (let h = 0; h < sat.maxHistory; h++) {
+          const pastAngle = sat.angle - sat.speed * h
+          const cosA = Math.cos(pastAngle)
+          const sinA = Math.sin(pastAngle)
+          const unrotX = cosA * sat.radiusX
+          const unrotY = sinA * sat.radiusY
+          const cosR = Math.cos(sat.rotation)
+          const sinR = Math.sin(sat.rotation)
+          const relX = unrotX * cosR - unrotY * sinR
+          const relY = unrotX * sinR + unrotY * cosR
+
+          const pastParent = p.history[Math.min(h, p.history.length - 1)] || { x: p.x, y: p.y }
+          sat.history.push({ x: pastParent.x + relX, y: pastParent.y + relY })
+        }
+      })
+    }
+
     const createParticle = (
       spawnAnywhere = false,
       forcedBaseY?: number,
@@ -167,13 +196,13 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       const isSmallMobile = width < 480
       const colorScheme = palette[Math.floor(Math.random() * palette.length)]
 
-      // Balanced depth distribution: prominent comets & streams with ambient depth
+      // Balanced depth distribution: 90% full comets with satellites and tails
       let layer: 'ambient' | 'stream' | 'meteor'
       if (forcedLayer) {
         layer = forcedLayer
       } else {
         const roll = Math.random()
-        layer = roll < 0.15 ? 'ambient' : roll < 0.70 ? 'stream' : 'meteor'
+        layer = roll < 0.10 ? 'ambient' : roll < 0.65 ? 'stream' : 'meteor'
       }
 
       let speedX: number
@@ -181,20 +210,21 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       let maxHistory: number
       let alpha: number
 
+      // Speed calibrated: Mobile speeds reduced ~35% for graceful observation across narrow screens
       if (layer === 'ambient') {
-        speedX = isMobile ? 0.6 : 0.8
+        speedX = isSmallMobile ? 0.38 : isMobile ? 0.42 : 0.75
         size = isMobile ? 0.9 : 1.2
-        maxHistory = isMobile ? 6 : 9
+        maxHistory = isMobile ? 8 : 10
         alpha = 0.45
       } else if (layer === 'stream') {
-        speedX = isMobile ? 1.0 : 1.3
+        speedX = isSmallMobile ? 0.65 : isMobile ? 0.70 : 1.25
         size = isMobile ? 1.4 : 1.9
-        maxHistory = isMobile ? 14 : 22
+        maxHistory = isSmallMobile ? 22 : isMobile ? 24 : 26
         alpha = 0.8
       } else {
-        speedX = isMobile ? 1.45 : 1.8
+        speedX = isSmallMobile ? 0.90 : isMobile ? 0.98 : 1.65
         size = isMobile ? 1.8 : 2.6
-        maxHistory = isMobile ? 18 : 28
+        maxHistory = isSmallMobile ? 26 : isMobile ? 28 : 32
         alpha = 0.95
       }
 
@@ -205,10 +235,13 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         ? Math.random() * 8 + 5
         : Math.random() * 11 + 7
 
-      // Spawn distribution: spread across width on init, smoothly staggered behind left edge on respawn
-      const startX = spawnAnywhere
-        ? Math.random() * width
-        : -Math.random() * (isMobile ? 130 : 200) - 25
+      // Compact respawn buffer: starts just behind left border so new comets enter within ~0.3-0.8s
+      const buffer = isSmallMobile
+        ? Math.random() * 25 + 12
+        : isMobile
+        ? Math.random() * 35 + 15
+        : Math.random() * 55 + 20
+      const startX = spawnAnywhere ? Math.random() * width : -buffer
 
       const baseY = forcedBaseY !== undefined ? forcedBaseY : getAvailableBaseY()
 
@@ -242,11 +275,11 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
           color: colorScheme.core,
           glowColor: colorScheme.glow,
           history: [],
-          maxHistory: isMobile ? 3 : 5,
+          maxHistory: isMobile ? 4 : 6,
         })
       }
 
-      return {
+      const p: Particle = {
         x: startX,
         y: baseY,
         baseY,
@@ -264,63 +297,35 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         layer,
         satellites,
       }
+
+      prewarmHistory(p)
+      return p
     }
 
     // Particle count optimization: optimal balance (PC: 16, Tablet: 13, Mobile: 10)
-    // Seamless pipeline initialization: eliminates any initial cooldown or empty periods
+    // Instantaneous screen coverage: eliminates any initial cooldown or empty periods on load
     const initParticles = () => {
       const isSmallMobile = width < 480
       const isMobile = width < 768
       const count = isSmallMobile ? 10 : isMobile ? 13 : 16
 
       particles = []
-      // Pipeline covers the left inbound buffer (-leftBuffer) through the visible screen width
-      const leftBuffer = isMobile ? 220 : 340
-      const totalSpan = width + leftBuffer
 
       for (let i = 0; i < count; i++) {
         const baseY = getAvailableBaseY(i)
-        // Ensure balanced proportion of meteors, streams, and ambient dust
+        // Ensure high proportion of prominent meteors and streams across the sky
         let layer: 'ambient' | 'stream' | 'meteor'
         if (i % 3 === 0) layer = 'meteor'
         else if (i % 3 === 1) layer = 'stream'
-        else layer = Math.random() < 0.6 ? 'stream' : 'ambient'
+        else layer = Math.random() < 0.7 ? 'stream' : 'ambient'
 
-        // Evenly distribute X across the pipeline so there is NEVER a vacuum or cooldown period
-        const slice = totalSpan / count
-        const startX = -leftBuffer + (i + 0.5) * slice + (Math.random() - 0.5) * (slice * 0.45)
+        // Evenly stagger across the viewport so multiple comets are visible immediately on frame 0
+        const segment = (width + 30) / count
+        const startX = -15 + (i + 0.5) * segment + (Math.random() - 0.5) * (segment * 0.35)
 
         const p = createParticle(false, baseY, layer)
         p.x = startX
-
-        // Pre-warm movement history so tails are already gloriously formed from the very first frame
-        p.history = []
-        for (let h = 0; h < p.maxHistory; h++) {
-          const pastX = p.x - p.speedX * h
-          const pastWave =
-            Math.sin(pastX * p.wobbleFreq + p.phase) * p.wobbleAmp
-          p.history.push({ x: pastX, y: p.baseY + pastWave })
-        }
-
-        // Pre-warm satellite histories
-        p.satellites.forEach((sat) => {
-          sat.history = []
-          for (let h = 0; h < sat.maxHistory; h++) {
-            const pastAngle = sat.angle - sat.speed * h
-            const cosA = Math.cos(pastAngle)
-            const sinA = Math.sin(pastAngle)
-            const unrotX = cosA * sat.radiusX
-            const unrotY = sinA * sat.radiusY
-            const cosR = Math.cos(sat.rotation)
-            const sinR = Math.sin(sat.rotation)
-            const relX = unrotX * cosR - unrotY * sinR
-            const relY = unrotX * sinR + unrotY * cosR
-
-            const pastParent = p.history[Math.min(h, p.history.length - 1)] || { x: p.x, y: p.y }
-            sat.history.push({ x: pastParent.x + relX, y: pastParent.y + relY })
-          }
-        })
-
+        prewarmHistory(p)
         particles.push(p)
       }
     }
@@ -686,10 +691,54 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
 
         // Respawn cleanly on the left once the entire tail exits the screen right
         const tailLength = p.speedX * p.maxHistory
-        if (p.x - tailLength > width + 25) {
+        if (p.x - tailLength > width + 20) {
           particles[idx] = createParticle(false, getAvailableBaseY())
         }
       })
+
+      // Continuous Celestial Flow Guarantee:
+      // Mathematically guarantees at least 1 prominent comet on mobile, and at least 2 on desktop at all times
+      const isMobileDevice = width < 768
+      const minVisibleComets = isMobileDevice ? 1 : 2
+
+      let visibleCometCount = 0
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i]
+        if (p.layer !== 'ambient' && p.x >= -20 && p.x <= width + 20) {
+          visibleCometCount++
+        }
+      }
+
+      if (visibleCometCount < minVisibleComets) {
+        // Find an off-screen particle (or the furthest exited particle) to immediately glide in from the left
+        let candidateIdx = -1
+        let maxDist = -1
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i]
+          if (p.x < -20) {
+            const dist = -p.x
+            if (dist > maxDist) {
+              maxDist = dist
+              candidateIdx = i
+            }
+          } else if (p.x > width + 20) {
+            const dist = p.x - width
+            if (dist > maxDist) {
+              maxDist = dist
+              candidateIdx = i
+            }
+          }
+        }
+
+        if (candidateIdx !== -1) {
+          const p = particles[candidateIdx]
+          p.layer = Math.random() < 0.45 ? 'meteor' : 'stream'
+          p.baseY = getAvailableBaseY()
+          p.x = -(Math.random() * 12 + 6)
+          prewarmHistory(p)
+        }
+      }
 
       animationFrameId = requestAnimationFrame(render)
     }
