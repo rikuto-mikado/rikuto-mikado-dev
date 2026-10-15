@@ -6,11 +6,13 @@ import { blogPostsData, upcomingPostData } from '../data/blogPosts'
 import whyOurGenerationImg from '../assets/whyourgeneration.png'
 import whyMassesImg from '../assets/whyIbelievethemasses.png'
 import onExistentialCrisisImg from '../assets/onexistentialcrisis.png'
+import theComplexityOfEducationImg from '../assets/thecomplexityofeducation.png'
 
 const blogCoverImages: Record<string, string> = {
   'why-our-generation-cannot-ignore-agi': whyOurGenerationImg,
   'why-masses-happier-without-ai': whyMassesImg,
   'on-existential-crisis': onExistentialCrisisImg,
+  'education-complexity-and-information-gap': theComplexityOfEducationImg,
 }
 
 interface BlogSectionProps {
@@ -128,6 +130,29 @@ export default function BlogSection({
                       {/* Decorative background watermark */}
                       <div className="absolute -right-4 -bottom-4 w-28 h-28 rounded-full border border-[#9A4C22]/15 pointer-events-none" />
                       <div className="absolute right-6 bottom-6 w-16 h-16 rounded-full border border-dashed border-[#9A4C22]/20 pointer-events-none" />
+                      <div className="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                        <span className="text-[10px] font-sans font-semibold tracking-[0.2em] uppercase text-[#9A4C22]/80">
+                          {post.category}
+                        </span>
+                        <div className="flex items-center justify-center my-auto py-2">
+                          <svg
+                            className="w-8 h-8 text-[#9A4C22]/40 transform group-hover:scale-110 transition-transform duration-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.3}
+                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                            />
+                          </svg>
+                        </div>
+                        <span className={`text-[10px] font-serif italic ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                          {post.date}
+                        </span>
+                      </div>
                     </>
                   )}
 
@@ -215,29 +240,111 @@ export default function BlogSection({
             )
           })}
 
-          {/* Upcoming Card (Rendered only when an upcoming post is defined) */}
+          {/* Upcoming Card (Structured identically to article cards for consistent height and seamless row expansion) */}
           {upcomingPost && (
             <div
-              className={`rounded-2xl p-6 border border-dashed flex flex-col justify-between transition-colors duration-500 opacity-60 hover:opacity-80 ${
+              className={`rounded-2xl overflow-hidden border border-dashed flex flex-col justify-between transition-all duration-300 opacity-75 hover:opacity-100 ${
                 isDark
-                  ? 'border-[#2D2A26] bg-[#161413]/50 text-gray-400'
-                  : 'border-[#d8d1c5] bg-[#F5F4F0]/50 text-gray-500'
+                  ? 'border-[#3A352F] bg-[#161413]/40 text-gray-400 hover:border-[#D4A373]/50'
+                  : 'border-[#d8d1c5] bg-[#F5F4F0]/40 text-gray-500 hover:border-[#d4a373]'
               }`}
             >
-              <div className="space-y-3">
-                <span className="text-[10px] uppercase font-sans font-semibold tracking-widest text-[#9A4C22]">
-                  {lang === 'ja' ? '次回執筆予定' : 'Upcoming'}
-                </span>
-                <h4
-                  className={`font-serif italic text-base sm:text-lg ${
-                    isDark ? 'text-gray-300' : 'text-gray-700'
+              {/* Draft Placeholder Cover with identical aspect-[16/10] */}
+              <div
+                className={`relative aspect-[16/10] overflow-hidden border-b border-dashed transition-colors duration-500 flex flex-col justify-between p-5 ${
+                  isDark
+                    ? 'bg-gradient-to-br from-[#1F1D1A]/80 via-[#191715]/60 to-[#141211]/80 border-[#2E2B27]'
+                    : 'bg-gradient-to-br from-[#ECE8E1]/80 via-[#E8E3DA]/60 to-[#DFD9CD]/80 border-[#e3dbcd]'
+                }`}
+              >
+                {/* Decorative geometry rings */}
+                <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full border border-dashed border-[#9A4C22]/20 pointer-events-none" />
+                <div className="absolute right-6 bottom-6 w-14 h-14 rounded-full border border-dotted border-[#9A4C22]/25 pointer-events-none" />
+
+                <div className="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-sans font-semibold tracking-[0.2em] uppercase text-[#9A4C22]/80">
+                      {lang === 'ja' ? '次回執筆予定' : 'UPCOMING'}
+                    </span>
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#E0A96D]/60 animate-pulse" />
+                  </div>
+                  <div className="flex items-center justify-center my-auto py-2 opacity-35">
+                    <svg
+                      className="w-8 h-8 text-[#9A4C22]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  </div>
+                  <span className={`text-[10px] font-mono tracking-wider ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                    DRAFT • ESSAY V
+                  </span>
+                </div>
+              </div>
+
+              {/* Card Details (Matches article card padding and flex structure) */}
+              <div className="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between">
+                <div className="space-y-3">
+                  {/* Meta row */}
+                  <div className={`text-[11px] font-sans ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                    <span className="font-medium">
+                      {lang === 'ja' ? '近日公開予定' : 'Coming Soon'}
+                    </span>
+                  </div>
+
+                  {/* Category Badge matching published cards */}
+                  <div>
+                    <span
+                      className={`inline-block uppercase tracking-wider px-2.5 py-0.5 rounded-md text-[10px] font-semibold font-sans border border-dashed ${
+                        isDark
+                          ? 'text-[#C4BEB4] bg-[#221F1C]/70 border-[#3A352F]'
+                          : 'text-gray-600 bg-white/70 border-gray-300'
+                      }`}
+                    >
+                      {lang === 'ja' ? '執筆中' : 'In Progress'}
+                    </span>
+                  </div>
+
+                  <h3
+                    className={`font-serif italic text-lg md:text-xl font-bold leading-snug line-clamp-2 ${
+                      isDark ? 'text-gray-300' : 'text-gray-700'
+                    }`}
+                  >
+                    {upcomingPost.title}
+                  </h3>
+
+                  <p
+                    className={`font-sans text-xs sm:text-sm leading-relaxed font-light italic line-clamp-3 ${
+                      isDark ? 'text-gray-500' : 'text-gray-400'
+                    }`}
+                  >
+                    {lang === 'ja'
+                      ? '若者であることの現実と、次世代が直面する独自の構造的課題についての洞察。'
+                      : 'Insights on the reality of youth and the unique structural challenges faced by the next generation.'}
+                  </p>
+                </div>
+
+                {/* Metadata footer matching article cards */}
+                <div
+                  className={`pt-3 border-t border-dashed flex items-center justify-between text-xs font-sans ${
+                    isDark ? 'border-[#2D2A26] text-gray-500' : 'border-[#e6e0d5] text-gray-400'
                   }`}
                 >
-                  {upcomingPost.title}
-                </h4>
-              </div>
-              <div className="pt-4 mt-6 border-t border-dashed border-gray-300/30 text-[11px] font-sans">
-                {upcomingPost.status || (lang === 'ja' ? '執筆予定 (In Progress)' : 'In Progress • Soon')}
+                  <span className="font-mono text-[11px]">
+                    #NextEssay
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 font-medium text-[11px] text-[#9A4C22]/80">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#9A4C22]/60 animate-ping" />
+                    {upcomingPost.status || (lang === 'ja' ? '執筆中' : 'In Progress')}
+                  </span>
+                </div>
               </div>
             </div>
           )}

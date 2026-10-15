@@ -476,7 +476,7 @@ export const uiText = {
     blogBadge: 'Perspectives & Essays',
     blogHeading: 'Essays & Observations',
     blogLead:
-      'Long-form reflections on emerging intelligence, identity, and practical career resilience in the physical layer.',
+      'Just a collection of personal thoughts and reflections on everyday topics and observations.',
     readEssay: 'Read Essay',
     authorBy: 'By Rikuto Mikado',
     shareArticle: 'Share',
@@ -590,7 +590,7 @@ export const uiText = {
     blogBadge: '思考録 ＆ エッセイ',
     blogHeading: '思考録・エッセイ',
     blogLead:
-      '急速に変化するAI環境、人間の存在意義、そして物理インフラを軸とした生存戦略に関する個人的な考察録。',
+      '日々の思考や関心事を書き留めた、ただの個人的な考察録。',
     readEssay: '記事を読む',
     authorBy: '執筆: 三角 陸人',
     shareArticle: '共有',
