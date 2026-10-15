@@ -1,5 +1,18 @@
 import { useEffect, useRef } from 'react'
 
+interface Satellite {
+  radiusX: number
+  radiusY: number
+  rotation: number
+  speed: number
+  angle: number
+  size: number
+  color: string
+  glowColor: string
+  history: { x: number; y: number }[]
+  maxHistory: number
+}
+
 interface Particle {
   x: number
   y: number
@@ -20,6 +33,7 @@ interface Particle {
   alpha: number
   pulseSpeed: number
   layer: 'ambient' | 'stream' | 'meteor'
+  satellites: Satellite[]
 }
 
 interface WaveBeam {
@@ -100,47 +114,138 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
     let waveBeams: WaveBeam[] = []
     let particles: Particle[] = []
 
-    const createParticle = (spawnAnywhere = false): Particle => {
+    // Calculate a spaced baseY to mathematically prevent particles from overlapping on the Y-axis
+    const getAvailableBaseY = (slotIndex?: number): number => {
+      const topPadding = height * 0.07
+      const usableHeight = height * 0.86
+      const count = particles.length || (width < 480 ? 9 : width < 768 ? 11 : 12)
+
+      // When initializing, divide screen into stratified lanes with gentle organic jitter
+      if (slotIndex !== undefined) {
+        const laneHeight = usableHeight / count
+        const jitter = (Math.random() - 0.5) * (laneHeight * 0.4)
+        return topPadding + (slotIndex + 0.5) * laneHeight + jitter
+      }
+
+      // When respawning, pick a Y location that maximizes vertical distance from existing particles
+      const minDistance = width < 768 ? 52 : 72
+      let bestY = Math.random() * usableHeight + topPadding
+      let bestScore = -1
+
+      for (let attempt = 0; attempt < 16; attempt++) {
+        const candidateY = Math.random() * usableHeight + topPadding
+        let nearestDist = Infinity
+
+        for (const p of particles) {
+          // Weight nearby particles more heavily if they are in the left 65% of the screen
+          const isLeft = p.x < width * 0.65
+          const distWeight = isLeft ? 1.0 : 0.6
+          const dist = Math.abs(p.baseY - candidateY) * distWeight
+          if (dist < nearestDist) {
+            nearestDist = dist
+          }
+        }
+
+        if (nearestDist >= minDistance) {
+          return candidateY
+        }
+        if (nearestDist > bestScore) {
+          bestScore = nearestDist
+          bestY = candidateY
+        }
+      }
+
+      return bestY
+    }
+
+    const createParticle = (
+      spawnAnywhere = false,
+      forcedBaseY?: number,
+      forcedLayer?: 'ambient' | 'stream' | 'meteor'
+    ): Particle => {
       const isMobile = width < 768
       const isSmallMobile = width < 480
       const colorScheme = palette[Math.floor(Math.random() * palette.length)]
 
-      // Classification into 3 depth tiers: ambient dust, main stream, shooting meteor
-      const roll = Math.random()
-      const layer: 'ambient' | 'stream' | 'meteor' =
-        roll < 0.3 ? 'ambient' : roll < 0.85 ? 'stream' : 'meteor'
+      // Balanced depth distribution: more prominent comets & streams, minimal dull ambient
+      let layer: 'ambient' | 'stream' | 'meteor'
+      if (forcedLayer) {
+        layer = forcedLayer
+      } else {
+        const roll = Math.random()
+        layer = roll < 0.15 ? 'ambient' : roll < 0.70 ? 'stream' : 'meteor'
+      }
 
       let speedX: number
       let size: number
       let maxHistory: number
       let alpha: number
 
+      // Refined moderate speed differentials to prevent fast meteors from bunching up with slower particles
       if (layer === 'ambient') {
-        speedX = isMobile ? 0.4 : 0.7
+        speedX = isMobile ? 0.6 : 0.8
         size = isMobile ? 0.9 : 1.2
-        maxHistory = isMobile ? 5 : 8
-        alpha = 0.4
+        maxHistory = isMobile ? 6 : 9
+        alpha = 0.45
       } else if (layer === 'stream') {
-        speedX = isMobile ? 0.9 : 1.4
-        size = isMobile ? 1.3 : 1.8
-        maxHistory = isMobile ? 10 : 16
-        alpha = 0.75
-      } else {
-        speedX = isMobile ? 1.5 : 2.2
-        size = isMobile ? 1.6 : 2.4
+        speedX = isMobile ? 0.95 : 1.2
+        size = isMobile ? 1.4 : 1.9
         maxHistory = isMobile ? 14 : 22
+        alpha = 0.8
+      } else {
+        speedX = isMobile ? 1.35 : 1.6
+        size = isMobile ? 1.8 : 2.6
+        maxHistory = isMobile ? 18 : 28
         alpha = 0.95
       }
 
-      // Restrict vertical amplitude on small mobile screens to keep negative space clean
+      // Controlled wave amplitude to prevent cross-lane collision and visual clutter
       const wobbleAmp = isSmallMobile
-        ? Math.random() * 8 + 5
+        ? Math.random() * 5 + 4
         : isMobile
-        ? Math.random() * 14 + 7
-        : Math.random() * 24 + 10
+        ? Math.random() * 8 + 5
+        : Math.random() * 11 + 7
 
-      const startX = spawnAnywhere ? Math.random() * width : -Math.random() * 70 - 15
-      const baseY = Math.random() * height
+      // Spawn distribution: spread across width on init, widely staggered behind left edge on respawn to prevent waves
+      const startX = spawnAnywhere
+        ? Math.random() * width
+        : -Math.random() * (isMobile ? 160 : 320) - 30
+
+      const baseY = forcedBaseY !== undefined ? forcedBaseY : getAvailableBaseY()
+
+      // 1 to 3 satellites revolving around the particle
+      const satCount =
+        layer === 'ambient'
+          ? Math.random() < 0.6 ? 1 : 2
+          : layer === 'stream'
+          ? Math.floor(Math.random() * 3) + 1
+          : Math.floor(Math.random() * 2) + 2
+
+      const satellites: Satellite[] = []
+      for (let s = 0; s < satCount; s++) {
+        // Orbit radius scaled cleanly to screen size to avoid crowding
+        const baseRadius = (isMobile ? 7 : 10) + s * (isMobile ? 3.5 : 5.5) + Math.random() * 2.5
+        const radiusX = baseRadius
+        const radiusY = radiusX * (Math.random() * 0.28 + 0.42)
+        const rotation = Math.random() * Math.PI
+        const dir = Math.random() < 0.5 ? 1 : -1
+        const speed = dir * (Math.random() * 0.018 + 0.024)
+        const initialAngle = (Math.PI * 2 * s) / satCount + (Math.random() - 0.5) * 0.6
+        const satSize = Math.max(0.5, size * (Math.random() * 0.2 + 0.32))
+
+        satellites.push({
+          radiusX,
+          radiusY,
+          rotation,
+          speed,
+          angle: initialAngle,
+          size: satSize,
+          color: colorScheme.core,
+          glowColor: colorScheme.glow,
+          history: [],
+          maxHistory: isMobile ? 3 : 5,
+        })
+      }
 
       return {
         x: startX,
@@ -158,21 +263,29 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         alpha,
         pulseSpeed: Math.random() * 0.025 + 0.015,
         layer,
+        satellites,
       }
     }
 
-    // Particle count optimization to eliminate mobile overcrowding
-    // Mobile (<480px): ~7 particles
-    // Tablet (<768px): ~11 particles
-    // Desktop: ~19 particles
+    // Particle count optimization: serene celestial presence with generous negative space
+    // Mobile (<480px): 9 particles
+    // Tablet (<768px): 11 particles
+    // Desktop: 12 particles (refined from 20 to eliminate clutter and crowding)
     const initParticles = () => {
       const isSmallMobile = width < 480
       const isMobile = width < 768
-      const count = isSmallMobile ? 7 : isMobile ? 11 : 19
+      const count = isSmallMobile ? 9 : isMobile ? 11 : 12
 
       particles = []
       for (let i = 0; i < count; i++) {
-        particles.push(createParticle(true))
+        const baseY = getAvailableBaseY(i)
+        // Ensure healthy, balanced proportion of meteors, streams, and ambient dust
+        let layer: 'ambient' | 'stream' | 'meteor'
+        if (i % 3 === 0) layer = 'meteor'
+        else if (i % 3 === 1) layer = 'stream'
+        else layer = Math.random() < 0.6 ? 'stream' : 'ambient'
+
+        particles.push(createParticle(true, baseY, layer))
       }
     }
 
@@ -279,8 +392,8 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         ctx.restore()
       })
 
-      // 2. Proximity links between nearby particles (classic constellation effect)
-      const maxConnectDistance = width < 768 ? 85 : 120
+      // 2. Proximity links between nearby particles (subtle constellation effect)
+      const maxConnectDistance = width < 768 ? 50 : 72
       ctx.save()
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -291,9 +404,9 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
           const dist = Math.sqrt(dx * dx + dy * dy)
 
           if (dist < maxConnectDistance) {
-            const lineAlpha = (1 - dist / maxConnectDistance) * 0.18
+            const lineAlpha = (1 - dist / maxConnectDistance) * 0.12
             ctx.strokeStyle = `rgba(212, 163, 115, ${lineAlpha})`
-            ctx.lineWidth = 0.6
+            ctx.lineWidth = 0.5
             ctx.beginPath()
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
@@ -330,35 +443,164 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
           p.history.pop()
         }
 
-        // 3a. Smooth tapered trailing light tail
+        // 3a. Update & compute satellite orbital positions around parent particle
+        interface ComputedSatellite {
+          sat: Satellite
+          x: number
+          y: number
+          depth: number
+        }
+
+        const computedSatellites: ComputedSatellite[] = p.satellites.map((sat) => {
+          sat.angle += sat.speed
+
+          const cosA = Math.cos(sat.angle)
+          const sinA = Math.sin(sat.angle)
+
+          // 2D tilted orbital plane
+          const unrotX = cosA * sat.radiusX
+          const unrotY = sinA * sat.radiusY
+
+          const cosR = Math.cos(sat.rotation)
+          const sinR = Math.sin(sat.rotation)
+
+          const relX = unrotX * cosR - unrotY * sinR
+          const relY = unrotX * sinR + unrotY * cosR
+
+          const satX = p.x + relX
+          const satY = p.y + relY
+
+          sat.history.unshift({ x: satX, y: satY })
+          if (sat.history.length > sat.maxHistory) {
+            sat.history.pop()
+          }
+
+          return {
+            sat,
+            x: satX,
+            y: satY,
+            depth: sinA, // > 0: in front of parent, <= 0: behind parent
+          }
+        })
+
+        // Satellite renderer helper
+        const drawSatellite = (comp: ComputedSatellite) => {
+          const { sat, x: satX, y: satY, depth } = comp
+          const depthFactor = (depth + 1) * 0.5 // 0 (far behind) to 1 (near front)
+          const currentAlpha = p.alpha * (0.35 + depthFactor * 0.55)
+          const currentSatSize = sat.size * (0.75 + depthFactor * 0.45)
+
+          // Satellite mini helical tail
+          if (sat.history.length > 1) {
+            ctx.save()
+            for (let h = 0; h < sat.history.length - 1; h++) {
+              const h1 = sat.history[h]
+              const h2 = sat.history[h + 1]
+              const ratio = 1 - h / sat.history.length
+              const tailAlpha = currentAlpha * Math.pow(ratio, 1.2) * 0.6
+              ctx.beginPath()
+              ctx.moveTo(h1.x, h1.y)
+              ctx.lineTo(h2.x, h2.y)
+              ctx.strokeStyle = `${p.color.tail}${tailAlpha})`
+              ctx.lineWidth = Math.max(0.25, currentSatSize * ratio * 0.85)
+              ctx.lineCap = 'round'
+              ctx.stroke()
+            }
+            ctx.restore()
+          }
+
+          // Satellite glow & orb
+          ctx.save()
+          const satGlowRadius = currentSatSize * (depth > 0 ? 3.2 : 2.0)
+          const satGrad = ctx.createRadialGradient(
+            satX,
+            satY,
+            0,
+            satX,
+            satY,
+            satGlowRadius
+          )
+          satGrad.addColorStop(0, sat.color)
+          satGrad.addColorStop(0.35, sat.glowColor)
+          satGrad.addColorStop(1, 'rgba(212, 163, 115, 0)')
+
+          ctx.beginPath()
+          ctx.arc(satX, satY, satGlowRadius, 0, Math.PI * 2)
+          ctx.fillStyle = satGrad
+          ctx.fill()
+
+          // Satellite core dot
+          ctx.beginPath()
+          ctx.arc(satX, satY, currentSatSize * 0.75, 0, Math.PI * 2)
+          ctx.fillStyle = sat.color
+          if (depth > 0) {
+            ctx.shadowColor = sat.glowColor
+            ctx.shadowBlur = 5
+          }
+          ctx.fill()
+          ctx.restore()
+        }
+
+        // Draw satellites behind parent (depth <= 0)
+        computedSatellites
+          .filter((s) => s.depth <= 0)
+          .forEach(drawSatellite)
+
+        // 3b. Majestic Dual-Layer Comet Tail (Soft Amber Sheath + Incandescent Inner Filament)
         if (p.history.length > 2) {
           ctx.save()
+
+          // Layer 1: Outer soft glowing sheath (amber/terracotta plume)
           for (let i = 0; i < p.history.length - 1; i++) {
             const p1 = p.history[i]
             const p2 = p.history[i + 1]
-
             const ratio = 1 - i / p.history.length
-            const trailAlpha = p.alpha * Math.pow(ratio, 1.3) * 0.7
-            const trailWidth = Math.max(0.3, p.size * ratio * 0.95)
+
+            // Non-linear plume curve: thicker near head, softly tapering backward
+            const plumeWidth = Math.max(0.4, p.size * Math.pow(ratio, 0.7) * 1.5)
+            const outerAlpha = p.alpha * Math.pow(ratio, 1.25) * 0.65
 
             ctx.beginPath()
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
-            ctx.strokeStyle = `${p.color.tail}${trailAlpha})`
-            ctx.lineWidth = trailWidth
+            ctx.strokeStyle = `${p.color.tail}${outerAlpha})`
+            ctx.lineWidth = plumeWidth
             ctx.lineCap = 'round'
             ctx.stroke()
           }
+
+          // Layer 2: Inner hot white-gold filament (runs through head and mid-tail)
+          const coreFilamentLength = Math.max(2, Math.floor(p.history.length * 0.7))
+          for (let i = 0; i < coreFilamentLength - 1; i++) {
+            const p1 = p.history[i]
+            const p2 = p.history[i + 1]
+            const ratio = 1 - i / coreFilamentLength
+
+            const innerWidth = Math.max(0.25, p.size * ratio * 0.6)
+            const innerAlpha = p.alpha * Math.pow(ratio, 1.1) * 0.95
+
+            ctx.beginPath()
+            ctx.moveTo(p1.x, p1.y)
+            ctx.lineTo(p2.x, p2.y)
+            // Starts incandescent diamond-white, blending with subtle ivory
+            ctx.strokeStyle = `rgba(255, 252, 245, ${innerAlpha})`
+            ctx.lineWidth = innerWidth
+            ctx.lineCap = 'round'
+            ctx.stroke()
+          }
+
           ctx.restore()
         }
 
-        // 3b. Classic glowing orb core (pure circular radial gradient)
+        // 3c. Luminous Comet Nucleus with Astronomical Anamorphic Flare
         const pulse = Math.sin(time * p.pulseSpeed + p.phase) * 0.18 + 0.82
         const currentSize = p.size * pulse
 
         ctx.save()
-        // Outer soft glow
-        const glowRadius = currentSize * (p.layer === 'meteor' ? 4.0 : 3.0)
+
+        // 1. Soft radial celestial aura (bloom corona)
+        const glowMultiplier = p.layer === 'meteor' ? 4.6 : p.layer === 'stream' ? 3.6 : 2.8
+        const glowRadius = currentSize * glowMultiplier
         const grad = ctx.createRadialGradient(
           p.x,
           p.y,
@@ -368,7 +610,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
           glowRadius
         )
         grad.addColorStop(0, p.color.core)
-        grad.addColorStop(0.35, p.color.glow)
+        grad.addColorStop(0.32, p.color.glow)
         grad.addColorStop(1, 'rgba(212, 163, 115, 0)')
 
         ctx.beginPath()
@@ -376,18 +618,51 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         ctx.fillStyle = grad
         ctx.fill()
 
-        // Inner bright focal core
+        // 2. Optical Anamorphic Cross-Flare on prominent streams & meteors
+        if (p.layer !== 'ambient') {
+          const isMeteor = p.layer === 'meteor'
+          const flareLength = currentSize * (isMeteor ? 3.6 : 2.6)
+          const flareAlpha = p.alpha * (isMeteor ? 0.85 : 0.6) * pulse
+
+          // Horizontal anamorphic streak (aligned with rightward orbital travel)
+          ctx.beginPath()
+          ctx.moveTo(p.x - flareLength * 0.5, p.y)
+          ctx.lineTo(p.x + flareLength, p.y)
+          ctx.strokeStyle = `rgba(255, 252, 242, ${flareAlpha})`
+          ctx.lineWidth = Math.max(0.4, currentSize * 0.28)
+          ctx.lineCap = 'round'
+          ctx.stroke()
+
+          // Subtle vertical cross streak (starlight twinkle)
+          const vertLength = flareLength * 0.42
+          ctx.beginPath()
+          ctx.moveTo(p.x, p.y - vertLength)
+          ctx.lineTo(p.x, p.y + vertLength)
+          ctx.strokeStyle = `rgba(255, 248, 230, ${flareAlpha * 0.7})`
+          ctx.lineWidth = Math.max(0.3, currentSize * 0.22)
+          ctx.lineCap = 'round'
+          ctx.stroke()
+        }
+
+        // 3. Incandescent focal core (pure white high-intensity nucleus)
         ctx.beginPath()
         ctx.arc(p.x, p.y, currentSize * 0.75, 0, Math.PI * 2)
-        ctx.fillStyle = p.color.core
+        ctx.fillStyle = '#FFFFFF'
         ctx.shadowColor = p.color.glow
-        ctx.shadowBlur = p.layer === 'meteor' ? 10 : 6
+        ctx.shadowBlur = p.layer === 'meteor' ? 14 : 8
         ctx.fill()
+
         ctx.restore()
 
-        // Respawn on the left when leaving the right edge
-        if (p.x - p.maxHistory * 12 > width + 30) {
-          particles[idx] = createParticle(false)
+        // 3d. Draw satellites in front of parent (depth > 0)
+        computedSatellites
+          .filter((s) => s.depth > 0)
+          .forEach(drawSatellite)
+
+        // Respawn cleanly on the left once the entire tail exits the screen right
+        const tailLength = p.speedX * p.maxHistory
+        if (p.x - tailLength > width + 25) {
+          particles[idx] = createParticle(false, getAvailableBaseY())
         }
       })
 
@@ -409,7 +684,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
     <canvas
       ref={canvasRef}
       className={`fixed inset-0 pointer-events-none ${className}`}
-      style={{ zIndex: 5 }}
+      style={{ zIndex: 15 }}
       aria-hidden="true"
     />
   )
