@@ -116,19 +116,19 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
 
     // Calculate a spaced baseY to mathematically prevent particles from overlapping on the Y-axis
     const getAvailableBaseY = (slotIndex?: number): number => {
-      const topPadding = height * 0.07
-      const usableHeight = height * 0.86
-      const count = particles.length || (width < 480 ? 9 : width < 768 ? 11 : 12)
+      const topPadding = height * 0.06
+      const usableHeight = height * 0.88
+      const count = particles.length || (width < 480 ? 10 : width < 768 ? 13 : 16)
 
       // When initializing, divide screen into stratified lanes with gentle organic jitter
       if (slotIndex !== undefined) {
         const laneHeight = usableHeight / count
-        const jitter = (Math.random() - 0.5) * (laneHeight * 0.4)
+        const jitter = (Math.random() - 0.5) * (laneHeight * 0.45)
         return topPadding + (slotIndex + 0.5) * laneHeight + jitter
       }
 
       // When respawning, pick a Y location that maximizes vertical distance from existing particles
-      const minDistance = width < 768 ? 52 : 72
+      const minDistance = width < 768 ? 44 : 58
       let bestY = Math.random() * usableHeight + topPadding
       let bestScore = -1
 
@@ -137,9 +137,9 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         let nearestDist = Infinity
 
         for (const p of particles) {
-          // Weight nearby particles more heavily if they are in the left 65% of the screen
-          const isLeft = p.x < width * 0.65
-          const distWeight = isLeft ? 1.0 : 0.6
+          // Weight nearby particles more heavily if they are in the left 60% of the screen
+          const isLeft = p.x < width * 0.6
+          const distWeight = isLeft ? 1.0 : 0.65
           const dist = Math.abs(p.baseY - candidateY) * distWeight
           if (dist < nearestDist) {
             nearestDist = dist
@@ -167,7 +167,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       const isSmallMobile = width < 480
       const colorScheme = palette[Math.floor(Math.random() * palette.length)]
 
-      // Balanced depth distribution: more prominent comets & streams, minimal dull ambient
+      // Balanced depth distribution: prominent comets & streams with ambient depth
       let layer: 'ambient' | 'stream' | 'meteor'
       if (forcedLayer) {
         layer = forcedLayer
@@ -181,19 +181,18 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       let maxHistory: number
       let alpha: number
 
-      // Refined moderate speed differentials to prevent fast meteors from bunching up with slower particles
       if (layer === 'ambient') {
         speedX = isMobile ? 0.6 : 0.8
         size = isMobile ? 0.9 : 1.2
         maxHistory = isMobile ? 6 : 9
         alpha = 0.45
       } else if (layer === 'stream') {
-        speedX = isMobile ? 0.95 : 1.2
+        speedX = isMobile ? 1.0 : 1.3
         size = isMobile ? 1.4 : 1.9
         maxHistory = isMobile ? 14 : 22
         alpha = 0.8
       } else {
-        speedX = isMobile ? 1.35 : 1.6
+        speedX = isMobile ? 1.45 : 1.8
         size = isMobile ? 1.8 : 2.6
         maxHistory = isMobile ? 18 : 28
         alpha = 0.95
@@ -206,10 +205,10 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         ? Math.random() * 8 + 5
         : Math.random() * 11 + 7
 
-      // Spawn distribution: spread across width on init, widely staggered behind left edge on respawn to prevent waves
+      // Spawn distribution: spread across width on init, smoothly staggered behind left edge on respawn
       const startX = spawnAnywhere
         ? Math.random() * width
-        : -Math.random() * (isMobile ? 160 : 320) - 30
+        : -Math.random() * (isMobile ? 130 : 200) - 25
 
       const baseY = forcedBaseY !== undefined ? forcedBaseY : getAvailableBaseY()
 
@@ -223,7 +222,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
 
       const satellites: Satellite[] = []
       for (let s = 0; s < satCount; s++) {
-        // Orbit radius scaled cleanly to screen size to avoid crowding
+        // Orbit radius scaled cleanly to screen size to avoid crowding on narrow mobile displays
         const baseRadius = (isMobile ? 7 : 10) + s * (isMobile ? 3.5 : 5.5) + Math.random() * 2.5
         const radiusX = baseRadius
         const radiusY = radiusX * (Math.random() * 0.28 + 0.42)
@@ -267,25 +266,62 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       }
     }
 
-    // Particle count optimization: serene celestial presence with generous negative space
-    // Mobile (<480px): 9 particles
-    // Tablet (<768px): 11 particles
-    // Desktop: 12 particles (refined from 20 to eliminate clutter and crowding)
+    // Particle count optimization: optimal balance (PC: 16, Tablet: 13, Mobile: 10)
+    // Seamless pipeline initialization: eliminates any initial cooldown or empty periods
     const initParticles = () => {
       const isSmallMobile = width < 480
       const isMobile = width < 768
-      const count = isSmallMobile ? 9 : isMobile ? 11 : 12
+      const count = isSmallMobile ? 10 : isMobile ? 13 : 16
 
       particles = []
+      // Pipeline covers the left inbound buffer (-leftBuffer) through the visible screen width
+      const leftBuffer = isMobile ? 220 : 340
+      const totalSpan = width + leftBuffer
+
       for (let i = 0; i < count; i++) {
         const baseY = getAvailableBaseY(i)
-        // Ensure healthy, balanced proportion of meteors, streams, and ambient dust
+        // Ensure balanced proportion of meteors, streams, and ambient dust
         let layer: 'ambient' | 'stream' | 'meteor'
         if (i % 3 === 0) layer = 'meteor'
         else if (i % 3 === 1) layer = 'stream'
         else layer = Math.random() < 0.6 ? 'stream' : 'ambient'
 
-        particles.push(createParticle(true, baseY, layer))
+        // Evenly distribute X across the pipeline so there is NEVER a vacuum or cooldown period
+        const slice = totalSpan / count
+        const startX = -leftBuffer + (i + 0.5) * slice + (Math.random() - 0.5) * (slice * 0.45)
+
+        const p = createParticle(false, baseY, layer)
+        p.x = startX
+
+        // Pre-warm movement history so tails are already gloriously formed from the very first frame
+        p.history = []
+        for (let h = 0; h < p.maxHistory; h++) {
+          const pastX = p.x - p.speedX * h
+          const pastWave =
+            Math.sin(pastX * p.wobbleFreq + p.phase) * p.wobbleAmp
+          p.history.push({ x: pastX, y: p.baseY + pastWave })
+        }
+
+        // Pre-warm satellite histories
+        p.satellites.forEach((sat) => {
+          sat.history = []
+          for (let h = 0; h < sat.maxHistory; h++) {
+            const pastAngle = sat.angle - sat.speed * h
+            const cosA = Math.cos(pastAngle)
+            const sinA = Math.sin(pastAngle)
+            const unrotX = cosA * sat.radiusX
+            const unrotY = sinA * sat.radiusY
+            const cosR = Math.cos(sat.rotation)
+            const sinR = Math.sin(sat.rotation)
+            const relX = unrotX * cosR - unrotY * sinR
+            const relY = unrotX * sinR + unrotY * cosR
+
+            const pastParent = p.history[Math.min(h, p.history.length - 1)] || { x: p.x, y: p.y }
+            sat.history.push({ x: pastParent.x + relX, y: pastParent.y + relY })
+          }
+        })
+
+        particles.push(p)
       }
     }
 
@@ -420,22 +456,11 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       particles.forEach((p, idx) => {
         p.x += p.speedX
 
-        // Undulating sine wave motion
+        // Smooth continuous sine wave trajectory (no jerky mouse avoidance jumps)
         const wave =
           Math.sin(p.x * p.wobbleFreq + p.phase + time * p.wobbleSpeed) *
           p.wobbleAmp
-        let currentY = p.baseY + wave
-
-        // Cursor avoidance force
-        const dx = p.x - mouse.x
-        const dy = currentY - mouse.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 150) {
-          const force = (1 - dist / 150) * 12
-          currentY += (dy / (dist || 1)) * force
-        }
-
-        p.y = currentY
+        p.y = p.baseY + wave
 
         // Track movement history for smooth trailing
         p.history.unshift({ x: p.x, y: p.y })
