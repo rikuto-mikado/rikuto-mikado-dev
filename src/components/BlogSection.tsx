@@ -7,12 +7,14 @@ import whyOurGenerationImg from '../assets/whyourgeneration.png'
 import whyMassesImg from '../assets/whyIbelievethemasses.png'
 import onExistentialCrisisImg from '../assets/onexistentialcrisis.png'
 import theComplexityOfEducationImg from '../assets/thecomplexityofeducation.png'
+import theIdealOfDiversityImg from '../assets/theidealofdiversity.png'
 
 const blogCoverImages: Record<string, string> = {
   'why-our-generation-cannot-ignore-agi': whyOurGenerationImg,
   'why-masses-happier-without-ai': whyMassesImg,
   'on-existential-crisis': onExistentialCrisisImg,
   'education-complexity-and-information-gap': theComplexityOfEducationImg,
+  'the-ideal-of-diversity': theIdealOfDiversityImg,
 }
 
 interface BlogSectionProps {
@@ -34,6 +36,12 @@ export default function BlogSection({
   const posts = blogPostsData[lang]
   const upcomingPost = upcomingPostData[lang]
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null)
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const INITIAL_VISIBLE_COUNT = 4
+  const totalItemCount = posts.length + (upcomingPost ? 1 : 0)
+  const visiblePosts = isExpanded ? posts : posts.slice(0, INITIAL_VISIBLE_COUNT)
+  const showUpcoming = Boolean(upcomingPost && (isExpanded || posts.length < INITIAL_VISIBLE_COUNT))
+
   const selectedPost = selectedPostId
     ? posts.find((p) => p.id === selectedPostId) ?? null
     : null
@@ -93,7 +101,7 @@ export default function BlogSection({
 
         {/* 4-Column Grid on Desktop (Matching Skill Acquisition Cards) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {posts.map((post) => {
+          {visiblePosts.map((post) => {
             const coverImg = blogCoverImages[post.id]
             return (
               <article
@@ -241,7 +249,7 @@ export default function BlogSection({
           })}
 
           {/* Upcoming Card (Structured identically to article cards for consistent height and seamless row expansion) */}
-          {upcomingPost && (
+          {showUpcoming && upcomingPost && (
             <div
               className={`rounded-2xl overflow-hidden border border-dashed flex flex-col justify-between transition-all duration-300 opacity-75 hover:opacity-100 ${
                 isDark
@@ -283,9 +291,6 @@ export default function BlogSection({
                       />
                     </svg>
                   </div>
-                  <span className={`text-[10px] font-mono tracking-wider ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                    DRAFT • ESSAY V
-                  </span>
                 </div>
               </div>
 
@@ -349,6 +354,47 @@ export default function BlogSection({
             </div>
           )}
         </div>
+
+        {/* Read More / Show Less Toggle Button */}
+        {totalItemCount > INITIAL_VISIBLE_COUNT && (
+          <div className="mt-12 text-center">
+            <button
+              type="button"
+              onClick={() => setIsExpanded((prev) => !prev)}
+              aria-expanded={isExpanded}
+              className={`inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer shadow-sm hover:shadow-md ${
+                isDark
+                  ? 'bg-[#1C1A18] hover:bg-[#25221E] text-[#E0A96D] border border-[#3A352F] hover:border-[#D4A373]/60'
+                  : 'bg-white hover:bg-[#F9F8F5] text-[#9A4C22] border border-[#d8d1c5] hover:border-[#9A4C22]/60'
+              }`}
+            >
+              <span>
+                {isExpanded
+                  ? lang === 'ja'
+                    ? '閉じる'
+                    : 'Show less'
+                  : lang === 'ja'
+                    ? 'もっと見る'
+                    : 'Read more'}
+              </span>
+              <svg
+                className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                  isExpanded ? 'rotate-180' : ''
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Reading Modal rendered through React Portal to document.body (Immune to parent section stacking contexts) */}

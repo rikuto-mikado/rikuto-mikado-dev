@@ -1,18 +1,5 @@
 import { useEffect, useRef } from 'react'
 
-interface Satellite {
-  radiusX: number
-  radiusY: number
-  rotation: number
-  speed: number
-  angle: number
-  size: number
-  color: string
-  glowColor: string
-  history: { x: number; y: number }[]
-  maxHistory: number
-}
-
 interface Particle {
   x: number
   y: number
@@ -33,7 +20,6 @@ interface Particle {
   alpha: number
   pulseSpeed: number
   layer: 'ambient' | 'stream' | 'meteor'
-  satellites: Satellite[]
 }
 
 interface WaveBeam {
@@ -118,7 +104,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
     const getAvailableBaseY = (slotIndex?: number): number => {
       const topPadding = height * 0.06
       const usableHeight = height * 0.88
-      const count = particles.length || (width < 480 ? 10 : width < 768 ? 13 : 16)
+      const count = particles.length || (width < 480 ? 10 : width < 768 ? 12 : 15)
 
       // When initializing, divide screen into stratified lanes with gentle organic jitter
       if (slotIndex !== undefined) {
@@ -158,7 +144,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       return bestY
     }
 
-    // Helper to pre-calculate movement and satellite history for seamless rendering without pop-in
+    // Helper to pre-calculate movement history for seamless rendering without pop-in on initial load
     const prewarmHistory = (p: Particle) => {
       p.history = []
       for (let h = 0; h < p.maxHistory; h++) {
@@ -167,24 +153,6 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
           Math.sin(pastX * p.wobbleFreq + p.phase) * p.wobbleAmp
         p.history.push({ x: pastX, y: p.baseY + pastWave })
       }
-
-      p.satellites.forEach((sat) => {
-        sat.history = []
-        for (let h = 0; h < sat.maxHistory; h++) {
-          const pastAngle = sat.angle - sat.speed * h
-          const cosA = Math.cos(pastAngle)
-          const sinA = Math.sin(pastAngle)
-          const unrotX = cosA * sat.radiusX
-          const unrotY = sinA * sat.radiusY
-          const cosR = Math.cos(sat.rotation)
-          const sinR = Math.sin(sat.rotation)
-          const relX = unrotX * cosR - unrotY * sinR
-          const relY = unrotX * sinR + unrotY * cosR
-
-          const pastParent = p.history[Math.min(h, p.history.length - 1)] || { x: p.x, y: p.y }
-          sat.history.push({ x: pastParent.x + relX, y: pastParent.y + relY })
-        }
-      })
     }
 
     const createParticle = (
@@ -196,13 +164,13 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       const isSmallMobile = width < 480
       const colorScheme = palette[Math.floor(Math.random() * palette.length)]
 
-      // Balanced depth distribution: 90% full comets with satellites and tails
+      // Balanced depth distribution: high proportion of prominent flowing meteors and streams
       let layer: 'ambient' | 'stream' | 'meteor'
       if (forcedLayer) {
         layer = forcedLayer
       } else {
         const roll = Math.random()
-        layer = roll < 0.10 ? 'ambient' : roll < 0.65 ? 'stream' : 'meteor'
+        layer = roll < 0.15 ? 'ambient' : roll < 0.65 ? 'stream' : 'meteor'
       }
 
       let speedX: number
@@ -210,32 +178,32 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       let maxHistory: number
       let alpha: number
 
-      // Speed calibrated: Mobile speeds reduced ~35% for graceful observation across narrow screens
+      // Speed calibrated: Mobile speeds gently softened (~35%) for comfortable observation across narrow displays
       if (layer === 'ambient') {
-        speedX = isSmallMobile ? 0.38 : isMobile ? 0.42 : 0.75
+        speedX = isSmallMobile ? 0.38 : isMobile ? 0.44 : 0.75
         size = isMobile ? 0.9 : 1.2
         maxHistory = isMobile ? 8 : 10
         alpha = 0.45
       } else if (layer === 'stream') {
-        speedX = isSmallMobile ? 0.65 : isMobile ? 0.70 : 1.25
-        size = isMobile ? 1.4 : 1.9
-        maxHistory = isSmallMobile ? 22 : isMobile ? 24 : 26
+        speedX = isSmallMobile ? 0.68 : isMobile ? 0.74 : 1.25
+        size = isMobile ? 1.4 : 1.8
+        maxHistory = isSmallMobile ? 20 : isMobile ? 22 : 25
         alpha = 0.8
       } else {
-        speedX = isSmallMobile ? 0.90 : isMobile ? 0.98 : 1.65
-        size = isMobile ? 1.8 : 2.6
-        maxHistory = isSmallMobile ? 26 : isMobile ? 28 : 32
+        speedX = isSmallMobile ? 0.92 : isMobile ? 1.02 : 1.65
+        size = isMobile ? 1.9 : 2.6
+        maxHistory = isSmallMobile ? 24 : isMobile ? 28 : 32
         alpha = 0.95
       }
 
-      // Controlled wave amplitude to prevent cross-lane collision and visual clutter
+      // Controlled organic sine wave amplitude (gentle, continuous, no abrupt twitching)
       const wobbleAmp = isSmallMobile
         ? Math.random() * 5 + 4
         : isMobile
-        ? Math.random() * 8 + 5
-        : Math.random() * 11 + 7
+        ? Math.random() * 7 + 5
+        : Math.random() * 10 + 7
 
-      // Compact respawn buffer: starts just behind left border so new comets enter within ~0.3-0.8s
+      // Respawn buffer: enters smoothly from just behind left boundary
       const buffer = isSmallMobile
         ? Math.random() * 25 + 12
         : isMobile
@@ -244,40 +212,6 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       const startX = spawnAnywhere ? Math.random() * width : -buffer
 
       const baseY = forcedBaseY !== undefined ? forcedBaseY : getAvailableBaseY()
-
-      // 1 to 3 satellites revolving around the particle
-      const satCount =
-        layer === 'ambient'
-          ? Math.random() < 0.6 ? 1 : 2
-          : layer === 'stream'
-          ? Math.floor(Math.random() * 3) + 1
-          : Math.floor(Math.random() * 2) + 2
-
-      const satellites: Satellite[] = []
-      for (let s = 0; s < satCount; s++) {
-        // Orbit radius scaled cleanly to screen size to avoid crowding on narrow mobile displays
-        const baseRadius = (isMobile ? 7 : 10) + s * (isMobile ? 3.5 : 5.5) + Math.random() * 2.5
-        const radiusX = baseRadius
-        const radiusY = radiusX * (Math.random() * 0.28 + 0.42)
-        const rotation = Math.random() * Math.PI
-        const dir = Math.random() < 0.5 ? 1 : -1
-        const speed = dir * (Math.random() * 0.018 + 0.024)
-        const initialAngle = (Math.PI * 2 * s) / satCount + (Math.random() - 0.5) * 0.6
-        const satSize = Math.max(0.5, size * (Math.random() * 0.2 + 0.32))
-
-        satellites.push({
-          radiusX,
-          radiusY,
-          rotation,
-          speed,
-          angle: initialAngle,
-          size: satSize,
-          color: colorScheme.core,
-          glowColor: colorScheme.glow,
-          history: [],
-          maxHistory: isMobile ? 4 : 6,
-        })
-      }
 
       const p: Particle = {
         x: startX,
@@ -295,25 +229,24 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         alpha,
         pulseSpeed: Math.random() * 0.025 + 0.015,
         layer,
-        satellites,
       }
 
       prewarmHistory(p)
       return p
     }
 
-    // Particle count optimization: optimal balance (PC: 16, Tablet: 13, Mobile: 10)
+    // Particle count optimization (Mobile: 10, Tablet: 12, PC: 15)
     // Instantaneous screen coverage: eliminates any initial cooldown or empty periods on load
     const initParticles = () => {
       const isSmallMobile = width < 480
       const isMobile = width < 768
-      const count = isSmallMobile ? 10 : isMobile ? 13 : 16
+      const count = isSmallMobile ? 10 : isMobile ? 12 : 15
 
       particles = []
 
       for (let i = 0; i < count; i++) {
         const baseY = getAvailableBaseY(i)
-        // Ensure high proportion of prominent meteors and streams across the sky
+        // Ensure healthy proportion of meteors and streams across the sky
         let layer: 'ambient' | 'stream' | 'meteor'
         if (i % 3 === 0) layer = 'meteor'
         else if (i % 3 === 1) layer = 'stream'
@@ -457,7 +390,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       }
       ctx.restore()
 
-      // 3. Flowing particles and smooth tapered light trails
+      // 3. Flowing particles and smooth tapered light trails (Classic, elegant comet & streams)
       particles.forEach((p, idx) => {
         p.x += p.speedX
 
@@ -473,163 +406,59 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
           p.history.pop()
         }
 
-        // 3a. Update & compute satellite orbital positions around parent particle
-        interface ComputedSatellite {
-          sat: Satellite
-          x: number
-          y: number
-          depth: number
-        }
-
-        const computedSatellites: ComputedSatellite[] = p.satellites.map((sat) => {
-          sat.angle += sat.speed
-
-          const cosA = Math.cos(sat.angle)
-          const sinA = Math.sin(sat.angle)
-
-          // 2D tilted orbital plane
-          const unrotX = cosA * sat.radiusX
-          const unrotY = sinA * sat.radiusY
-
-          const cosR = Math.cos(sat.rotation)
-          const sinR = Math.sin(sat.rotation)
-
-          const relX = unrotX * cosR - unrotY * sinR
-          const relY = unrotX * sinR + unrotY * cosR
-
-          const satX = p.x + relX
-          const satY = p.y + relY
-
-          sat.history.unshift({ x: satX, y: satY })
-          if (sat.history.length > sat.maxHistory) {
-            sat.history.pop()
-          }
-
-          return {
-            sat,
-            x: satX,
-            y: satY,
-            depth: sinA, // > 0: in front of parent, <= 0: behind parent
-          }
-        })
-
-        // Satellite renderer helper
-        const drawSatellite = (comp: ComputedSatellite) => {
-          const { sat, x: satX, y: satY, depth } = comp
-          const depthFactor = (depth + 1) * 0.5 // 0 (far behind) to 1 (near front)
-          const currentAlpha = p.alpha * (0.35 + depthFactor * 0.55)
-          const currentSatSize = sat.size * (0.75 + depthFactor * 0.45)
-
-          // Satellite mini helical tail
-          if (sat.history.length > 1) {
-            ctx.save()
-            for (let h = 0; h < sat.history.length - 1; h++) {
-              const h1 = sat.history[h]
-              const h2 = sat.history[h + 1]
-              const ratio = 1 - h / sat.history.length
-              const tailAlpha = currentAlpha * Math.pow(ratio, 1.2) * 0.6
-              ctx.beginPath()
-              ctx.moveTo(h1.x, h1.y)
-              ctx.lineTo(h2.x, h2.y)
-              ctx.strokeStyle = `${p.color.tail}${tailAlpha})`
-              ctx.lineWidth = Math.max(0.25, currentSatSize * ratio * 0.85)
-              ctx.lineCap = 'round'
-              ctx.stroke()
-            }
-            ctx.restore()
-          }
-
-          // Satellite glow & orb
-          ctx.save()
-          const satGlowRadius = currentSatSize * (depth > 0 ? 3.2 : 2.0)
-          const satGrad = ctx.createRadialGradient(
-            satX,
-            satY,
-            0,
-            satX,
-            satY,
-            satGlowRadius
-          )
-          satGrad.addColorStop(0, sat.color)
-          satGrad.addColorStop(0.35, sat.glowColor)
-          satGrad.addColorStop(1, 'rgba(212, 163, 115, 0)')
-
-          ctx.beginPath()
-          ctx.arc(satX, satY, satGlowRadius, 0, Math.PI * 2)
-          ctx.fillStyle = satGrad
-          ctx.fill()
-
-          // Satellite core dot
-          ctx.beginPath()
-          ctx.arc(satX, satY, currentSatSize * 0.75, 0, Math.PI * 2)
-          ctx.fillStyle = sat.color
-          if (depth > 0) {
-            ctx.shadowColor = sat.glowColor
-            ctx.shadowBlur = 5
-          }
-          ctx.fill()
-          ctx.restore()
-        }
-
-        // Draw satellites behind parent (depth <= 0)
-        computedSatellites
-          .filter((s) => s.depth <= 0)
-          .forEach(drawSatellite)
-
-        // 3b. Majestic Dual-Layer Comet Tail (Soft Amber Sheath + Incandescent Inner Filament)
+        // 3a. Smooth tapered trailing light tail
         if (p.history.length > 2) {
           ctx.save()
 
-          // Layer 1: Outer soft glowing sheath (amber/terracotta plume)
+          // Main smooth tapered comet plume
           for (let i = 0; i < p.history.length - 1; i++) {
             const p1 = p.history[i]
             const p2 = p.history[i + 1]
-            const ratio = 1 - i / p.history.length
 
-            // Non-linear plume curve: thicker near head, softly tapering backward
-            const plumeWidth = Math.max(0.4, p.size * Math.pow(ratio, 0.7) * 1.5)
-            const outerAlpha = p.alpha * Math.pow(ratio, 1.25) * 0.65
+            const ratio = 1 - i / p.history.length
+            const trailAlpha = p.alpha * Math.pow(ratio, 1.25) * 0.72
+            const trailWidth = Math.max(0.35, p.size * ratio * 1.1)
 
             ctx.beginPath()
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
-            ctx.strokeStyle = `${p.color.tail}${outerAlpha})`
-            ctx.lineWidth = plumeWidth
+            ctx.strokeStyle = `${p.color.tail}${trailAlpha})`
+            ctx.lineWidth = trailWidth
             ctx.lineCap = 'round'
             ctx.stroke()
           }
 
-          // Layer 2: Inner hot white-gold filament (runs through head and mid-tail)
-          const coreFilamentLength = Math.max(2, Math.floor(p.history.length * 0.7))
-          for (let i = 0; i < coreFilamentLength - 1; i++) {
-            const p1 = p.history[i]
-            const p2 = p.history[i + 1]
-            const ratio = 1 - i / coreFilamentLength
+          // Subtle hot incandescent filament in the front portion of prominent meteor trails
+          if (p.layer === 'meteor' && p.history.length > 4) {
+            const innerLen = Math.floor(p.history.length * 0.6)
+            for (let i = 0; i < innerLen - 1; i++) {
+              const p1 = p.history[i]
+              const p2 = p.history[i + 1]
 
-            const innerWidth = Math.max(0.25, p.size * ratio * 0.6)
-            const innerAlpha = p.alpha * Math.pow(ratio, 1.1) * 0.95
+              const ratio = 1 - i / innerLen
+              const innerAlpha = p.alpha * Math.pow(ratio, 1.2) * 0.65
+              const innerWidth = Math.max(0.28, p.size * ratio * 0.55)
 
-            ctx.beginPath()
-            ctx.moveTo(p1.x, p1.y)
-            ctx.lineTo(p2.x, p2.y)
-            // Starts incandescent diamond-white, blending with subtle ivory
-            ctx.strokeStyle = `rgba(255, 252, 245, ${innerAlpha})`
-            ctx.lineWidth = innerWidth
-            ctx.lineCap = 'round'
-            ctx.stroke()
+              ctx.beginPath()
+              ctx.moveTo(p1.x, p1.y)
+              ctx.lineTo(p2.x, p2.y)
+              ctx.strokeStyle = `rgba(255, 252, 245, ${innerAlpha})`
+              ctx.lineWidth = innerWidth
+              ctx.lineCap = 'round'
+              ctx.stroke()
+            }
           }
 
           ctx.restore()
         }
 
-        // 3c. Luminous Comet Nucleus with Astronomical Anamorphic Flare
+        // 3b. Classic glowing celestial orb core (pure radial glow + starlight nucleus)
         const pulse = Math.sin(time * p.pulseSpeed + p.phase) * 0.18 + 0.82
         const currentSize = p.size * pulse
 
         ctx.save()
-
-        // 1. Soft radial celestial aura (bloom corona)
-        const glowMultiplier = p.layer === 'meteor' ? 4.6 : p.layer === 'stream' ? 3.6 : 2.8
+        // Outer soft glow aura
+        const glowMultiplier = p.layer === 'meteor' ? 4.2 : p.layer === 'stream' ? 3.4 : 2.6
         const glowRadius = currentSize * glowMultiplier
         const grad = ctx.createRadialGradient(
           p.x,
@@ -640,7 +469,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
           glowRadius
         )
         grad.addColorStop(0, p.color.core)
-        grad.addColorStop(0.32, p.color.glow)
+        grad.addColorStop(0.35, p.color.glow)
         grad.addColorStop(1, 'rgba(212, 163, 115, 0)')
 
         ctx.beginPath()
@@ -648,46 +477,14 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         ctx.fillStyle = grad
         ctx.fill()
 
-        // 2. Optical Anamorphic Cross-Flare on prominent streams & meteors
-        if (p.layer !== 'ambient') {
-          const isMeteor = p.layer === 'meteor'
-          const flareLength = currentSize * (isMeteor ? 3.6 : 2.6)
-          const flareAlpha = p.alpha * (isMeteor ? 0.85 : 0.6) * pulse
-
-          // Horizontal anamorphic streak (aligned with rightward orbital travel)
-          ctx.beginPath()
-          ctx.moveTo(p.x - flareLength * 0.5, p.y)
-          ctx.lineTo(p.x + flareLength, p.y)
-          ctx.strokeStyle = `rgba(255, 252, 242, ${flareAlpha})`
-          ctx.lineWidth = Math.max(0.4, currentSize * 0.28)
-          ctx.lineCap = 'round'
-          ctx.stroke()
-
-          // Subtle vertical cross streak (starlight twinkle)
-          const vertLength = flareLength * 0.42
-          ctx.beginPath()
-          ctx.moveTo(p.x, p.y - vertLength)
-          ctx.lineTo(p.x, p.y + vertLength)
-          ctx.strokeStyle = `rgba(255, 248, 230, ${flareAlpha * 0.7})`
-          ctx.lineWidth = Math.max(0.3, currentSize * 0.22)
-          ctx.lineCap = 'round'
-          ctx.stroke()
-        }
-
-        // 3. Incandescent focal core (pure white high-intensity nucleus)
+        // Inner bright focal core
         ctx.beginPath()
         ctx.arc(p.x, p.y, currentSize * 0.75, 0, Math.PI * 2)
-        ctx.fillStyle = '#FFFFFF'
+        ctx.fillStyle = p.layer === 'meteor' ? '#FFFFFF' : p.color.core
         ctx.shadowColor = p.color.glow
-        ctx.shadowBlur = p.layer === 'meteor' ? 14 : 8
+        ctx.shadowBlur = p.layer === 'meteor' ? 12 : 7
         ctx.fill()
-
         ctx.restore()
-
-        // 3d. Draw satellites in front of parent (depth > 0)
-        computedSatellites
-          .filter((s) => s.depth > 0)
-          .forEach(drawSatellite)
 
         // Respawn cleanly on the left once the entire tail exits the screen right
         const tailLength = p.speedX * p.maxHistory
@@ -710,7 +507,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       }
 
       if (visibleCometCount < minVisibleComets) {
-        // Find an off-screen particle (or the furthest exited particle) to immediately glide in from the left
+        // Find an off-screen particle to immediately glide in from the left
         let candidateIdx = -1
         let maxDist = -1
 

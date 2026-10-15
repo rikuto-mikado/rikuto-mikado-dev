@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import LightTrails from './components/LightTrails'
 import Sidebar from './components/Sidebar'
 import BlogSection from './components/BlogSection'
+import TerminalProfile from './components/TerminalProfile'
 import type { Language, CourseItem } from './data/translations'
 import { timelineEventsData, coursesData, uiText } from './data/translations'
 import certFullstackWeb from './assets/cert-fullstack-web.png'
@@ -366,14 +367,11 @@ export default function App() {
           <div className={`border-t-2 border-dashed w-3/4 max-w-lg mx-auto transition-colors duration-500 ${
             isDark ? 'border-[#d4a373]/50' : 'border-[#d4a373]'
           }`}></div>
-        </div>
 
-        {/* Scroll indicator */}
-        <div className={`text-center flex flex-col items-center gap-2 text-xs font-sans uppercase tracking-widest pt-6 transition-colors duration-500 ${
-          isDark ? 'text-gray-400' : 'text-gray-500'
-        }`}>
-          <span>{ui.scrollPrompt}</span>
-          <div className="w-px h-8 bg-gradient-to-b from-[#9A4C22] to-transparent"></div>
+          {/* Interactive Developer Terminal (GitHub README Profile) */}
+          <div className="pt-2 sm:pt-4 max-w-3xl mx-auto w-full text-left">
+            <TerminalProfile isDark={isDark} />
+          </div>
         </div>
       </section>
 
