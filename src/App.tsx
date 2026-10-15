@@ -613,8 +613,8 @@ export default function App() {
             </p>
           </div>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          {/* Cards Grid: 4-Column on Desktop (Matching Perspectives & Essays) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {courses.map((course, idx) => (
               <div
                 key={idx}
@@ -635,15 +635,15 @@ export default function App() {
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                   {/* Subtle hover overlay hint */}
-                  <div className="absolute inset-0 bg-[#2b2623]/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="px-4 py-2 rounded-full bg-white/95 text-gray-900 text-xs font-sans font-semibold tracking-wider uppercase shadow-md flex items-center gap-1.5">
+                  <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20 backdrop-blur-[2px]">
+                    <span className="px-4 py-2 rounded-full bg-white/95 text-gray-900 text-xs font-sans font-semibold tracking-wider uppercase shadow-md flex items-center gap-1.5 transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
                       {ui.viewCert}
                     </span>
                   </div>
                 </div>
 
                 {/* Card details */}
-                <div className="p-6 md:p-7 space-y-4 flex-1 flex flex-col justify-between">
+                <div className="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between">
                   <div className="space-y-3">
                     {/* Meta row: Date */}
                     <div
@@ -668,7 +668,7 @@ export default function App() {
                     </div>
 
                     <h3
-                      className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 ${
+                      className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 line-clamp-2 ${
                         isDark
                           ? 'text-[#F5F3EE] group-hover:text-[#E0A96D]'
                           : 'text-gray-900 group-hover:text-[#9A4C22]'
@@ -679,7 +679,7 @@ export default function App() {
 
                     {course.note && (
                       <p
-                        className={`font-sans text-xs sm:text-sm leading-relaxed font-light transition-colors duration-500 ${
+                        className={`font-sans text-xs sm:text-sm leading-relaxed font-light transition-colors duration-500 line-clamp-3 ${
                           isDark ? 'text-[#C4BEB4]' : 'text-gray-600'
                         }`}
                       >
@@ -692,10 +692,10 @@ export default function App() {
                   <div className={`pt-3 border-t flex items-center justify-between text-xs font-sans transition-colors duration-500 ${
                     isDark ? 'border-[#262320] text-gray-400' : 'border-[#f0ebe3] text-gray-600'
                   }`}>
-                    <span>
+                    <span className="truncate pr-2">
                       {ui.instructor}: <strong className={`font-medium transition-colors duration-500 ${isDark ? 'text-[#F5F3EE]' : 'text-gray-800'}`}>{course.instructor}</strong>
                     </span>
-                    <span className={`px-2 py-0.5 rounded font-medium transition-colors duration-500 ${
+                    <span className={`shrink-0 px-2 py-0.5 rounded font-medium transition-colors duration-500 ${
                       isDark ? 'bg-[#262320] text-gray-300' : 'bg-gray-100 text-gray-800'
                     }`}>
                       {course.hours}
