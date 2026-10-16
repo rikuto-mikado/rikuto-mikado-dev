@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import LightTrails from './components/LightTrails'
+import LoadingScreen from './components/LoadingScreen'
 import Sidebar from './components/Sidebar'
 import BlogSection from './components/BlogSection'
 import TerminalProfile from './components/TerminalProfile'
@@ -177,6 +178,9 @@ export default function App() {
         isDark ? 'bg-[#131211] text-[#E8E4DD]' : 'bg-[#F5F4F0] text-gray-800'
       }`}
     >
+      {/* Initial Site Entry Loading Screen */}
+      <LoadingScreen />
+
       {/* Floating Header Dock (Dark Mode Toggle, Language Switcher & Navigation Menu) */}
       <div
         className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-[60] flex items-center p-1 sm:p-1.5 rounded-full border shadow-xl backdrop-blur-md transition-all duration-300 ${
