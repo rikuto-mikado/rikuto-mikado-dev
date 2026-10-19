@@ -1,5 +1,50 @@
 @import "tailwindcss";
 
+@theme {
+  /* Brand accents */
+  --color-rust: #9a4c22;
+  --color-sand: #d4a373;
+  --color-apricot: #e0a96d;
+  --color-tan: #c29c6d;
+  --color-sun: #f5c563;
+
+  /* Light theme neutrals */
+  --color-paper: #f5f4f0;
+  --color-cream-surface: #ede7dc;
+  --color-cream-divider: #e6e2d8;
+  --color-cream-line: #e3dbcd;
+  --color-cream-border: #d6ccbd;
+
+  /* Text on dark backgrounds */
+  --color-ivory: #f5f3ee;
+  --color-linen: #e8e4dd;
+  --color-stone: #c4beb4;
+
+  /* Dark theme surfaces, darkest to lightest */
+  --color-night: #131211;
+  --color-night-panel: #161413;
+  --color-night-section: #181614;
+  --color-night-modal: #181615;
+  --color-night-card: #1c1a18;
+  --color-night-chip: #22201d;
+  --color-night-divider: #262320;
+  --color-night-hover: #282522;
+  --color-night-edge: #2d2a26;
+  --color-night-rule: #2e2b27;
+  --color-night-border: #3a352f;
+
+  --animate-fade-in: fade-in 0.3s ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -57,3 +102,8 @@ html {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+}

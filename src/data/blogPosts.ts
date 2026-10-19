@@ -12,6 +12,7 @@ export interface BlogPost {
 
 export interface UpcomingPost {
   title: string
+  excerpt: string
   status?: string
 }
 
@@ -243,10 +244,12 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
 export const upcomingPostData: Record<Language, UpcomingPost | null> = {
   en: {
     title: 'Unfortunately, I Am Young',
+    excerpt: 'Insights on the reality of youth and the unique structural challenges faced by the next generation.',
     status: 'In Progress • Soon',
   },
   ja: {
     title: '私は残念ながら若者だ',
+    excerpt: '若者であることの現実と、次世代が直面する独自の構造的課題についての洞察。',
     status: '執筆予定 (In Progress)',
   },
 }

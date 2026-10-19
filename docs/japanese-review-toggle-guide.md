@@ -9,10 +9,10 @@
 
 ## How to Enable (1 Line)
 
-In [`src/App.tsx`](../src/App.tsx):
+In [`src/config.ts`](../src/config.ts):
 
 ```ts
-const isJapaneseAvailable = true; // change false -> true
+export const IS_JAPANESE_AVAILABLE: boolean = true // change false -> true
 ```
 
 ---
@@ -21,21 +21,25 @@ const isJapaneseAvailable = true; // change false -> true
 
 If removing the toast mechanism completely once translations are verified:
 
-1. **[`src/App.tsx`](../src/App.tsx)**:
-   - Remove `isJapaneseAvailable`, `toastMessage`, `toastTimeoutRef`, and `triggerToast()`.
-   - Remove `{toastMessage && ( ... )}` toast JSX block.
-   - Simplify `toggleLang`:
-     ```ts
-     const toggleLang = () => setLang((prev) => (prev === "en" ? "ja" : "en"));
-     ```
-   - Remove `isJapaneseAvailable` prop from `<Sidebar />`.
+1. **[`src/config.ts`](../src/config.ts)**:
+   - Remove `IS_JAPANESE_AVAILABLE` (and its use in [`src/hooks/useLanguage.ts`](../src/hooks/useLanguage.ts)).
 
-2. **[`src/components/Sidebar.tsx`](../src/components/Sidebar.tsx)**:
-   - Remove `isJapaneseAvailable` from `SidebarProps`.
-   - Revert language status and button label to default:
-     ```tsx
-     <span className="text-[10px] font-sans text-gray-400">
-       {lang === 'en' ? 'Switch to Japanese' : '英語表示に切り替え'}
-     </span>
-     <button onClick={onToggleLang}>{ui.langToggle}</button>
+2. **[`src/App.tsx`](../src/App.tsx)**:
+   - Remove `useToast()`, the `<Toast />` element, and the guard inside `toggleLang`:
+     ```ts
+     const { lang, toggleLang } = useLanguage()
      ```
+   - Remove the `isJapaneseAvailable` prop from `<Sidebar />` and `<BlogSection />`.
+
+3. **[`src/components/layout/Sidebar.tsx`](../src/components/layout/Sidebar.tsx)**:
+   - Remove `isJapaneseAvailable` from `SidebarProps`.
+   - Use the default language row copy:
+     ```tsx
+     subtitle={ui.langSwitchHint}
+     buttonLabel={ui.langToggle}
+     ```
+
+4. **[`src/components/sections/blog/BlogReaderModal.tsx`](../src/components/sections/blog/BlogReaderModal.tsx)**:
+   - Remove `isJapaneseAvailable` and use `ui.langSwitchLabel` for the language button's `aria-label` / `title`; drop the `(Soon)` suffix.
+
+5. Optionally delete [`src/hooks/useToast.ts`](../src/hooks/useToast.ts) and [`src/components/common/Toast.tsx`](../src/components/common/Toast.tsx) if nothing else uses them.

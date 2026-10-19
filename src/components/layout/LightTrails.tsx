@@ -1,5 +1,14 @@
 import { useEffect, useRef } from 'react'
 
+type ParticleLayer = 'ambient' | 'stream' | 'meteor'
+
+interface ParticleColor {
+  core: string
+  glow: string
+  /** rgba() prefix; append `${alpha})` to complete it */
+  tail: string
+}
+
 interface Particle {
   x: number
   y: number
@@ -10,16 +19,12 @@ interface Particle {
   wobbleFreq: number
   wobbleSpeed: number
   phase: number
-  color: {
-    core: string
-    glow: string
-    tail: string
-  }
+  color: ParticleColor
   history: { x: number; y: number }[]
   maxHistory: number
   alpha: number
   pulseSpeed: number
-  layer: 'ambient' | 'stream' | 'meteor'
+  layer: ParticleLayer
 }
 
 interface WaveBeam {
@@ -36,6 +41,56 @@ interface WaveBeam {
 interface LightTrailsProps {
   className?: string
 }
+
+const MOBILE_BREAKPOINT = 768
+const SMALL_MOBILE_BREAKPOINT = 480
+
+// Particle count optimization (Mobile: 10, Tablet: 12, PC: 15)
+const getParticleCount = (width: number) =>
+  width < SMALL_MOBILE_BREAKPOINT ? 10 : width < MOBILE_BREAKPOINT ? 12 : 15
+
+// Color palette calibrated for both cream (#F5F4F0) and dark green (#344432) backgrounds
+const palette: ParticleColor[] = [
+  {
+    core: '#FFFFFF',
+    glow: 'rgba(235, 185, 120, 0.85)',
+    tail: 'rgba(212, 163, 115, ',
+  },
+  {
+    core: '#FFF9E6',
+    glow: 'rgba(240, 195, 130, 0.75)',
+    tail: 'rgba(224, 155, 78, ',
+  },
+  {
+    core: '#FFF2D6',
+    glow: 'rgba(195, 140, 85, 0.7)',
+    tail: 'rgba(180, 115, 65, ',
+  },
+]
+
+// Background sine wave beams (classic fluid wave aesthetic)
+const getWaveBeams = (isMobile: boolean): WaveBeam[] => [
+  {
+    baseYRatio: 0.35,
+    amplitude: isMobile ? 16 : 30,
+    frequency: isMobile ? 0.0024 : 0.0015,
+    speed: 0.006,
+    phase: 0,
+    width: isMobile ? 0.8 : 1.2,
+    alpha: 0.2,
+    colorRgb: '212, 163, 115',
+  },
+  {
+    baseYRatio: 0.65,
+    amplitude: isMobile ? 20 : 38,
+    frequency: isMobile ? 0.002 : 0.0012,
+    speed: 0.004,
+    phase: Math.PI * 0.7,
+    width: isMobile ? 0.9 : 1.4,
+    alpha: 0.16,
+    colorRgb: '224, 155, 78',
+  },
+]
 
 export default function LightTrails({ className = '' }: LightTrailsProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -54,49 +109,6 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
     // Coordinates for smooth cursor interaction
     const mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000 }
 
-    // Color palette calibrated for both cream (#F5F4F0) and dark green (#344432) backgrounds
-    const palette = [
-      {
-        core: '#FFFFFF',
-        glow: 'rgba(235, 185, 120, 0.85)',
-        tail: 'rgba(212, 163, 115, ',
-      },
-      {
-        core: '#FFF9E6',
-        glow: 'rgba(240, 195, 130, 0.75)',
-        tail: 'rgba(224, 155, 78, ',
-      },
-      {
-        core: '#FFF2D6',
-        glow: 'rgba(195, 140, 85, 0.7)',
-        tail: 'rgba(180, 115, 65, ',
-      },
-    ]
-
-    // Background sine wave beams (classic fluid wave aesthetic)
-    const getWaveBeams = (isMobile: boolean): WaveBeam[] => [
-      {
-        baseYRatio: 0.35,
-        amplitude: isMobile ? 16 : 30,
-        frequency: isMobile ? 0.0024 : 0.0015,
-        speed: 0.006,
-        phase: 0,
-        width: isMobile ? 0.8 : 1.2,
-        alpha: 0.2,
-        colorRgb: '212, 163, 115',
-      },
-      {
-        baseYRatio: 0.65,
-        amplitude: isMobile ? 20 : 38,
-        frequency: isMobile ? 0.002 : 0.0012,
-        speed: 0.004,
-        phase: Math.PI * 0.7,
-        width: isMobile ? 0.9 : 1.4,
-        alpha: 0.16,
-        colorRgb: '224, 155, 78',
-      },
-    ]
-
     let waveBeams: WaveBeam[] = []
     let particles: Particle[] = []
 
@@ -104,7 +116,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
     const getAvailableBaseY = (slotIndex?: number): number => {
       const topPadding = height * 0.06
       const usableHeight = height * 0.88
-      const count = particles.length || (width < 480 ? 10 : width < 768 ? 12 : 15)
+      const count = particles.length || getParticleCount(width)
 
       // When initializing, divide screen into stratified lanes with gentle organic jitter
       if (slotIndex !== undefined) {
@@ -114,7 +126,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       }
 
       // When respawning, pick a Y location that maximizes vertical distance from existing particles
-      const minDistance = width < 768 ? 44 : 58
+      const minDistance = width < MOBILE_BREAKPOINT ? 44 : 58
       let bestY = Math.random() * usableHeight + topPadding
       let bestScore = -1
 
@@ -158,14 +170,14 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
     const createParticle = (
       spawnAnywhere = false,
       forcedBaseY?: number,
-      forcedLayer?: 'ambient' | 'stream' | 'meteor'
+      forcedLayer?: ParticleLayer
     ): Particle => {
-      const isMobile = width < 768
-      const isSmallMobile = width < 480
+      const isMobile = width < MOBILE_BREAKPOINT
+      const isSmallMobile = width < SMALL_MOBILE_BREAKPOINT
       const colorScheme = palette[Math.floor(Math.random() * palette.length)]
 
       // Balanced depth distribution: high proportion of prominent flowing meteors and streams
-      let layer: 'ambient' | 'stream' | 'meteor'
+      let layer: ParticleLayer
       if (forcedLayer) {
         layer = forcedLayer
       } else {
@@ -235,19 +247,16 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       return p
     }
 
-    // Particle count optimization (Mobile: 10, Tablet: 12, PC: 15)
     // Instantaneous screen coverage: eliminates any initial cooldown or empty periods on load
     const initParticles = () => {
-      const isSmallMobile = width < 480
-      const isMobile = width < 768
-      const count = isSmallMobile ? 10 : isMobile ? 12 : 15
+      const count = getParticleCount(width)
 
       particles = []
 
       for (let i = 0; i < count; i++) {
         const baseY = getAvailableBaseY(i)
         // Ensure healthy proportion of meteors and streams across the sky
-        let layer: 'ambient' | 'stream' | 'meteor'
+        let layer: ParticleLayer
         if (i % 3 === 0) layer = 'meteor'
         else if (i % 3 === 1) layer = 'stream'
         else layer = Math.random() < 0.7 ? 'stream' : 'ambient'
@@ -273,8 +282,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       canvas.height = height * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      const isMobile = width < 768
-      waveBeams = getWaveBeams(isMobile)
+      waveBeams = getWaveBeams(width < MOBILE_BREAKPOINT)
       initParticles()
     }
 
@@ -335,7 +343,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
         ctx.shadowBlur = 10
 
         ctx.beginPath()
-        const step = width < 768 ? 20 : 16
+        const step = width < MOBILE_BREAKPOINT ? 20 : 16
         let first = true
 
         for (let x = -20; x <= width + 20; x += step) {
@@ -367,7 +375,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
       })
 
       // 2. Proximity links between nearby particles (subtle constellation effect)
-      const maxConnectDistance = width < 768 ? 50 : 72
+      const maxConnectDistance = width < MOBILE_BREAKPOINT ? 50 : 72
       ctx.save()
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -495,8 +503,7 @@ export default function LightTrails({ className = '' }: LightTrailsProps) {
 
       // Continuous Celestial Flow Guarantee:
       // Mathematically guarantees at least 1 prominent comet on mobile, and at least 2 on desktop at all times
-      const isMobileDevice = width < 768
-      const minVisibleComets = isMobileDevice ? 1 : 2
+      const minVisibleComets = width < MOBILE_BREAKPOINT ? 1 : 2
 
       let visibleCometCount = 0
       for (let i = 0; i < particles.length; i++) {

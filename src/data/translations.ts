@@ -12,6 +12,8 @@ export interface TimelineItem {
   isUpcoming?: boolean
 }
 
+export type CertImageKey = 'pythonBootcamp' | 'fullstackWeb' | 'pythonMega' | 'indianCooking'
+
 export interface CourseItem {
   title: string
   instructor: string
@@ -20,7 +22,7 @@ export interface CourseItem {
   date: string
   category: string
   note?: string
-  imageKey: string
+  imageKey: CertImageKey
   certificateId: string
 }
 
@@ -373,8 +375,6 @@ export const coursesData: Record<Language, CourseItem[]> = {
 export const uiText = {
   en: {
     menu: 'Menu',
-    close: 'Close',
-    switchTheme: 'Switch to',
     light: 'Light',
     dark: 'Dark',
     themeDarkName: 'Dark Theme',
@@ -382,13 +382,11 @@ export const uiText = {
     themeDarkSub: 'Midnight charcoal',
     themeLightSub: 'Warm paper ivory',
     langToggle: '日本語',
-    langLabel: 'Language',
     navIndex: 'Navigation & Index',
     tableOfContents: 'Table of Contents',
     contactAndLocation: 'Contact & Location',
     locationText: 'Hokkaido, Japan',
     copyright: '© 2026 Rikuto Mikado. All rights reserved.',
-    scrollPrompt: 'Scroll to explore',
 
     // Nav items
     navAbout: 'About',
@@ -478,17 +476,29 @@ export const uiText = {
     blogLead:
       'Just a collection of personal thoughts and reflections on everyday topics and observations.',
     readEssay: 'Read Essay',
-    authorBy: 'By Rikuto Mikado',
-    shareArticle: 'Share',
-    linkCopied: 'Link Copied! ✓',
 
     // Footer
     footerContact: 'Direct Contact',
+
+    // Language switcher
+    langSwitchCode: 'JA',
+    langSwitchLabel: '日本語に切り替える',
+    currentLangCode: 'EN',
+    currentLangName: 'English',
+    langSwitchHint: 'Switch to Japanese',
+
+    // Blog cards & reader
+    readShort: 'Read',
+    readMore: 'Read more',
+    showLess: 'Show less',
+    upcomingLabel: 'UPCOMING',
+    comingSoon: 'Coming Soon',
+    inProgress: 'In Progress',
+    closeModal: 'Close modal',
+    closeArticle: 'Close Article',
   },
   ja: {
     menu: 'メニュー',
-    close: '閉じる',
-    switchTheme: '切り替え:',
     light: 'ライト',
     dark: 'ダーク',
     themeDarkName: 'ダークテーマ',
@@ -496,13 +506,11 @@ export const uiText = {
     themeDarkSub: 'ダークグレー',
     themeLightSub: 'ペーパーアイボリー',
     langToggle: 'English',
-    langLabel: '言語切替',
     navIndex: 'ナビゲーション ＆ 目次',
     tableOfContents: '目次',
     contactAndLocation: 'お問い合わせ ＆ 拠点',
     locationText: '日本、北海道',
     copyright: '© 2026 Rikuto Mikado. All rights reserved.',
-    scrollPrompt: '探索する',
 
     // Nav items
     navAbout: '自己紹介',
@@ -592,11 +600,28 @@ export const uiText = {
     blogLead:
       '日々の思考や関心事を書き留めた、ただの個人的な考察録。',
     readEssay: '記事を読む',
-    authorBy: '執筆: 三角 陸人',
-    shareArticle: '共有',
-    linkCopied: 'リンクをコピーしました ✓',
 
     // Footer
     footerContact: 'お問い合わせ',
+
+    // Language switcher
+    langSwitchCode: 'EN',
+    langSwitchLabel: 'Switch to English',
+    currentLangCode: 'JP',
+    currentLangName: '日本語',
+    langSwitchHint: '英語表示に切り替え',
+
+    // Blog cards & reader
+    readShort: '読む',
+    readMore: 'もっと見る',
+    showLess: '閉じる',
+    upcomingLabel: '次回執筆予定',
+    comingSoon: '近日公開予定',
+    inProgress: '執筆中',
+    closeModal: '閉じる',
+    closeArticle: '閉じる',
   },
 }
+
+export type UiText = (typeof uiText)[Language]
+export type UiTextKey = keyof UiText
