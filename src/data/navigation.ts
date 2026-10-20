@@ -13,8 +13,9 @@ export const navSections = [
   { id: 'trajectory', num: '02', labelKey: 'navTrajectory', subtitleKey: 'navTrajectorySub' },
   { id: 'courses', num: '03', labelKey: 'navLearning', subtitleKey: 'navLearningSub' },
   { id: 'blog', num: '04', labelKey: 'navBlog', subtitleKey: 'navBlogSub' },
-  { id: 'roadmap', num: '05', labelKey: 'navRoadmap', subtitleKey: 'navRoadmapSub' },
-  { id: 'contact', num: '06', labelKey: 'navContact', subtitleKey: 'navContactSub' },
+  { id: 'study-log', num: '05', labelKey: 'navStudyLog', subtitleKey: 'navStudyLogSub' },
+  { id: 'roadmap', num: '06', labelKey: 'navRoadmap', subtitleKey: 'navRoadmapSub' },
+  { id: 'contact', num: '07', labelKey: 'navContact', subtitleKey: 'navContactSub' },
 ] as const satisfies readonly NavSection[]
 
 export type SectionId = (typeof navSections)[number]['id']

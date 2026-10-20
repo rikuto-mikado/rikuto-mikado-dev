@@ -399,6 +399,8 @@ export const uiText = {
     navRoadmapSub: 'Strategic 3-Phase Plan',
     navBlog: 'Blog',
     navBlogSub: 'Essays on AI & Society',
+    navStudyLog: 'Study Log',
+    navStudyLogSub: 'Live Feed from typbox',
     navContact: 'Contact',
     navContactSub: 'Get in Touch & Socials',
 
@@ -477,6 +479,15 @@ export const uiText = {
       'Just a collection of personal thoughts and reflections on everyday topics and observations.',
     readEssay: 'Read Essay',
 
+    // Study log feed
+    studyLogBadge: 'Study Log Feed',
+    studyLogHeading: 'Recent Sessions',
+    studyLogLead: 'Live telemetry from typbox, the tool I use to log every study session.',
+    studyLogLoading: 'Fetching telemetry…',
+    studyLogError: 'Could not reach the log server. Please try again later.',
+    studyLogEmpty: 'No sessions logged yet.',
+    studyLogTotal: 'Total',
+
     // Footer
     footerContact: 'Direct Contact',
 
@@ -523,6 +534,8 @@ export const uiText = {
     navRoadmapSub: '3段階の中長期キャリア戦略',
     navBlog: 'ブログ',
     navBlogSub: '思考録とエッセイ',
+    navStudyLog: '学習ログ',
+    navStudyLogSub: 'typbox の学習記録',
     navContact: '連絡先',
     navContactSub: 'お問い合わせ・SNSリンク',
 
@@ -600,6 +613,15 @@ export const uiText = {
     blogLead:
       '日々の思考や関心事を書き留めた、ただの個人的な考察録。',
     readEssay: '記事を読む',
+
+    // Study log feed
+    studyLogBadge: '学習ログ',
+    studyLogHeading: '最近の学習記録',
+    studyLogLead: '学習記録ツール typbox から受信している、日々の学習セッションのログ。',
+    studyLogLoading: 'ログを取得中…',
+    studyLogError: 'ログサーバーに接続できませんでした。時間をおいて再度お試しください。',
+    studyLogEmpty: 'まだ記録がありません。',
+    studyLogTotal: '合計',
 
     // Footer
     footerContact: 'お問い合わせ',

@@ -11,6 +11,7 @@ import CoursesSection from './components/sections/courses/CoursesSection'
 import FooterSection from './components/sections/FooterSection'
 import HeroSection from './components/sections/hero/HeroSection'
 import RoadmapSection from './components/sections/RoadmapSection'
+import StudyLogFeed from './components/sections/StudyLogFeed'
 import TrajectorySection from './components/sections/TrajectorySection'
 import { IS_JAPANESE_AVAILABLE, SITE_LOGO_SRC } from './config'
 import { sectionIds } from './data/navigation'
@@ -98,6 +99,8 @@ export default function App() {
         isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
         onModalStateChange={setIsBlogModalOpen}
       />
+
+      <StudyLogFeed isDark={isDark} ui={ui} lang={lang} />
 
       <RoadmapSection ui={ui} />
       <FooterSection ui={ui} socialLinks={socialLinks} />
