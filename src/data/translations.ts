@@ -487,6 +487,12 @@ export const uiText = {
     studyLogError: 'Could not reach the log server. Please try again later.',
     studyLogEmpty: 'No sessions logged yet.',
     studyLogTotal: 'Total',
+    studyLogSessions: 'Sessions',
+    studyLogDays: 'Days',
+    studyLogByCategory: 'This Week by Category',
+    studyLogWeekEmpty: 'No sessions logged this week yet.',
+    studyLogRecentEmpty: 'No sessions logged in the last 7 days.',
+    studyLogSource: 'Study log from my TYPBOX account',
 
     // Footer
     footerContact: 'Direct Contact',
@@ -622,6 +628,12 @@ export const uiText = {
     studyLogError: 'ログサーバーに接続できませんでした。時間をおいて再度お試しください。',
     studyLogEmpty: 'まだ記録がありません。',
     studyLogTotal: '合計',
+    studyLogSessions: '回数',
+    studyLogDays: '日数',
+    studyLogByCategory: '今週のカテゴリ別学習時間',
+    studyLogWeekEmpty: '今週の記録はまだありません。',
+    studyLogRecentEmpty: '直近7日間の記録はありません。',
+    studyLogSource: '私の TYPBOX アカウントの学習ログ',
 
     // Footer
     footerContact: 'お問い合わせ',
