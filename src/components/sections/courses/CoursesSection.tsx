@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import type { CourseItem, UiText } from '../../../data/translations'
+import ReadMoreButton from '../../common/ReadMoreButton'
 import SectionHeader from '../../common/SectionHeader'
 import CourseCard from './CourseCard'
+
+const INITIAL_VISIBLE_COUNT = 4
 
 interface CoursesSectionProps {
   isDark: boolean
@@ -10,6 +14,11 @@ interface CoursesSectionProps {
 }
 
 export default function CoursesSection({ isDark, ui, courses, onSelectCourse }: CoursesSectionProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  // Courses are stored oldest first; show the most recent certificates first
+  const newestFirstCourses = [...courses].reverse()
+  const visibleCourses = isExpanded ? newestFirstCourses : newestFirstCourses.slice(0, INITIAL_VISIBLE_COUNT)
+
   return (
     <section
       id="courses"
@@ -21,10 +30,19 @@ export default function CoursesSection({ isDark, ui, courses, onSelectCourse }: 
         <SectionHeader isDark={isDark} badge={ui.coursesBadge} heading={ui.coursesHeading} lead={ui.coursesLead} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {courses.map((course, index) => (
-            <CourseCard key={index} course={course} isDark={isDark} ui={ui} onSelect={onSelectCourse} />
+          {visibleCourses.map((course) => (
+            <CourseCard key={course.certificateId} course={course} isDark={isDark} ui={ui} onSelect={onSelectCourse} />
           ))}
         </div>
+
+        {courses.length > INITIAL_VISIBLE_COUNT && (
+          <ReadMoreButton
+            isDark={isDark}
+            ui={ui}
+            isExpanded={isExpanded}
+            onToggle={() => setIsExpanded((prev) => !prev)}
+          />
+        )}
       </div>
     </section>
   )

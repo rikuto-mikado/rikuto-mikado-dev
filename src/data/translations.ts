@@ -12,7 +12,7 @@ export interface TimelineItem {
   isUpcoming?: boolean
 }
 
-export type CertImageKey = 'pythonBootcamp' | 'fullstackWeb' | 'pythonMega' | 'indianCooking'
+export type CertImageKey = 'pythonBootcamp' | 'fullstackWeb' | 'pythonMega' | 'indianCooking' | 'mba'
 
 export interface CourseItem {
   title: string
@@ -323,6 +323,17 @@ export const coursesData: Record<Language, CourseItem[]> = {
       imageKey: 'indianCooking',
       certificateId: 'UC-6290b034-8ffd-48a0-b549-9c08c6f18786',
     },
+    {
+      title: 'An Entire MBA in 1 Course: Award Winning Business School Prof',
+      instructor: 'Chris Haroun',
+      hours: '8 hrs',
+      platform: 'Udemy',
+      date: 'Oct 2026',
+      category: 'Business & Management',
+      note: 'Core business school fundamentals spanning strategy, finance, marketing, and management.',
+      imageKey: 'mba',
+      certificateId: 'UC-d2363b0e-340b-48f1-bc72-373d4ac347a4',
+    },
   ],
   ja: [
     {
@@ -368,6 +379,17 @@ export const coursesData: Record<Language, CourseItem[]> = {
       note: 'インド料理への純粋な興味から受講。本格的なスパイス使いとレストランスタイルの調理技法を修得。',
       imageKey: 'indianCooking',
       certificateId: 'UC-6290b034-8ffd-48a0-b549-9c08c6f18786',
+    },
+    {
+      title: 'An Entire MBA in 1 Course: Award Winning Business School Prof',
+      instructor: 'Chris Haroun',
+      hours: '8時間',
+      platform: 'Udemy',
+      date: '2026年10月',
+      category: 'ビジネス＆マネジメント',
+      note: '戦略、財務、マーケティング、マネジメントなど、ビジネススクールの基礎を横断的に習得。',
+      imageKey: 'mba',
+      certificateId: 'UC-d2363b0e-340b-48f1-bc72-373d4ac347a4',
     },
   ],
 }

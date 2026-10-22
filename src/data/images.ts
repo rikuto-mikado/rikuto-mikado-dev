@@ -1,6 +1,7 @@
 import type { CertImageKey } from './translations'
 import certFullstackWeb from '../assets/cert-fullstack-web.webp'
 import certIndianCooking from '../assets/cert-indian-cooking.webp'
+import certMba from '../assets/cert-mba.webp'
 import certPythonBootcamp from '../assets/cert-python-bootcamp.webp'
 import certPythonMega from '../assets/cert-python-mega.webp'
 import whyOurGenerationImg from '../assets/whyourgeneration.webp'
@@ -14,6 +15,7 @@ export const certImages: Record<CertImageKey, string> = {
   fullstackWeb: certFullstackWeb,
   pythonMega: certPythonMega,
   indianCooking: certIndianCooking,
+  mba: certMba,
 }
 
 // Keyed by blog post id; posts without an entry fall back to a decorative placeholder cover
