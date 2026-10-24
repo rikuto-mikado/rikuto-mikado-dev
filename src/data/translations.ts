@@ -12,7 +12,7 @@ export interface TimelineItem {
   isUpcoming?: boolean
 }
 
-export type CertImageKey = 'pythonBootcamp' | 'fullstackWeb' | 'pythonMega' | 'indianCooking' | 'mba'
+export type CertImageKey = 'pythonBootcamp' | 'fullstackWeb' | 'pythonMega' | 'indianCooking' | 'mba' | 'sqlBootcamp'
 
 export interface CourseItem {
   title: string
@@ -334,6 +334,17 @@ export const coursesData: Record<Language, CourseItem[]> = {
       imageKey: 'mba',
       certificateId: 'UC-d2363b0e-340b-48f1-bc72-373d4ac347a4',
     },
+    {
+      title: 'The Complete SQL Bootcamp: Go from Zero to Hero',
+      instructor: 'Jose Portilla',
+      hours: '9 hrs',
+      platform: 'Udemy',
+      date: 'Oct 2026',
+      category: 'Databases & SQL',
+      note: 'Querying, joins, aggregations, and database design with PostgreSQL, from fundamentals to advanced commands.',
+      imageKey: 'sqlBootcamp',
+      certificateId: 'UC-c85c8d83-7d38-4d78-8bf4-f454fb36b447',
+    },
   ],
   ja: [
     {
@@ -390,6 +401,17 @@ export const coursesData: Record<Language, CourseItem[]> = {
       note: '戦略、財務、マーケティング、マネジメントなど、ビジネススクールの基礎を横断的に習得。',
       imageKey: 'mba',
       certificateId: 'UC-d2363b0e-340b-48f1-bc72-373d4ac347a4',
+    },
+    {
+      title: 'The Complete SQL Bootcamp: Go from Zero to Hero',
+      instructor: 'Jose Portilla',
+      hours: '9時間',
+      platform: 'Udemy',
+      date: '2026年10月',
+      category: 'データベース＆SQL',
+      note: 'PostgreSQLを用いたクエリ、結合、集計、データベース設計を基礎から応用まで習得。',
+      imageKey: 'sqlBootcamp',
+      certificateId: 'UC-c85c8d83-7d38-4d78-8bf4-f454fb36b447',
     },
   ],
 }
