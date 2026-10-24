@@ -10,6 +10,15 @@ export interface TimelineItem {
   details?: string[]
   isCurrent?: boolean
   isUpcoming?: boolean
+  // Plan is likely to change; rendered behind a fog overlay
+  isTentative?: boolean
+}
+
+export interface CrossroadsRoute {
+  id: string
+  title: string
+  timing: string
+  points: string[]
 }
 
 export type CertImageKey = 'pythonBootcamp' | 'fullstackWeb' | 'pythonMega' | 'indianCooking' | 'mba' | 'sqlBootcamp'
@@ -57,6 +66,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         'Submit the formal application for the First-Class Electrician license upon fulfilling the full three years of practical on-site experience.',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
       period: 'Apr 2029 – Mar 2031',
@@ -72,6 +82,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         'Maintain disciplined, daily English study routines to stay prepared for the 2-year IELTS renewal cycle.',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
       period: 'Apr 2028 – Mar 2029',
@@ -89,6 +100,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         'Continue consistent English learning in preparation for my second IELTS sitting.',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
       period: 'Apr 2027 – Mar 2028',
@@ -104,19 +116,20 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         'Leverage the twice-yearly exam schedule for Third-Class Chief Electrical Engineer, methodically passing subjects as preparation matures.',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
-      period: 'Sep 2026 - Present',
+      period: 'Sep 2026 – Present',
       duration: 'Current',
       category: 'Hands-On Transition & Preparation',
       location: 'Urakawa, Hokkaido, Japan',
-      title: 'Transition to Physical Infrastructure & Core Exam Preparation',
+      title: 'Transition to Physical Infrastructure & Exam Preparation',
       narrative:
         'Briefly relocated to Latvia for a Computer Science bachelor’s program, but returned to Japan within weeks after reassessing local living costs and the rapid acceleration of AI technologies. Seeing the fast changes driven by LLMs, I decided to build a dependable foundation in the physical world. I redirected my focus toward electrical engineering and infrastructure—actively preparing for core national licenses including Third-Class Chief Electrical Engineer—while keeping full-stack development as a valuable skill that keeps me flexible for the future.',
       isCurrent: true,
     },
     {
-      period: 'Jun 2025 - Aug 2026',
+      period: 'Jun 2025 – Aug 2026',
       duration: '1 yr 3 mos',
       category: 'Independent Living & Intensive Dev',
       location: 'Sapporo, Hokkaido, Japan',
@@ -125,7 +138,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         'Lived independently in Sapporo with family support, dedicating daily schedules to intensive full-stack development through Udemy while mastering essential life skills such as cooking and personal discipline. Clarified personal priorities and core values, cultivating the autonomous capability to learn and iterate without relying on a mentor.',
     },
     {
-      period: 'Jan 2025 - Jun 2025',
+      period: 'Jan 2025 – Jun 2025',
       duration: '6 mos',
       category: 'Exploration & Foundation Building',
       location: 'Urakawa, Hokkaido, Japan',
@@ -134,7 +147,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         'Following early high school graduation, utilized the Sophia learning platform with the initial goal of enrolling in a US distance-learning university. Read research papers, tracked global developments, and used generative AI tools to accelerate information gathering while gaining hands-on understanding of both AI power and hallucination risks. Shifted from the US distance-degree plan to commit fully to full-stack development, establishing a strict self-management routine.',
     },
     {
-      period: 'Jun 2024 - Feb 2025',
+      period: 'Jun 2024 – Feb 2025',
       duration: '9 mos',
       category: 'High School Education',
       location: 'Online / US Accredited',
@@ -143,7 +156,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         'Transferred from local schooling to Penn Foster Group and accelerated coursework to graduate early with an official US High School Diploma.',
     },
     {
-      period: 'Apr 2023 - May 2024',
+      period: 'Apr 2023 – May 2024',
       duration: '1 yr 1 mo',
       category: 'Secondary Education',
       location: 'Urakawa, Hokkaido, Japan',
@@ -181,6 +194,7 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         '実務経験3年を満了した時点で「第一種電気工事士」の正式な免状交付申請を行う',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
       period: '2029年4月 – 2031年3月',
@@ -196,13 +210,14 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         '2年ごとのスコア更新に向けて、日々の英語学習を習慣化して継続',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
       period: '2028年4月 – 2029年3月',
-      duration: '技術専門校 2年目',
+      duration: '技術専門機関 2年目',
       category: '高度専門技術研修',
       location: '北海道',
-      title: '技術専門校 2年目：第一種電工・電験三種完遂・施工管理技士補・消防設備士',
+      title: '技術専門機関 2年目：第一種電工・電験三種完遂・施工管理技士補・消防設備士',
       narrative:
         '技術専門機関での2年目は、上位の国家資格や施工管理資格の合格に集中。学習負荷とプレッシャーを考慮し、余裕を持ったスケジュールで着実に合格を狙う。',
       details: [
@@ -213,28 +228,30 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
         '2回目のIELTS受験に向けた英語学習を継続',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
       period: '2027年4月 – 2028年3月',
-      duration: '技術専門校 1年目',
+      duration: '技術専門機関 1年目',
       category: '技術研修機関への入学',
       location: '北海道',
       title: '技術専門機関への入学：電気工学の基礎・第二種電工取得・IELTS初挑戦',
       narrative:
-        '北海道の技術専門校（公設の技術研修機関）に入学し、電気工学の理論と実践技術の習得を開始。早い段階から国家資格と英語の基準スコア取得に挑む。',
+        '北海道の公設の技術専門機関に入学し、電気工学の理論と実践技術の習得を開始。早い段階から国家資格と英語の基準スコア取得に挑む。',
       details: [
         '1年目の後半に1回目のIELTSを受験（東京を想定）、目標スコアの取得を目指す',
         '1年目の修了時期に「第二種電気工事士」の試験を受けて取得',
         '年2回ある「電験三種」の受験機会を活かし、仕上がった科目から順次合格を積み上げる',
       ],
       isUpcoming: true,
+      isTentative: true,
     },
     {
       period: '2026年9月 – 現在',
       duration: '現在',
       category: '物理インフラへの転換',
       location: '北海道 浦河町',
-      title: '物理インフラへの転換と中核国家資格の準備',
+      title: '物理インフラへの転換と国家資格の準備',
       narrative:
         'ラトビアの大学コンピュータサイエンス学科への進学準備のため一時渡航したものの、現地の物価やAIの急激な進化を直視して数週間で帰国。LLMがもたらす構造変化を踏まえ、地に足のついた「物理的な保険」を確保すべく方針を転換した。電験三種をはじめとする国家資格の取得準備を開始し、電気関係の市場で必要な知識と技術の習得へ舵を切りました。',
       isCurrent: true,
@@ -273,6 +290,69 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
       location: '北海道 浦河町',
       title: '北海道浦河高等学校',
       narrative: '地元の高校に入学し、基礎的な学業と生活習慣の基盤を築いた。',
+    },
+  ],
+}
+
+// Candidate paths currently under consideration, shown above the current entry
+export const crossroadsRoutesData: Record<Language, CrossroadsRoute[]> = {
+  en: [
+    {
+      id: 'A',
+      title: 'Electrical Technical Institution',
+      timing: 'From Apr 2027',
+      points: [
+        'Second-Class Electrician',
+        'Third-Class Chief Electrical Engineer',
+        'Three years of field experience alongside OTHM studies',
+      ],
+    },
+    {
+      id: 'B',
+      title: 'OTHM Diploma & Parallel Credentials',
+      timing: 'From Dec 2026 or 2027',
+      points: [
+        'OTHM Level 4/5 Diploma (UK, distance)',
+        'Third-Class Chief Electrical Engineer',
+        'CCNP Enterprise',
+        'IELTS 6.5',
+      ],
+    },
+    {
+      id: 'C',
+      title: 'Fast-Track US Bachelor’s',
+      timing: 'Once the English score is secured',
+      points: [
+        'Reach the admission score on the Duolingo English Test',
+        'Resume Sophia Learning to bank transferable credits',
+        'Enroll in UMPI YourPace (University of Maine at Presque Isle)',
+        'Transfer credits and finish the degree on the shortest path, then move forward',
+      ],
+    },
+  ],
+  ja: [
+    {
+      id: 'A',
+      title: '電気系の技術専門機関へ進学',
+      timing: '2027年4月〜',
+      points: ['第二種電気工事士', '第三種電気主任技術者（電験三種）', '現場経験3年とOTHMを並行'],
+    },
+    {
+      id: 'B',
+      title: 'OTHM在籍＋資格の並行取得',
+      timing: '2026年12月 または 2027年〜',
+      points: ['OTHM Level 4/5 Diploma（英国・通信制）', '電験三種', 'CCNP Enterprise', 'IELTS 6.5'],
+    },
+    {
+      id: 'C',
+      title: '米国学士を最短で取得',
+      timing: '英語の基準点を取れ次第',
+      points: [
+        'Duolingo English Testで入学基準点を取得',
+        'Sophia Learningを再開し、移行可能な単位を蓄積',
+        'UMPI（メイン州立大学プレスクアイル校）YourPaceに入学',
+        '単位を移行して最短で学士を取得し、その後動き出す',
+      ],
     },
   ],
 }
@@ -479,6 +559,12 @@ export const uiText = {
       'A transparent chronicle of self-directed learning, practical course corrections, and step-by-step milestones toward a grounded career.',
     statusCurrent: 'Current Focus',
     statusRoadmap: 'Roadmap',
+    statusTentative: 'Tentative',
+    statusConsidering: 'Considering',
+    crossroadsPeriod: 'Crossroads',
+    crossroadsTitle: 'Three Paths I’m Weighing',
+    crossroadsLead: 'For now, my planning centers on these three options.',
+    crossroadsFooter: 'Three roads, one destination. Which one I take is still undecided.',
 
     // Courses
     coursesBadge: 'Skill Acquisition',
@@ -620,6 +706,12 @@ export const uiText = {
       '独学による探求、AIの進化を見据えた戦略的な軌道修正、そして主体的なスキル獲得のプロセスを、透明性をもって記録したタイムライン。',
     statusCurrent: '現在進行中',
     statusRoadmap: '今後の計画',
+    statusTentative: '未確定',
+    statusConsidering: '検討中',
+    crossroadsPeriod: '分岐点',
+    crossroadsTitle: 'いま考えている三つの道',
+    crossroadsLead: '現在は、主にこの三つを軸に進路を検討しています。',
+    crossroadsFooter: '道は三つ、行き先は一つ。どの道を進むかはまだ決めていません。',
 
     // Courses
     coursesBadge: 'スキルの修得',

@@ -243,13 +243,13 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
 
 export const upcomingPostData: Record<Language, UpcomingPost | null> = {
   en: {
-    title: 'Unfortunately, I Am Young',
-    excerpt: 'Insights on the reality of youth and the unique structural challenges faced by the next generation.',
+    title: 'Two Weeks in Latvia',
+    excerpt: 'What daily life was like during my two weeks in Latvia, before I ultimately decided to return to Japan.',
     status: 'In Progress • Soon',
   },
   ja: {
-    title: '私は残念ながら若者だ',
-    excerpt: '若者であることの現実と、次世代が直面する独自の構造的課題についての洞察。',
+    title: 'ラトビアでの2週間',
+    excerpt: '結果的に帰国を選んだ、ラトビアで過ごした2週間の生活がどんなものだったのか。',
     status: '執筆予定 (In Progress)',
   },
 }

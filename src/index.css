@@ -102,8 +102,50 @@ html {
   }
 }
 
+/* Drifting mist laid over tentative roadmap entries */
+.fog {
+  --fog-rgb: 245 244 240;
+  position: absolute;
+  inset: -1rem -1rem -1rem -0.5rem;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+}
+.fog-dark {
+  --fog-rgb: 19 18 17;
+}
+.fog::before,
+.fog::after {
+  content: '';
+  position: absolute;
+  inset: 0 -40%;
+  background-image:
+    radial-gradient(ellipse 30% 9% at 20% 12%, rgb(var(--fog-rgb) / 0.75), transparent 70%),
+    radial-gradient(ellipse 35% 10% at 65% 30%, rgb(var(--fog-rgb) / 0.7), transparent 70%),
+    radial-gradient(ellipse 28% 8% at 35% 52%, rgb(var(--fog-rgb) / 0.75), transparent 70%),
+    radial-gradient(ellipse 32% 10% at 75% 70%, rgb(var(--fog-rgb) / 0.7), transparent 70%),
+    radial-gradient(ellipse 30% 9% at 25% 88%, rgb(var(--fog-rgb) / 0.75), transparent 70%);
+  animation: fog-drift 45s ease-in-out infinite alternate;
+}
+.fog::after {
+  background-position: 30% 6%;
+  opacity: 0.8;
+  animation-duration: 70s;
+  animation-direction: alternate-reverse;
+}
+@keyframes fog-drift {
+  from {
+    transform: translateX(-10%);
+  }
+  to {
+    transform: translateX(10%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in {
+  .animate-fade-in,
+  .fog::before,
+  .fog::after {
     animation: none;
   }
 }

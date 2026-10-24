@@ -1,25 +1,30 @@
-# Japanese Review Guard (Temporary Note)
+# Japanese Review Guard
 
 ## Summary
 
-- **Context**: Japanese copy in `src/data/translations.ts` is currently under review.
-- **Current Behavior**: Language switch buttons (`JA`) remain visible in the dock and sidebar to preserve layout, but clicking them triggers a "Coming Soon" toast notification rather than switching the language.
+- **Context**: The Japanese copy in `src/data/translations.ts` has been reviewed, and the Japanese version is live.
+- **Current Behavior**: `IS_JAPANESE_AVAILABLE` is `true`, so the language switch buttons (`JA`) in the dock, sidebar, and blog reader switch languages normally.
+- **Guard Mechanism**: The guard code is still in place. Setting the flag back to `false` keeps the `JA` buttons visible to preserve layout, but clicking them shows a "Coming Soon" toast notification instead of switching languages, and the site always starts in English.
 
 ---
 
-## How to Enable (1 Line)
+## How to Temporarily Disable Japanese (1 Line)
+
+Use this if the Japanese copy needs another review pass.
 
 In [`src/config.ts`](../src/config.ts):
 
 ```ts
-export const IS_JAPANESE_AVAILABLE: boolean = true // change false -> true
+export const IS_JAPANESE_AVAILABLE: boolean = false; // change true -> false
 ```
+
+Set it back to `true` to re-enable Japanese.
 
 ---
 
-## How to Remove Temporary Code (Optional Cleanup)
+## How to Remove the Guard Code (Optional Cleanup)
 
-If removing the toast mechanism completely once translations are verified:
+If the guard is no longer needed, the toast mechanism can be removed completely:
 
 1. **[`src/config.ts`](../src/config.ts)**:
    - Remove `IS_JAPANESE_AVAILABLE` (and its use in [`src/hooks/useLanguage.ts`](../src/hooks/useLanguage.ts)).
@@ -27,9 +32,9 @@ If removing the toast mechanism completely once translations are verified:
 2. **[`src/App.tsx`](../src/App.tsx)**:
    - Remove `useToast()`, the `<Toast />` element, and the guard inside `toggleLang`:
      ```ts
-     const { lang, toggleLang } = useLanguage()
+     const { lang, toggleLang } = useLanguage();
      ```
-   - Remove the `isJapaneseAvailable` prop from `<Sidebar />` and `<BlogSection />`.
+   - Remove the `isJapaneseAvailable` prop from `<Sidebar />` and `<BlogSection />` (and from `BlogSectionProps` in [`src/components/sections/blog/BlogSection.tsx`](../src/components/sections/blog/BlogSection.tsx), which passes it on to `BlogReaderModal`).
 
 3. **[`src/components/layout/Sidebar.tsx`](../src/components/layout/Sidebar.tsx)**:
    - Remove `isJapaneseAvailable` from `SidebarProps`.

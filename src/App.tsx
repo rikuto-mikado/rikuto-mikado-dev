@@ -17,7 +17,7 @@ import { IS_JAPANESE_AVAILABLE, SITE_LOGO_SRC } from './config'
 import { sectionIds } from './data/navigation'
 import { socialLinks } from './data/socialLinks'
 import type { CourseItem } from './data/translations'
-import { coursesData, timelineEventsData, uiText } from './data/translations'
+import { coursesData, crossroadsRoutesData, timelineEventsData, uiText } from './data/translations'
 import { useEscapeKey } from './hooks/useEscapeKey'
 import { useLanguage } from './hooks/useLanguage'
 import { useScrollSpy } from './hooks/useScrollSpy'
@@ -87,7 +87,12 @@ export default function App() {
 
       <HeroSection isDark={isDark} ui={ui} />
       <AboutSection isDark={isDark} ui={ui} />
-      <TrajectorySection isDark={isDark} ui={ui} events={timelineEventsData[lang]} />
+      <TrajectorySection
+        isDark={isDark}
+        ui={ui}
+        events={timelineEventsData[lang]}
+        routes={crossroadsRoutesData[lang]}
+      />
       <CoursesSection isDark={isDark} ui={ui} courses={coursesData[lang]} onSelectCourse={setSelectedCert} />
 
       {selectedCert && <CertificateModal cert={selectedCert} isDark={isDark} ui={ui} onClose={closeCert} />}
