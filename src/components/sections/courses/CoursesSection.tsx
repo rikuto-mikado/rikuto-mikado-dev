@@ -3,6 +3,7 @@ import { sectionPage } from '../../../data/navigation'
 import type { CourseItem, UiText } from '../../../data/translations'
 import ReadMoreButton from '../../common/ReadMoreButton'
 import PageHead from '../../newspaper/PageHead'
+import { usePrintEdition } from '../../../hooks/usePrintEdition'
 import CourseCard from './CourseCard'
 
 const INITIAL_VISIBLE_COUNT = 4
@@ -16,9 +17,11 @@ interface CoursesSectionProps {
 
 export default function CoursesSection({ isDark, ui, courses, onSelectCourse }: CoursesSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  // The print edition carries every certificate
+  const { isPrinting } = usePrintEdition()
   // Courses are stored oldest first; show the most recent certificates first
   const newestFirstCourses = [...courses].reverse()
-  const visibleCourses = isExpanded ? newestFirstCourses : newestFirstCourses.slice(0, INITIAL_VISIBLE_COUNT)
+  const visibleCourses = isExpanded || isPrinting ? newestFirstCourses : newestFirstCourses.slice(0, INITIAL_VISIBLE_COUNT)
 
   return (
     <section

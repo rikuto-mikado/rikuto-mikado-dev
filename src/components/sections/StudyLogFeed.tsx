@@ -18,6 +18,7 @@ import {
   weekRange,
   windowStartKey,
 } from '../../lib/studyLog'
+import { usePrintEdition } from '../../hooks/usePrintEdition'
 import { ChevronDownIcon } from '../common/icons'
 import PageHead from '../newspaper/PageHead'
 
@@ -32,6 +33,8 @@ interface StudyLogFeedProps {
 export default function StudyLogFeed({ isDark, ui, lang }: StudyLogFeedProps) {
   const feed = useStudyLogFeed()
   const [isExpanded, setIsExpanded] = useState(false)
+  // The print edition carries the whole week's log
+  const { isPrinting } = usePrintEdition()
 
   const entries = useMemo(() => (feed.status === 'ready' ? feed.entries : []), [feed])
   const days = useMemo(() => groupByDay(entries), [entries])
@@ -54,7 +57,7 @@ export default function StudyLogFeed({ isDark, ui, lang }: StudyLogFeedProps) {
     const startKey = windowStartKey(feed.fetchedAt, RECENT_DAY_COUNT)
     return days.filter((day) => day.date >= startKey)
   }, [days, feed])
-  const visibleDays = isExpanded ? recentDays : recentDays.slice(0, INITIAL_VISIBLE_DAYS)
+  const visibleDays = isExpanded || isPrinting ? recentDays : recentDays.slice(0, INITIAL_VISIBLE_DAYS)
 
   // One bar per calendar day in the rolling window, including days with nothing logged
   const chartDays = useMemo(() => {
@@ -286,6 +289,7 @@ export default function StudyLogFeed({ isDark, ui, lang }: StudyLogFeedProps) {
 
                 {recentDays.length > INITIAL_VISIBLE_DAYS && (
                   <button
+                    data-print="hide"
                     type="button"
                     onClick={() => setIsExpanded((prev) => !prev)}
                     aria-expanded={isExpanded}

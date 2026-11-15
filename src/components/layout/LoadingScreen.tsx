@@ -59,6 +59,7 @@ export default function LoadingScreen({ onFinished }: LoadingScreenProps) {
   return (
     <div
       role="status"
+      data-print="hide"
       aria-live="polite"
       aria-label="Loading The R.M. Journal"
       className={`fixed inset-0 z-[200] flex flex-col items-center justify-center bg-night-panel text-paper select-none transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${

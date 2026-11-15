@@ -25,7 +25,7 @@ export default function PageHead({ isDark, page, section, kicker, heading, deck 
   const heavyRule = isDark ? 'border-linen/80' : 'border-ink'
 
   return (
-    <header className="mb-12 md:mb-16">
+    <header className="page-head mb-12 md:mb-16">
       {/* Running head */}
       <div
         className={`grid grid-cols-[auto_1fr_auto] items-baseline gap-4 pb-2 border-b font-sans text-[11px] uppercase tracking-[0.16em] ${muted} ${
@@ -55,7 +55,7 @@ export default function PageHead({ isDark, page, section, kicker, heading, deck 
       </div>
 
       {/* Lead headline + deck */}
-      <div className="pt-7 md:pt-9 max-w-4xl space-y-4">
+      <div className="page-head-lead pt-7 md:pt-9 max-w-4xl space-y-4">
         <span className="sm:hidden block font-sans text-[11px] uppercase tracking-[0.18em] text-accent">
           {kicker}
         </span>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { usePrintEdition } from '../../hooks/usePrintEdition'
 
 interface HalftoneImageProps {
   src: string
@@ -35,7 +36,10 @@ export default function HalftoneImage({
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [image, setImage] = useState<HTMLImageElement | null>(null)
   // Lazy frames wait until they come within ~one screen of the viewport before downloading anything
-  const [isNear, setIsNear] = useState(loading === 'eager')
+  const [isNearViewport, setIsNear] = useState(loading === 'eager')
+  // Printing needs every photo, wherever it sits on the page
+  const { isPrinting } = usePrintEdition()
+  const isNear = isNearViewport || isPrinting
   const [focusX, focusY] = focus
 
   useEffect(() => {
@@ -110,6 +114,30 @@ export default function HalftoneImage({
       if (!ctx) return
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.clearRect(0, 0, width, height)
+
+      // Print: carry the continuous-tone base inside this canvas (the <img> base is hidden), so each
+      // photo embeds in the PDF as one compact raster instead of a full-resolution filtered image.
+      if (isPrinting) {
+        const base = document.createElement('canvas')
+        base.width = sample.width
+        base.height = sample.height
+        const bctx = base.getContext('2d')
+        if (bctx) {
+          bctx.drawImage(image, (width - drawW) * focusX, (height - drawH) * focusY, drawW, drawH)
+          const data = bctx.getImageData(0, 0, base.width, base.height)
+          const px = data.data
+          for (let i = 0; i < px.length; i += 4) {
+            const luma = (0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2]) / 255
+            // Ink-coloured pixel whose opacity follows the shadow depth (multiply-like, on white paper)
+            px[i] = 29
+            px[i + 1] = 26
+            px[i + 2] = 23
+            px[i + 3] = Math.round((1 - luma) * 0.5 * 255)
+          }
+          bctx.putImageData(data, 0, 0)
+          ctx.drawImage(base, 0, 0, width, height)
+        }
+      }
       // Light mode: ink dots for shadows. Dark mode: light dots for highlights (a reversed plate).
       ctx.fillStyle = isDark ? 'rgb(232 228 221 / 0.78)' : 'rgb(29 26 23 / 0.8)'
 
@@ -144,7 +172,7 @@ export default function HalftoneImage({
     const observer = new ResizeObserver(draw)
     observer.observe(frame)
     return () => observer.disconnect()
-  }, [image, isDark, cell, focusX, focusY])
+  }, [image, isDark, isPrinting, cell, focusX, focusY])
 
   return (
     <div ref={frameRef} className={`relative overflow-hidden ${className}`}>

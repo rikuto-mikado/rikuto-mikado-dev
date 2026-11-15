@@ -21,6 +21,7 @@ import { coursesData, crossroadsRoutesData, timelineEventsData, uiText } from '.
 import { EditionContext } from './hooks/useEdition'
 import { useEscapeKey } from './hooks/useEscapeKey'
 import { useLanguage } from './hooks/useLanguage'
+import { PrintEditionContext, usePrintEditionState } from './hooks/usePrintEdition'
 import { useScrollSpy } from './hooks/useScrollSpy'
 import { useTheme } from './hooks/useTheme'
 import { useToast } from './hooks/useToast'
@@ -35,6 +36,10 @@ export default function App() {
   const [selectedCert, setSelectedCert] = useState<CourseItem | null>(null)
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  const printState = usePrintEditionState()
+  // The print edition is always set on white paper, whatever theme is on screen
+  const isDarkView = isDark && !printState.isPrinting
 
   const ui = uiText[lang]
   const editionValue = useMemo(() => ({ lang, edition: getEditionInfo(lang) }), [lang])
@@ -53,69 +58,74 @@ export default function App() {
 
   useEscapeKey(closeCert)
   useEffect(() => startSmoothScroll(), [])
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkView)
+  }, [isDarkView])
 
   return (
-    <EditionContext.Provider value={editionValue}>
-      <div
-        className={`desk relative min-h-screen font-serif transition-colors duration-500 selection:bg-accent-fill selection:text-white ${
-          isDark ? 'text-linen' : 'text-ink'
-        }`}
-      >
-        <LoadingScreen />
+    <PrintEditionContext.Provider value={printState}>
+      <EditionContext.Provider value={editionValue}>
+        <div
+          className={`desk relative min-h-screen font-serif transition-colors duration-500 selection:bg-accent-fill selection:text-white ${
+            isDark ? 'text-linen' : 'text-ink'
+          }`}
+        >
+          <LoadingScreen />
 
-        <FloatingDock
-          isDark={isDark}
-          ui={ui}
-          isHidden={isBlogModalOpen || selectedCert !== null}
-          isSidebarOpen={isSidebarOpen}
-          onToggleTheme={toggleTheme}
-          onToggleLang={toggleLang}
-          onOpenSidebar={openSidebar}
-        />
-
-        <Toast toast={toast} isDark={isDark} onDismiss={dismissToast} />
-
-        <Sidebar
-          isOpen={isSidebarOpen}
-          onClose={closeSidebar}
-          isDark={isDark}
-          onToggleTheme={toggleTheme}
-          lang={lang}
-          onToggleLang={toggleLang}
-          isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
-          activeSection={activeSection}
-          logoSrc={SITE_LOGO_SRC}
-          socialLinks={socialLinks}
-        />
-
-        {/* The newspaper itself: one sheet on the desk */}
-        <div className="paper sheet flex flex-col">
-          <Masthead isDark={isDark} ui={ui} />
-          <HeroSection isDark={isDark} ui={ui} courses={coursesData[lang]} />
-          <AboutSection isDark={isDark} ui={ui} />
-          <TrajectorySection
-            isDark={isDark}
+          <FloatingDock
+            isDark={isDarkView}
             ui={ui}
-            events={timelineEventsData[lang]}
-            routes={crossroadsRoutesData[lang]}
+            isHidden={isBlogModalOpen || selectedCert !== null}
+            isSidebarOpen={isSidebarOpen}
+            onToggleTheme={toggleTheme}
+            onToggleLang={toggleLang}
+            onOpenSidebar={openSidebar}
           />
-          <CoursesSection isDark={isDark} ui={ui} courses={coursesData[lang]} onSelectCourse={setSelectedCert} />
 
-          {selectedCert && <CertificateModal cert={selectedCert} isDark={isDark} ui={ui} onClose={closeCert} />}
+          <Toast toast={toast} isDark={isDarkView} onDismiss={dismissToast} />
 
-          <BlogSection
+          <Sidebar
+            isOpen={isSidebarOpen}
+            onClose={closeSidebar}
+            isDark={isDarkView}
+            onToggleTheme={toggleTheme}
             lang={lang}
-            isDark={isDark}
             onToggleLang={toggleLang}
             isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
-            onModalStateChange={setIsBlogModalOpen}
+            activeSection={activeSection}
+            logoSrc={SITE_LOGO_SRC}
+            socialLinks={socialLinks}
           />
 
-          <StudyLogFeed isDark={isDark} ui={ui} lang={lang} />
+          {/* The newspaper itself: one sheet on the desk */}
+          <div className="paper sheet flex flex-col">
+            <Masthead isDark={isDarkView} ui={ui} />
+            <HeroSection isDark={isDarkView} ui={ui} courses={coursesData[lang]} />
+            <AboutSection isDark={isDarkView} ui={ui} />
+            <TrajectorySection
+              isDark={isDarkView}
+              ui={ui}
+              events={timelineEventsData[lang]}
+              routes={crossroadsRoutesData[lang]}
+            />
+            <CoursesSection isDark={isDarkView} ui={ui} courses={coursesData[lang]} onSelectCourse={setSelectedCert} />
 
-          <FooterSection isDark={isDark} ui={ui} socialLinks={socialLinks} />
+            {selectedCert && <CertificateModal cert={selectedCert} isDark={isDarkView} ui={ui} onClose={closeCert} />}
+
+            <BlogSection
+              lang={lang}
+              isDark={isDarkView}
+              onToggleLang={toggleLang}
+              isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
+              onModalStateChange={setIsBlogModalOpen}
+            />
+
+            <StudyLogFeed isDark={isDarkView} ui={ui} lang={lang} />
+
+            <FooterSection isDark={isDarkView} ui={ui} socialLinks={socialLinks} />
+          </div>
         </div>
-      </div>
-    </EditionContext.Provider>
+      </EditionContext.Provider>
+    </PrintEditionContext.Provider>
   )
 }

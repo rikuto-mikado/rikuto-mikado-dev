@@ -29,6 +29,7 @@ export default function FloatingDock({
 
   return (
     <div
+      data-print="hide"
       className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-[60] flex items-center p-1 sm:p-1.5 rounded-full border shadow-sm backdrop-blur-md transition-all duration-300 ${
         isHidden ? 'opacity-0 pointer-events-none -translate-y-2' : 'opacity-100'
       } ${

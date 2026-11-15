@@ -46,7 +46,7 @@ export function LeadStory({ post, isDark, ui, onSelect }: StoryProps) {
       as="article"
       label={`${ui.readEssay}: ${post.title}`}
       onClick={() => onSelect(post.id)}
-      className="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10"
+      className="lead-story grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10"
     >
       {coverImg && (
         <figure className="lg:col-span-7">

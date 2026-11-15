@@ -12,6 +12,11 @@ export interface TimelineItem {
   isUpcoming?: boolean
   // Plan is likely to change; rendered behind a fog overlay
   isTentative?: boolean
+  /** Set on the first (earliest) entry of a phase: a phase heading is printed just before it */
+  phase?: {
+    title: string
+    period: string
+  }
 }
 
 export interface CrossroadsRoute {
@@ -38,85 +43,120 @@ export interface CourseItem {
 export const timelineEventsData: Record<Language, TimelineItem[]> = {
   en: [
     {
-      period: '2031 & Beyond',
-      category: 'Career Transition & Research',
-      location: 'Sapporo / Kanto / Global',
-      title: 'Career Transition: Mission-Critical Data Centers & Global Enterprises',
+      period: 'c. 2036 & Beyond',
+      duration: 'Year 5+ at work',
+      location: 'Japan / Global',
+      category: 'Career Freedom',
+      title: 'Freedom of Choice in Career and Life',
       narrative:
-        'After establishing a proven track record in field engineering, I plan to transition into mission-critical facilities, such as enterprise data centers or global multinational firms, utilizing platforms like LinkedIn. Given Japan’s aging technical workforce and the ongoing expansion of digital infrastructure, this career approach is grounded in strong, structural market demand. In the longer run, I also maintain a personal aspiration to explore graduate studies internationally as a future horizon for deeper academic inquiry.',
+        'With a well-paid, non-field management role at a global or major company securing both income and work–life balance, I can step freely into what comes next.',
       details: [
-        'Transition to multinational corporations, major domestic enterprises, or mission-critical data centers in Sapporo or the Kanto metropolitan area.',
-        'Take and pass the second-stage practical examination for 2nd-Class Electrical Construction Management Engineer after completing 3 years of verified field experience.',
-        'Keep open the possibility of pursuing overseas graduate studies over the longer term to broaden academic and personal horizons.',
+        'Complete a U.S. online Master’s degree',
+        'Launch a small business that combines full-stack development with electrical-infrastructure knowledge',
+        'Found an agricultural business',
       ],
       isUpcoming: true,
     },
     {
-      period: 'Apr 2031 – Mar 2032',
-      duration: 'Field Year 3',
-      category: 'Professional Milestone',
-      location: 'Hokkaido / Kanto, Japan',
-      title: 'Third-Year Field Capstone: Facility Management & Network Credentials',
+      period: 'c. 2033 – 2036',
+      duration: 'Years 3–5 at work',
+      location: 'Japan / Global',
+      category: 'Move into Management',
+      title: 'Promotion into Non-Field Management',
       narrative:
-        'My third year of field experience focuses on acquiring key qualifications widely respected across Japan’s facilities management industry, while reinforcing networking capabilities to connect physical electrical systems with data networks.',
+        'Once the set is complete (3–5 years of field experience × a bachelor’s degree × Chief Electrical Engineer and Energy Manager licences × CCNP × English × development skills), I move into a fully non-field role, such as a commissioning manager overseeing the design and validation of new sites, or a capacity planner, through internal promotion or a move between global firms.',
       details: [
-        'Take and obtain the Building Environmental Hygiene Management Engineer (Building Manager) license in October upon completing the required two years of practical experience, a vital credential in Japan’s qualification-driven facility market.',
-        'Target Cisco Certified Network Professional (CCNP Enterprise) during this third year to solidify network and systems competencies, maintaining alternative plans if adjustments are necessary.',
-        'Retake the IELTS exam as the two-year validity period approaches, aiming to maintain or improve upon my initial benchmark score.',
-        'Submit the formal application for the First-Class Electrician license upon fulfilling the full three years of practical on-site experience.',
+        'Internal promotion, or a move between global firms',
+        'Target roles: Commissioning Manager / Capacity Planner',
       ],
       isUpcoming: true,
-      isTentative: true,
     },
     {
-      period: 'Apr 2029 – Mar 2031',
-      duration: 'Field Years 1–2',
-      category: 'Employment & Degree Studies',
-      location: 'Japan & UK (Distance)',
-      title: 'Industry Employment & Concurrent UK OTHM Degree Pathway',
+      period: 'Apr 2031 – Mar 2034',
+      duration: 'Years 1–3 at work',
+      location: 'Global data centres / Major infrastructure',
+      category: 'Field Experience',
+      title: 'Banking Field Experience and Earning Trust',
       narrative:
-        'Entering full-time industry employment as an electrical engineer, I will accumulate mandatory hands-on field experience while simultaneously advancing through an accredited British degree pathway through distance learning.',
+        'Join a global data-centre operator or a major infrastructure company as an engineer. Running high-voltage substations and cooling systems day to day builds the years of field experience required to be issued the First-Class Electrician and Energy Manager licences.',
       details: [
-        'Begin the UK OTHM Level 4/5 Diploma program, equivalent to the first two years of an accredited British Bachelor’s degree, aiming to complete a full Bachelor’s via a Top-up year while keeping further academic study as a potential future aspiration.',
-        'Sit for the Qualified Energy Manager examination around August of my second year of practical experience, taking advantage of curriculum overlap with the Chief Electrical Engineer syllabus.',
-        'Maintain disciplined, daily English study routines to stay prepared for the 2-year IELTS renewal cycle.',
+        'Licences issued: First-Class Electrician, Qualified Energy Manager',
+        'Use IELTS 6.5+ English for technical negotiation and reporting with engineers at overseas headquarters',
+        'Outside work, study for the Second-Class (then First-Class) Chief Electrical Engineer exam',
+        'Earn credits toward a U.S. online Master’s through edX',
       ],
       isUpcoming: true,
-      isTentative: true,
+      phase: {
+        title: 'From First Job to Non-Field Management',
+        period: 'Apr 2031 onward',
+      },
+    },
+    {
+      period: 'Apr 2030 – Mar 2031',
+      duration: 'Year 4',
+      location: 'Hokkaido · The Open University of Japan',
+      category: 'Graduation & Head Start',
+      title: 'Job Offer, Graduation and a Head Start on What’s Next',
+      narrative:
+        'Earn the last few credits, meet the four-year enrolment requirement and graduate with a Bachelor of Liberal Arts. With job hunting behind me, I use the spare time to begin the next phase early.',
+      details: [
+        'The Open University of Japan: 124 credits in total, graduation (B.A. in Liberal Arts)',
+        'Begin studying for the Second-Class Chief Electrical Engineer exam',
+        'Begin edX MicroBachelors / MicroMasters programs',
+      ],
+      isUpcoming: true,
+    },
+    {
+      period: 'Apr 2029 – Mar 2030',
+      duration: 'Year 3',
+      location: 'Hokkaido · The Open University of Japan',
+      category: 'Networking & Early Recruiting',
+      title: 'A Networking Credential and Early Recruiting',
+      narrative:
+        'Complete most of the 124 credits required to graduate, including the mandatory online classes. Earn the CCNP, the trump card for non-field and upstream roles, and from summer into winter take part in internships and early selection at global data centres and major infrastructure companies.',
+      details: [
+        'The Open University of Japan: 118 credits in total',
+        'Earn the CCNP',
+        'Internships and early selection at global data centres and major infrastructure companies',
+      ],
+      isUpcoming: true,
     },
     {
       period: 'Apr 2028 – Mar 2029',
-      duration: 'Technical Institution (Year 2)',
-      category: 'Advanced Technical Training',
-      location: 'Hokkaido, Japan',
-      title: 'Technical Institution Year 2: Advanced Electrical Licenses & Examination Milestones',
+      duration: 'Year 2',
+      location: 'Hokkaido · The Open University of Japan',
+      category: 'English & Facility Licences',
+      title: 'Hitting the English Target and a Run of Facility Licences',
       narrative:
-        'My second year at the technical institution is dedicated to passing advanced electrical and facility certifications, balancing study loads carefully to manage examination pressure effectively.',
+        'Focus on specialised courses and clear about 70% of the credits needed to graduate. Reach IELTS 6.5+, and add the licences most valued in data-centre operations to the Energy Manager exam, whose scope overlaps with the Third-Class Chief Electrical Engineer.',
       details: [
-        'Sit for the First-Class Electrician examination around October, allocating generous study time to ensure thorough preparation without undue stress.',
-        'Take the first-stage exam of 2nd-Class Electrical Construction Management Engineer around June to earn the official Assistant Management Engineer qualification.',
-        'Take and obtain the Fire Defense Equipment Officer Category A4 certification during the winter term.',
-        'Complete all remaining subject requirements for Third-Class Chief Electrical Engineer across these two years of institutional training (with flexibility to adapt later targets like Energy Manager if extra focus is needed).',
-        'Continue consistent English learning in preparation for my second IELTS sitting.',
+        'The Open University of Japan: 88 credits in total',
+        'Achieve IELTS 6.5+',
+        'Qualified Energy Manager (Electrical)',
+        'Hazardous Materials Engineer (Class B, Category 4)',
+        'Third-Class Refrigeration Machinery Engineer',
       ],
       isUpcoming: true,
-      isTentative: true,
     },
     {
       period: 'Apr 2027 – Mar 2028',
-      duration: 'Technical Institution (Year 1)',
-      category: 'Technical Institution Enrollment',
-      location: 'Hokkaido, Japan',
-      title: 'Technical Institution Enrollment: Foundations, 2nd-Class License & English Benchmark',
+      duration: 'Year 1',
+      location: 'Hokkaido · The Open University of Japan',
+      category: 'Foundations & Top Priorities',
+      title: 'Building Foundations and Clearing the Top-Priority Licences',
       narrative:
-        'Entering a specialized technical training institution in electrical engineering, establishing foundational theory, hands-on workshop competencies, and securing early licensing and language milestones.',
+        'Enrol at The Open University of Japan as a full-time student (or via the route that counts time as a non-degree student toward the four years), earning credits from home with a focus on foundation and introductory courses. Study centres on the two top priorities, the Third-Class Chief Electrical Engineer exam and IELTS 6.5+.',
       details: [
-        'Take my first official IELTS exam in the second half of Year 1 (targeting a testing venue in Tokyo) to establish an academic proficiency benchmark.',
-        'Sit for and obtain the Second-Class Electrician license near the end of Year 1.',
-        'Leverage the twice-yearly exam schedule for Third-Class Chief Electrical Engineer, methodically passing subjects as preparation matures.',
+        'The Open University of Japan: target 44 credits',
+        'Core study: Third-Class Chief Electrical Engineer and IELTS 6.5+',
+        'Obtain a standard driver’s licence',
+        'Pass the Second-Class and First-Class Electrician exams',
       ],
       isUpcoming: true,
-      isTentative: true,
+      phase: {
+        title: 'Four Years at The Open University of Japan',
+        period: 'Apr 2027 – Mar 2031',
+      },
     },
     {
       period: 'Sep 2026 – Present',
@@ -166,85 +206,120 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
   ],
   ja: [
     {
-      period: '2031年 以降',
-      category: 'キャリア転換と研究',
-      location: '札幌 / 関東 / 海外',
-      title: '大企業・データセンターへの転職と海外大学院（修士）進学',
+      period: '2036年頃 以降',
+      duration: '入社5年目以降',
+      location: '日本 / 海外',
+      category: 'キャリアの自由化',
+      title: 'キャリアと暮らしの自由化',
       narrative:
-        '現場エンジニアとしての実績を築いたのち、LinkedIn等を活用して札幌や関東圏の大企業、ミッションクリティカルなデータセンター、外資系企業への転職を実行する。日本の技術者の高齢化とデジタルインフラ需要の急増を背景に、このアプローチは現時点では再現性が高いと考えている。転職後のキャリアと並行して、イギリスやオーストラリア等の大学院（オンライン通信制も視野）に進学し、修士号（マスター）を取得して長期的な研究にも携わることを目指す。',
+        '外資や大企業の非現場管理職として、高い給与水準とワークライフバランスを確保しながら、次の挑戦へ自由に踏み出す。',
       details: [
-        'LinkedInを活用し、札幌または関東圏の大手企業、データセンター、外資系企業への転職を実行',
-        '実務経験3年を満たした段階で、2級電気工事施工管理技士の第二次検定を受験・取得',
-        '業務と並行して海外大学院（イギリス・豪州等）の修士課程に進学し、長期的な技術研究にアクセスする',
+        '米国オンライン修士（Master）の学位取得',
+        'フルスタック開発と電気インフラの知識を活かしたスモールビジネスの立ち上げ',
+        '農業法人の立ち上げ',
       ],
       isUpcoming: true,
     },
     {
-      period: '2031年4月 – 2032年3月',
-      duration: '実務 3年目',
-      category: '実務マイルストーン',
-      location: '北海道 / 関東',
-      title: '実務3年目の総仕上げ：ビル管理士・CCNP・第一種電工免状交付',
+      period: '2033年頃 – 2036年頃',
+      duration: '入社3〜5年目',
+      location: '日本 / 海外',
+      category: '非現場・管理職へ',
+      title: '非現場・マネジメント職への抜擢',
       narrative:
-        '実務経験3年目では、日本の施設管理市場において極めて重宝される資格の取得を完了させるとともに、物理的な電気設備とデータ通信網を繋ぐネットワーク技術の習得を進める。',
+        '「実務経験3〜5年 × 学士号 × 電験・エネ管 × CCNP × 英語 × 開発スキル」が揃った段階で、社内昇格または外資間の転職により、新設拠点の設計・検証を統括するコミッショニングマネージャーやキャパシティプランナーなど、完全な非現場職へ移行する。',
       details: [
-        '実務経験2年を満たした10月に「建築物環境衛生管理技術者（ビル管理士）」を受験・取得（日本の施設管理市場において必須級の資格）',
-        '実務3年目の段階で「CCNP Enterprise」の取得を目指し、ネットワークスキルを強化（難航した場合の代替案も準備）',
-        '1回目から2年が経過するためIELTSを再受験し、スコアの現状維持以上を目指す',
-        '実務経験3年を満了した時点で「第一種電気工事士」の正式な免状交付申請を行う',
+        '社内昇格、または外資間の転職',
+        '想定職種：コミッショニングマネージャー / キャパシティプランナー',
       ],
       isUpcoming: true,
-      isTentative: true,
     },
     {
-      period: '2029年4月 – 2031年3月',
-      duration: '実務 1〜2年目',
-      category: '就職と学位履修',
-      location: '日本国内 ＆ 英国（通信）',
-      title: '電気業界への就職（実務開始）と英国OTHM学士課程の並行履修',
+      period: '2031年4月 – 2034年3月',
+      duration: '入社1〜3年目',
+      location: '外資系データセンター / 大手インフラ企業',
+      category: '実務経験の回収',
+      title: '実務経験の回収と社内評価の確立',
       narrative:
-        '電気エンジニアとして企業に就職し、必須の実務経験を蓄積しながら、通信教育を活用して英国の正規学士号を目指すプログラムを並行して開始する。',
+        '外資系データセンターや大手インフラ企業に技術職として入社。高圧受変電設備や冷却システムの運用管理を通じて、第一種電気工事士やエネルギー管理士の免状交付に必要な実務経験年数を満たす。',
       details: [
-        '英国大学の1〜2年次に相当する「OTHM Level 4/5」プログラムを開始。将来的にTop-up制度で学士号を取得し、修士課程へ進む計画',
-        '電験と学習範囲が重なる「エネルギー管理士」を、実務2年目の8月頃に受験・取得',
-        '2年ごとのスコア更新に向けて、日々の英語学習を習慣化して継続',
+        '免状交付：第一種電気工事士、エネルギー管理士',
+        'IELTS 6.5+の英語力を活かし、海外本社エンジニアとの技術折衝やレポート業務を担う',
+        '業務外で電験二種（さらにその先の電験一種）の学習',
+        'edXを活用した米国オンライン修士課程（Master）の単位修得',
       ],
       isUpcoming: true,
-      isTentative: true,
+      phase: {
+        title: '就職から非現場・管理職への移行',
+        period: '2031年4月 以降',
+      },
+    },
+    {
+      period: '2030年4月 – 2031年3月',
+      duration: '4年目',
+      location: '北海道・放送大学',
+      category: '卒業と先回り',
+      title: '内定獲得と次のフェーズへの先回り',
+      narrative:
+        '残りの数単位を修得して4年間の在学要件を満たし、学士（教養）の学位を取得する。就職活動を終えた後の時間を使い、次のフェーズの準備を前倒しで始める。',
+      details: [
+        '放送大学：累計124単位・卒業（学士〈教養〉）',
+        '電験二種の学習を開始',
+        'edX（MicroBachelors / MicroMasters）の履修を開始',
+      ],
+      isUpcoming: true,
+    },
+    {
+      period: '2029年4月 – 2030年3月',
+      duration: '3年目',
+      location: '北海道・放送大学',
+      category: 'ネットワーク資格と就活',
+      title: 'ネットワーク資格と早期の就職活動',
+      narrative:
+        'オンライン授業の必修枠を含め、卒業要件124単位の大半を取り切る。非現場・上流職への切り札となるCCNPを取得し、夏から秋冬にかけて外資系データセンターや大手インフラ企業のインターンシップ・早期選考に臨む。',
+      details: [
+        '放送大学：累計118単位',
+        'CCNP 取得',
+        '外資系データセンター・大手インフラ企業のインターンシップ／早期選考',
+      ],
+      isUpcoming: true,
     },
     {
       period: '2028年4月 – 2029年3月',
-      duration: '技術専門機関 2年目',
-      category: '高度専門技術研修',
-      location: '北海道',
-      title: '技術専門機関 2年目：第一種電工・電験三種完遂・施工管理技士補・消防設備士',
+      duration: '2年目',
+      location: '北海道・放送大学',
+      category: '英語とファシリティ資格',
+      title: '英語の目標達成とファシリティ資格の連続取得',
       narrative:
-        '技術専門機関での2年目は、上位の国家資格や施工管理資格の合格に集中。学習負荷とプレッシャーを考慮し、余裕を持ったスケジュールで着実に合格を狙う。',
+        '専門科目を中心に履修を進め、卒業所要単位の約7割を消化する。IELTS 6.5+を達成し、電験三種と試験範囲が重なるエネルギー管理士（電気分野）に加えて、データセンター実務で重宝される資格を揃える。',
       details: [
-        '10月頃に「第一種電気工事士」を受験・取得（精神的なプレッシャーを考慮して多めに時間を確保）',
-        '6月頃に「2級電気工事施工管理技士」の第一次検定を受験し、「技士補」資格を取得',
-        '2年目の冬に「消防設備士 甲種4類」を受験・取得',
-        '電験三種はこの2年間での全科目合格を目標とする（難航した場合は後のエネルギー管理士の時期を調整）',
-        '2回目のIELTS受験に向けた英語学習を継続',
+        '放送大学：累計88単位',
+        'IELTS 6.5+ 達成',
+        'エネルギー管理士（電気分野）',
+        '危険物取扱者 乙種4類',
+        '第三種冷凍機械責任者',
       ],
       isUpcoming: true,
-      isTentative: true,
     },
     {
       period: '2027年4月 – 2028年3月',
-      duration: '技術専門機関 1年目',
-      category: '技術研修機関への入学',
-      location: '北海道',
-      title: '技術専門機関への入学：電気工学の基礎・第二種電工取得・IELTS初挑戦',
+      duration: '1年目',
+      location: '北海道・放送大学',
+      category: '基礎固めと最優先資格',
+      title: '基礎固めと最優先資格の突破',
       narrative:
-        '北海道の公設の技術専門機関に入学し、電気工学の理論と実践技術の習得を開始。早い段階から国家資格と英語の基準スコア取得に挑む。',
+        '放送大学に全科履修生（または選科履修生からの修業年限通算ルート）として入学し、基盤科目と導入科目を中心に自宅で単位を修得する。学習は、最優先とする電験三種とIELTS 6.5+を軸に据える。',
       details: [
-        '1年目の後半に1回目のIELTSを受験（東京を想定）、目標スコアの取得を目指す',
-        '1年目の修了時期に「第二種電気工事士」の試験を受けて取得',
-        '年2回ある「電験三種」の受験機会を活かし、仕上がった科目から順次合格を積み上げる',
+        '放送大学：目標44単位',
+        '学習の軸：電験三種、IELTS 6.5+',
+        '普通自動車運転免許の取得',
+        '第二種・第一種電気工事士（試験合格）',
       ],
       isUpcoming: true,
-      isTentative: true,
+      phase: {
+        title: '放送大学在学中の4年間',
+        period: '2027年4月 – 2031年3月',
+      },
     },
     {
       period: '2026年9月 – 現在',
@@ -294,64 +369,85 @@ export const timelineEventsData: Record<Language, TimelineItem[]> = {
   ],
 }
 
-// Candidate paths currently under consideration, shown above the current entry
+// Employers worth aiming for beyond global data centres, shown after the plan as one group of options
 export const crossroadsRoutesData: Record<Language, CrossroadsRoute[]> = {
   en: [
     {
       id: 'A',
-      title: 'Electrical Technical Institution',
-      timing: 'From Apr 2027',
+      title: 'Facility Management at Global Real-Estate Firms',
+      timing: 'e.g. CBRE, JLL',
       points: [
-        'Second-Class Electrician',
-        'Third-Class Chief Electrical Engineer',
-        'Three years of field experience alongside OTHM studies',
+        'Run the facilities of global IT, finance and pharma offices and research sites',
+        'Chief Electrical Engineer + Energy Manager + IELTS 6.5+ leads early to desk-based facility-manager roles',
       ],
     },
     {
       id: 'B',
-      title: 'OTHM Diploma & Parallel Credentials',
-      timing: 'From Dec 2026 or 2027',
+      title: 'Renewable Energy & Battery-Storage Infrastructure',
+      timing: 'Global and trading-house affiliated',
       points: [
-        'OTHM Level 4/5 Diploma (UK, distance)',
-        'Third-Class Chief Electrical Engineer',
-        'CCNP Enterprise',
-        'IELTS 6.5',
+        'Develop and remotely monitor solar, wind and large battery-storage sites',
+        'Chief Electrical Engineer + CCNP + English are valued as they are',
+        'Little overtime, high pay',
       ],
     },
     {
       id: 'C',
-      title: 'Fast-Track US Bachelor’s',
-      timing: 'Once the English score is secured',
+      title: 'Facility Arms of Major Telecom & IT Groups',
+      timing: 'e.g. NTT, KDDI, SoftBank, major electronics groups',
       points: [
-        'Reach the admission score on the Duolingo English Test',
-        'Resume Sophia Learning to bank transferable credits',
-        'Enroll in UMPI YourPace (University of Maine at Presque Isle)',
-        'Transfer credits and finish the degree on the shortest path, then move forward',
+        'Generous benefits: housing allowance, plenty of days off',
+        'Electrical licences + CCNP open the planning teams that design both telecom and power systems',
+      ],
+    },
+    {
+      id: 'D',
+      title: 'Plant Engineering at Chip, Pharma & Chemical Makers',
+      timing: 'Global and major Japanese firms',
+      points: [
+        'Manage and design factory utilities: power, HVAC, pure water, refrigeration',
+        'Chief Electrical Engineer, Energy Manager, refrigeration and hazardous-materials licences map directly',
+        'Stable, high pay from early on',
       ],
     },
   ],
   ja: [
     {
       id: 'A',
-      title: '電気系の技術専門機関へ進学',
-      timing: '2027年4月〜',
-      points: ['第二種電気工事士', '第三種電気主任技術者（電験三種）', '現場経験3年とOTHMを並行'],
+      title: '外資系総合不動産のファシリティマネジメント',
+      timing: '例：CBRE・JLL',
+      points: [
+        '外資系IT・金融・製薬企業のオフィスや研究施設の設備統括を受託',
+        '電験三種・エネ管・IELTS 6.5+で、早期からデスクワーク中心のファシリティマネージャーに',
+      ],
     },
     {
       id: 'B',
-      title: 'OTHM在籍＋資格の並行取得',
-      timing: '2026年12月 または 2027年〜',
-      points: ['OTHM Level 4/5 Diploma（英国・通信制）', '電験三種', 'CCNP Enterprise', 'IELTS 6.5'],
+      title: '再生可能エネルギー＆蓄電インフラ',
+      timing: '外資系・商社系',
+      points: [
+        '太陽光・風力発電所や大型蓄電所の開発・遠隔監視',
+        '電験三種・二種 × CCNP × 英語がそのまま評価される',
+        '残業が少なく、給与水準も高い',
+      ],
     },
     {
       id: 'C',
-      title: '米国学士を最短で取得',
-      timing: '英語の基準点を取れ次第',
+      title: '大手通信・IT系のファシリティ統括会社',
+      timing: '例：NTT・KDDI・ソフトバンク・大手電機系列',
       points: [
-        'Duolingo English Testで入学基準点を取得',
-        'Sophia Learningを再開し、移行可能な単位を蓄積',
-        'UMPI（メイン州立大学プレスクアイル校）YourPaceに入学',
-        '単位を移行して最短で学士を取得し、その後動き出す',
+        '住宅手当や休日数など、福利厚生が手厚い',
+        '電験三種・エネ管 × CCNPで、通信と電力設備の両方を設計・管理する企画部門へ',
+      ],
+    },
+    {
+      id: 'D',
+      title: '半導体・製薬・化学メーカーのプラントエンジニアリング',
+      timing: '外資・日系大手',
+      points: [
+        '工場のユーティリティ（電力・空調・純水・冷凍機）を管理・設計',
+        '電験三種・エネ管・第三種冷凍・危険物乙4の組み合わせが直結',
+        '若手から安定した高年収',
       ],
     },
   ],
@@ -519,8 +615,6 @@ export const uiText = {
     navTrajectorySub: 'Experience & Milestones',
     navLearning: 'Learning',
     navLearningSub: 'Courses & Certifications',
-    navRoadmap: 'Roadmap',
-    navRoadmapSub: 'Strategic 3-Phase Plan',
     navBlog: 'Blog',
     navBlogSub: 'Essays on AI & Society',
     navStudyLog: 'Study Log',
@@ -549,8 +643,6 @@ export const uiText = {
     aboutBadge1: 'Electrical Engineering & Infrastructure',
     aboutBadge2: 'Full-Stack Development',
     aboutPhotoName: 'Rikuto Mikado',
-    aboutPhotoPlace: 'Urakawa / Sapporo, Hokkaido, Japan',
-    aboutPhotoDesc: 'Physical Layer • Systems • Autonomous Learning',
 
     // Trajectory
     trajectoryBadge: 'Trajectory',
@@ -561,10 +653,10 @@ export const uiText = {
     statusRoadmap: 'Roadmap',
     statusTentative: 'Tentative',
     statusConsidering: 'Considering',
-    crossroadsPeriod: 'Crossroads',
-    crossroadsTitle: 'Three Paths I’m Weighing',
-    crossroadsLead: 'For now, my planning centers on these three options.',
-    crossroadsFooter: 'Three roads, one destination. Which one I take is still undecided.',
+    crossroadsPeriod: 'Beyond Data Centres',
+    crossroadsTitle: 'Other Employers Worth Aiming For',
+    crossroadsLead: 'Beyond global data centres: options that combine good conditions, high pay and a repeatable path in.',
+    crossroadsFooter: 'Four doors, one key: the same licences and English open every one of them.',
 
     // Courses
     coursesBadge: 'Skill Acquisition',
@@ -577,30 +669,6 @@ export const uiText = {
     length: 'Length',
     certId: 'Certificate ID',
     certCompletion: 'Certificate of Completion',
-
-    // Roadmap
-    roadmapBadge: 'Strategic Progression',
-    roadmapHeading: 'Roadmap & Vision',
-    roadmapLead:
-      'A practical, step-by-step roadmap connecting software skills with electrical engineering, hands-on field experience, and international degree pathways.',
-
-    roadmapCol1Tag: 'Years 2027 – 2029',
-    roadmapCol1Title: '"Hands-on foundations"',
-    roadmapCol1Body:
-      'Entering an advanced technical institute in Hokkaido to build practical electrical engineering competencies. Over these two years, I plan to secure the Second-Class and First-Class Electrician licenses, systematically complete subjects for Third-Class Chief Electrical Engineer, obtain safety qualifications (Fire Defense A4 & Assistant Management Engineer), and sit for the IELTS Academic exam.',
-    roadmapCol1Footer: 'Focus: Electrician 1st & 2nd • Chief Electrical Eng. • IELTS',
-
-    roadmapCol2Tag: 'Years 2029 – 2032',
-    roadmapCol2Title: '"Field practice & degree studies"',
-    roadmapCol2Body:
-      'Beginning full-time electrical field employment to accumulate three years of required on-site experience. In parallel, I will study through the UK OTHM diploma program toward an accredited British Bachelor’s degree, sit for the Qualified Energy Manager and Building Manager exams, prepare for Cisco CCNP Enterprise, and maintain IELTS scores within the 2-year renewal window.',
-    roadmapCol2Footer: 'Target: 3-Year Field Work • UK OTHM Degree • Facility Licenses',
-
-    roadmapCol3Tag: '2031 & Beyond',
-    roadmapCol3Title: '"Data centers & future horizons"',
-    roadmapCol3Body:
-      'Transitioning into mission-critical facilities, such as enterprise data centers or multinational corporations, leveraging platforms like LinkedIn to address Japan’s aging technical workforce shortage. Over the long horizon, I also hold an aspiration to explore graduate-level study internationally as a future milestone for lifelong intellectual pursuit.',
-    roadmapCol3Footer: 'Goal: Data Centers • Infrastructure Leadership • Future Graduate Horizons',
 
     // Blog
     blogBadge: 'Perspectives & Essays',
@@ -643,11 +711,17 @@ export const uiText = {
     colophonTitle: 'Colophon',
     colophonText:
       'The R.M. Journal is written, edited and published by Rikuto Mikado in Hokkaido, Japan. Set in Fraunces, Newsreader and Inter.',
-    lettersTitle: 'Letters to the Editor',
-    lettersText: 'Questions, ideas, or just a hello. Every letter is read.',
+    lettersTitle: 'Get in Touch',
+    lettersText: 'For questions, collaboration or opportunities, feel free to reach out by email.',
     listingCaption: 'Listing 1 — profile.py',
     specialtiesLabel: 'Specialties',
     chronologyLabel: 'Chronology',
+    frontPhotoCaption: 'Urakawa, Hokkaido, Japan',
+    nightEdition: 'Night Edition',
+    printEdition: 'Print Edition',
+    printEditionCta: 'Download PDF',
+    printEditionHint: 'Opens the print dialog. Choose “Save as PDF”.',
+    printPreparing: 'Typesetting…',
 
     // Footer
     footerContact: 'Direct Contact',
@@ -691,8 +765,6 @@ export const uiText = {
     navTrajectorySub: 'これまでの歩みと今後の展望',
     navLearning: '取得スキル',
     navLearningSub: 'Udemy修了証と学習実績',
-    navRoadmap: 'ロードマップ',
-    navRoadmapSub: '3段階の中長期キャリア戦略',
     navBlog: 'ブログ',
     navBlogSub: '思考録とエッセイ',
     navStudyLog: '学習ログ',
@@ -721,8 +793,6 @@ export const uiText = {
     aboutBadge1: '電気工学・社会基盤インフラ',
     aboutBadge2: 'フルスタック開発',
     aboutPhotoName: '三角 陸人(Rikuto Mikado)',
-    aboutPhotoPlace: '日本、北海道',
-    aboutPhotoDesc: '物理レイヤー • システム • 独学と実践',
 
     // Trajectory
     trajectoryBadge: '経歴と歩み',
@@ -733,10 +803,10 @@ export const uiText = {
     statusRoadmap: '今後の計画',
     statusTentative: '未確定',
     statusConsidering: '検討中',
-    crossroadsPeriod: '分岐点',
-    crossroadsTitle: 'いま考えている三つの道',
-    crossroadsLead: '現在は、主にこの三つを軸に進路を検討しています。',
-    crossroadsFooter: '道は三つ、行き先は一つ。どの道を進むかはまだ決めていません。',
+    crossroadsPeriod: '就職先の候補',
+    crossroadsTitle: '外資系データセンター以外で狙える就職先',
+    crossroadsLead: '「ホワイト × 高収入 × 再現性の高さ」を軸に、データセンター以外で視野に入れている候補です。',
+    crossroadsFooter: '扉は四つ、鍵は一つ。積み上げた資格と英語が、どの扉にもそのまま通用する。',
 
     // Courses
     coursesBadge: 'スキルの修得',
@@ -749,30 +819,6 @@ export const uiText = {
     length: '総学習時間',
     certId: '修了証ID',
     certCompletion: '修了認定証',
-
-    // Roadmap
-    roadmapBadge: '段階的キャリア構想',
-    roadmapHeading: 'ロードマップと展望',
-    roadmapLead:
-      'ソフトウェアスキル、電気工学、現場実務、そして海外学位プログラムを繋ぐ、地に足のついた3段階のキャリアロードマップ。',
-
-    roadmapCol1Tag: '2027年 – 2029年（技術専門機関期）',
-    roadmapCol1Title: '「確かな基礎と資格の習得」',
-    roadmapCol1Body:
-      '技術専門機関にて、電気工学の理論と現場技術の基礎を徹底的に体得します。この2年間で第一種電気工事士や電験三種の科目合格など、インフラエンジニアとしての必須資格を戦略的に取得し、同時にIELTSのスコアメイクを行うことで、デジタルと物理を繋ぐ強固な基盤を構築します。',
-    roadmapCol1Footer: '重点: 電気工事士第1種・2種 • 電験三種 • IELTS',
-
-    roadmapCol2Tag: '2029年 – 2032年（実務＆大学並行期）',
-    roadmapCol2Title: '「現場実務と海外学士号の並行」',
-    roadmapCol2Body:
-      'インフラ業界へ入り、ミッションクリティカルな現場で3年間の実務経験を蓄積します。並行して通信制の英国OTHMプログラムを通じて学士号の取得を進め、エネルギー管理士等の上位資格にも挑戦します。実務と学術調査を両立させ、より高度な専門性を深めるフェーズです。',
-    roadmapCol2Footer: '目標: 実務3年 • 英国OTHM学士 • エネ管・ビル管',
-
-    roadmapCol3Tag: '2031年 以降（キャリアの飛躍）',
-    roadmapCol3Title: '「データセンター転職と大学院研究」',
-    roadmapCol3Body:
-      '実務経験と資格を武器に、日本の技術者高齢化による構造的需要を捉え、大手データセンターや外資系企業へアクセスします。さらに将来的には海外大学院の修士課程へ進学し、生涯にわたる知の探求と技術研究を継続。最終的には「自身の創造性と自由」を完全に保護できる、揺るぎないポジションの確立を目指します。',
-    roadmapCol3Footer: '展望: データセンター • 海外大学院修士 • 長期研究',
 
     // Blog
     blogBadge: '思考録 ＆ エッセイ',
@@ -815,11 +861,17 @@ export const uiText = {
     colophonTitle: '奥付',
     colophonText:
       'The R.M. Journal は、北海道で Rikuto Mikado が執筆・編集・発行しています。書体は Fraunces、Newsreader、Inter。',
-    lettersTitle: '編集部へのお便り',
-    lettersText: 'ご質問、ご意見、ご挨拶など。お便りにはすべて目を通しています。',
+    lettersTitle: 'お問い合わせ',
+    lettersText: 'ご質問やご相談、お仕事のご依頼などは、メールでお気軽にご連絡ください。',
     listingCaption: 'リスト1 — profile.py',
     specialtiesLabel: '専門分野',
     chronologyLabel: '年表',
+    frontPhotoCaption: '日本、北海道浦河町',
+    nightEdition: '夜版',
+    printEdition: '紙面版',
+    printEditionCta: 'PDFで保存',
+    printEditionHint: '印刷画面で「PDFに保存」を選んでください。',
+    printPreparing: '組版中…',
 
     // Footer
     footerContact: 'お問い合わせ',

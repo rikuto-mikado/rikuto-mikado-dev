@@ -7,6 +7,7 @@ import { useBodyScrollLock } from '../../../hooks/useBodyScrollLock'
 import { useEscapeKey } from '../../../hooks/useEscapeKey'
 import ReadMoreButton from '../../common/ReadMoreButton'
 import PageHead from '../../newspaper/PageHead'
+import { usePrintEdition } from '../../../hooks/usePrintEdition'
 import BlogCard, { LeadStory } from './BlogCard'
 import BlogReaderModal from './BlogReaderModal'
 import UpcomingPostCard from './UpcomingPostCard'
@@ -31,17 +32,19 @@ export default function BlogSection({
 }: BlogSectionProps) {
   const ui = uiText[lang]
   const posts = blogPostsData[lang]
-  const upcomingPost = upcomingPostData[lang]
+  const upcomingPosts = upcomingPostData[lang]
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null)
   const [isExpanded, setIsExpanded] = useState(false)
+  // The print edition carries every essay
+  const { isPrinting } = usePrintEdition()
 
   // Posts are stored oldest first; the newest leads the page
   const [leadPost, ...olderPosts] = [...posts].reverse()
-  const secondaryPosts = isExpanded ? olderPosts : olderPosts.slice(0, INITIAL_SECONDARY_COUNT)
-  // The "next issue" box always sits in the first row of columns, after the first two stories
+  const secondaryPosts = isExpanded || isPrinting ? olderPosts : olderPosts.slice(0, INITIAL_SECONDARY_COUNT)
+  // The "next issue" notices share one column, always in the first row after the first two stories
   const columns = [
     ...secondaryPosts.slice(0, INITIAL_SECONDARY_COUNT).map((post) => ({ kind: 'post' as const, post })),
-    ...(upcomingPost ? [{ kind: 'upcoming' as const, post: upcomingPost }] : []),
+    ...(upcomingPosts.length > 0 ? [{ kind: 'upcoming' as const, posts: upcomingPosts }] : []),
     ...secondaryPosts.slice(INITIAL_SECONDARY_COUNT).map((post) => ({ kind: 'post' as const, post })),
   ]
   const rule = isDark ? 'border-night-border' : 'border-cream-border'
@@ -91,7 +94,11 @@ export default function BlogSection({
                 {item.kind === 'post' ? (
                   <BlogCard post={item.post} isDark={isDark} ui={ui} onSelect={setSelectedPostId} />
                 ) : (
-                  <UpcomingPostCard post={item.post} isDark={isDark} ui={ui} />
+                  <div className="flex flex-col gap-5">
+                    {item.posts.map((post) => (
+                      <UpcomingPostCard key={post.title} post={post} isDark={isDark} ui={ui} />
+                    ))}
+                  </div>
                 )}
               </div>
             ))}

@@ -37,6 +37,7 @@ export default function BlogReaderModal({
     <div
       ref={dialogRef}
       role="dialog"
+      data-print="hide"
       aria-modal="true"
       aria-labelledby={titleId}
       className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in"

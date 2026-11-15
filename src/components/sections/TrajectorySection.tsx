@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { sectionPage } from '../../data/navigation'
 import type { CrossroadsRoute, TimelineItem, UiText } from '../../data/translations'
 import { scrollToTarget } from '../../lib/smoothScroll'
@@ -37,14 +37,17 @@ const periodClass = (isDark: boolean) =>
   `font-mono text-xs tabular-nums transition-colors duration-500 ${isDark ? 'text-linen' : 'text-ink'}`
 
 /** Marker sitting on the vertical rail beside each entry. */
+/** Marker sitting on the vertical rail beside each entry; the current entry's marker glows and pulses. */
 function RailDot({ isDark, filled = false }: { isDark: boolean; filled?: boolean }) {
   return (
     <span
       aria-hidden="true"
       className={`absolute -left-[calc(2rem+4.5px)] sm:-left-[calc(2.5rem+4.5px)] top-1.5 w-2 h-2 rounded-full ring-4 transition-colors duration-500 ${
-        filled ? 'bg-accent' : isDark ? 'bg-night-border' : 'bg-cream-border'
+        filled ? 'bg-accent rail-dot-live' : isDark ? 'bg-night-border' : 'bg-cream-border'
       } ${isDark ? 'ring-night' : 'ring-paper'}`}
-    />
+    >
+      {filled && <span className="rail-dot-pulse" />}
+    </span>
   )
 }
 
@@ -139,6 +142,38 @@ function FogBank({ isDark, children }: { isDark: boolean; children: ReactNode })
   )
 }
 
+/** Heading that opens a stretch of the plan: a diamond on the rail, a heavy rule, period and title. */
+function PhaseHeading({
+  isDark,
+  phase,
+  anchorId,
+}: {
+  isDark: boolean
+  phase: NonNullable<TimelineItem['phase']>
+  anchorId: string
+}) {
+  return (
+    <div id={anchorId} data-chronology className="relative scroll-mt-28 pt-1">
+      <span
+        aria-hidden="true"
+        className={`absolute -left-[calc(2rem+6.5px)] sm:-left-[calc(2.5rem+6.5px)] top-[1.05rem] w-3 h-3 rotate-45 bg-accent ring-4 ${
+          isDark ? 'ring-night-paper' : 'ring-paper'
+        }`}
+      />
+      <div className={`border-t-[3px] pt-4 ${isDark ? 'border-linen/80' : 'border-ink'}`}>
+        <p className="font-mono text-xs tabular-nums text-accent">{phase.period}</p>
+        <h3
+          className={`mt-1.5 font-serif font-normal text-3xl md:text-4xl leading-[1.1] tracking-tight text-balance ${
+            isDark ? 'text-ivory' : 'text-ink'
+          }`}
+        >
+          {phase.title}
+        </h3>
+      </div>
+    </div>
+  )
+}
+
 const CROSSROADS_ID = 'trajectory-crossroads'
 
 function CrossroadsEntry({ isDark, ui, routes }: { isDark: boolean; ui: UiText; routes: CrossroadsRoute[] }) {
@@ -171,59 +206,41 @@ function CrossroadsEntry({ isDark, ui, routes }: { isDark: boolean; ui: UiText; 
         </p>
       </div>
 
-      <div className="relative mt-8 sm:pt-6">
-        {/* One rail splitting into three branches */}
-        <div
-          className={`hidden sm:block absolute top-0 left-[16.66%] right-[16.66%] border-t ${
-            isDark ? 'border-night-border' : 'border-cream-border'
-          }`}
-        ></div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-          {routes.map((route) => (
-            <div
-              key={route.id}
-              className={`relative rounded-md border p-4 sm:p-5 transition-colors duration-500 ${
-                isDark ? 'border-night-border' : 'border-cream-border'
-              }`}
-            >
-              <div
-                className={`hidden sm:block absolute -top-6 left-1/2 h-6 border-l ${
-                  isDark ? 'border-night-border' : 'border-cream-border'
+      {/* Options set like a newspaper notices grid: heavy rule on top, hairlines between cells */}
+      <div className={`mt-8 grid grid-cols-1 sm:grid-cols-2 border-t-[3px] ${isDark ? 'border-linen/80' : 'border-ink'}`}>
+        {routes.map((route, index) => (
+          <div
+            key={route.id}
+            className={`py-6 border-b ${isDark ? 'border-night-border' : 'border-cream-border'} ${
+              index % 2 === 0 ? 'sm:pr-6 sm:border-r' : 'sm:pl-6'
+            }`}
+          >
+            <div className="flex items-baseline gap-3">
+              <span className="font-serif italic font-light text-3xl leading-none text-accent" aria-hidden="true">
+                {route.id}
+              </span>
+              <h4
+                className={`font-serif text-lg md:text-xl font-normal leading-snug tracking-tight text-balance ${
+                  isDark ? 'text-ivory' : 'text-ink'
                 }`}
-              ></div>
-
-              <div className="flex items-center gap-2.5 mb-2">
-                <span
-                  className="shrink-0 flex items-center justify-center w-7 h-7 rounded-full border font-mono text-xs border-accent text-accent"
-                >
-                  {route.id}
-                </span>
-                <h4
-                  className={`font-sans text-sm font-semibold leading-snug transition-colors duration-500 ${
-                    isDark ? 'text-ivory' : 'text-gray-900'
-                  }`}
-                >
-                  {route.title}
-                </h4>
-              </div>
-
-              <p className={`font-sans text-[11px] mb-3 ${mutedText}`}>{route.timing}</p>
-
-              <ul className="space-y-1.5 font-sans text-xs">
-                {route.points.map((point, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="mt-[7px] shrink-0 w-2 border-t border-accent" />
-                    <span className={`leading-relaxed ${isDark ? 'text-stone' : 'text-gray-700'}`}>{point}</span>
-                  </li>
-                ))}
-              </ul>
+              >
+                {route.title}
+              </h4>
             </div>
-          ))}
-        </div>
+            <p className={`mt-2 font-mono text-[11px] tracking-wide ${mutedText}`}>{route.timing}</p>
+            <ul className="mt-3 space-y-1.5 font-news text-[15px]">
+              {route.points.map((point, pointIndex) => (
+                <li key={pointIndex} className="flex items-start gap-2.5">
+                  <span className="mt-[0.65em] shrink-0 w-2.5 border-t border-accent" aria-hidden="true" />
+                  <span className={`leading-relaxed ${isDark ? 'text-stone' : 'text-gray-700'}`}>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
-      <p className={`mt-6 text-center font-serif italic text-sm transition-colors duration-500 ${mutedText}`}>
+      <p className={`mt-6 text-center font-news italic text-[15px] transition-colors duration-500 ${mutedText}`}>
         {ui.crossroadsFooter}
       </p>
     </div>
@@ -235,6 +252,8 @@ interface ChronologyItem {
   period: string
   title: string
   tone: StatusTone | 'past'
+  /** Phase openers are printed as small section breaks in the index */
+  isPhase?: boolean
 }
 
 /**
@@ -253,9 +272,25 @@ function ChronologyIndex({
   activeId: string | null
 }) {
   const muted = isDark ? 'text-gray-400' : 'text-gray-500'
+  const navRef = useRef<HTMLElement | null>(null)
+
+  // Keep the active line in view when the index is taller than the viewport
+  useEffect(() => {
+    const nav = navRef.current
+    const active = nav?.querySelector<HTMLElement>('[aria-current="location"]')
+    if (!nav || !active) return
+    const top = active.offsetTop
+    const bottom = top + active.offsetHeight
+    if (top < nav.scrollTop + 40 || bottom > nav.scrollTop + nav.clientHeight - 40) {
+      nav.scrollTo({ top: top - nav.clientHeight / 3, behavior: 'smooth' })
+    }
+  }, [activeId])
 
   return (
     <nav
+      ref={navRef}
+      data-lenis-prevent
+      data-print="hide"
       aria-label={ui.chronologyLabel}
       className="hidden lg:block lg:col-span-3 self-start sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto [scrollbar-width:none]"
     >
@@ -269,6 +304,27 @@ function ChronologyIndex({
       <ol className={`divide-y ${isDark ? 'divide-night-border' : 'divide-cream-border'}`}>
         {items.map((item) => {
           const isActive = item.id === activeId
+          if (item.isPhase) {
+            // Section break inside the index
+            return (
+              <li key={item.id} className="pt-4 pb-1.5">
+                <button
+                  type="button"
+                  aria-current={isActive ? 'location' : undefined}
+                  onClick={() => {
+                    const target = document.getElementById(item.id)
+                    if (target) scrollToTarget(target)
+                  }}
+                  className="flex w-full items-center gap-2 text-left cursor-pointer"
+                >
+                  <span className="w-1.5 h-1.5 rotate-45 bg-accent shrink-0" aria-hidden="true" />
+                  <span className="font-sans text-[11px] uppercase tracking-[0.14em] font-semibold text-accent truncate">
+                    {item.title}
+                  </span>
+                </button>
+              </li>
+            )
+          }
           return (
             <li key={item.id}>
               <button
@@ -323,7 +379,8 @@ export default function TrajectorySection({ isDark, ui, events, routes }: Trajec
   const [activeId, setActiveId] = useState<string | null>(null)
 
   // Read oldest → newest (the data is stored newest first). Consecutive tentative entries share one
-  // fog bank, and the crossroads opens straight after the current entry, before the plans beyond it.
+  // fog bank, each stretch of the plan opens with its phase heading, and the list of other target
+  // employers closes the timeline.
   const blocks: ReactNode[] = []
   const chronology: ChronologyItem[] = []
   let foggedEntries: ReactNode[] = []
@@ -350,6 +407,12 @@ export default function TrajectorySection({ isDark, ui, events, routes }: Trajec
         : item.isUpcoming
           ? 'upcoming'
           : 'past'
+    if (item.phase) {
+      flushFog()
+      const phaseId = `trajectory-phase-${index}`
+      blocks.push(<PhaseHeading key={phaseId} isDark={isDark} phase={item.phase} anchorId={phaseId} />)
+      chronology.push({ id: phaseId, period: item.phase.period, title: item.phase.title, tone: 'upcoming', isPhase: true })
+    }
     if (item.isTentative) {
       foggedEntries.push(entry)
       chronology.push({ id: anchorId, period: item.period, title: item.title, tone })
@@ -358,12 +421,12 @@ export default function TrajectorySection({ isDark, ui, events, routes }: Trajec
     flushFog()
     blocks.push(entry)
     chronology.push({ id: anchorId, period: item.period, title: item.title, tone })
-    if (item.isCurrent && routes.length > 0) {
-      blocks.push(<CrossroadsEntry key="crossroads" isDark={isDark} ui={ui} routes={routes} />)
-      chronology.push({ id: CROSSROADS_ID, period: ui.crossroadsPeriod, title: ui.crossroadsTitle, tone: 'upcoming' })
-    }
   })
   flushFog()
+  if (routes.length > 0) {
+    blocks.push(<CrossroadsEntry key="crossroads" isDark={isDark} ui={ui} routes={routes} />)
+    chronology.push({ id: CROSSROADS_ID, period: ui.crossroadsPeriod, title: ui.crossroadsTitle, tone: 'upcoming' })
+  }
 
   // Highlight the entry crossing the upper-middle of the viewport
   useEffect(() => {
@@ -402,7 +465,7 @@ export default function TrajectorySection({ isDark, ui, events, routes }: Trajec
           <ChronologyIndex isDark={isDark} ui={ui} items={chronology} activeId={activeId} />
 
           <div
-            className={`relative lg:col-span-9 border-l space-y-14 pl-8 sm:pl-10 py-2 transition-colors duration-500 ${
+            className={`timeline-rail relative lg:col-span-9 border-l space-y-14 pl-8 sm:pl-10 py-2 transition-colors duration-500 ${
               isDark ? 'border-night-border' : 'border-cream-border'
             }`}
           >

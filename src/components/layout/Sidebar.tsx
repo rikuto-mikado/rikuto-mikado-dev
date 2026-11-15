@@ -1,3 +1,4 @@
+import { Printer } from 'lucide-react'
 import { useEffect, useRef, type ReactNode } from 'react'
 import { CONTACT_EMAIL } from '../../config'
 import { navSections } from '../../data/navigation'
@@ -7,6 +8,7 @@ import { uiText } from '../../data/translations'
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock'
 import { useEscapeKey } from '../../hooks/useEscapeKey'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
+import { usePrintEdition } from '../../hooks/usePrintEdition'
 import { scrollToTarget } from '../../lib/smoothScroll'
 import { ChevronRightIcon, CloseIcon, ThemeIcon } from '../common/icons'
 
@@ -102,6 +104,7 @@ export default function Sidebar({
   const ui = uiText[lang]
 
   const drawerRef = useFocusTrap<HTMLElement>(isOpen)
+  const { isPrinting, printEdition } = usePrintEdition()
   useBodyScrollLock(isOpen)
   useEscapeKey(() => {
     if (isOpen) onClose()
@@ -138,6 +141,7 @@ export default function Sidebar({
       <div
         onClick={onClose}
         aria-hidden="true"
+        data-print="hide"
         className={`fixed inset-0 z-[65] transition-opacity duration-500 ease-out ${
           isOpen ? 'opacity-100 pointer-events-auto bg-black/60 backdrop-blur-sm' : 'opacity-0 pointer-events-none'
         }`}
@@ -146,6 +150,7 @@ export default function Sidebar({
       {/* Slide-over drawer */}
       <aside
         ref={drawerRef}
+        data-print="hide"
         data-lenis-prevent
         // Keep the off-screen drawer out of the tab order and accessibility tree while closed
         inert={!isOpen}
@@ -297,6 +302,21 @@ export default function Sidebar({
             buttonLabel={isJapaneseAvailable ? ui.langToggle : '準備中'}
             buttonAriaLabel="Toggle language"
             onClick={onToggleLang}
+          />
+
+          <SettingRow
+            isDark={isDark}
+            darkAccentClass="text-accent"
+            badge={<Printer className="w-3.5 h-3.5" strokeWidth={1.75} />}
+            title={ui.printEdition}
+            subtitle={ui.printEditionHint}
+            buttonLabel={isPrinting ? ui.printPreparing : 'PDF'}
+            buttonAriaLabel={ui.printEditionCta}
+            onClick={() => {
+              // Close the drawer (and release its scroll lock) before the print layout is captured
+              onClose()
+              void printEdition()
+            }}
           />
 
           <div className="space-y-1.5 pt-1">

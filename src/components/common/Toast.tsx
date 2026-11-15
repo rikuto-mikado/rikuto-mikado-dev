@@ -15,6 +15,7 @@ export default function Toast({ toast, isDark, onDismiss }: ToastProps) {
   return createPortal(
     <div
       role="status"
+      data-print="hide"
       aria-live="polite"
       className={`fixed top-4 left-4 right-4 sm:left-auto sm:right-6 sm:top-6 sm:max-w-sm z-[120] px-4 py-3 rounded-lg border shadow-lg backdrop-blur-md transition-all duration-300 animate-fade-in ${
         isDark ? 'bg-night-card/95 border-night-border text-ivory' : 'bg-paper/95 border-cream-border text-ink'

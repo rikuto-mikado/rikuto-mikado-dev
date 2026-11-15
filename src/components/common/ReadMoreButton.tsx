@@ -11,7 +11,7 @@ interface ReadMoreButtonProps {
 // Expand/collapse toggle shared by the card grids (courses, blog)
 export default function ReadMoreButton({ isDark, ui, isExpanded, onToggle }: ReadMoreButtonProps) {
   return (
-    <div className="mt-12 text-center">
+    <div data-print="hide" className="mt-12 text-center">
       <button
         type="button"
         onClick={onToggle}

@@ -109,14 +109,14 @@ export default function HeroSection({ isDark, ui, courses }: HeroSectionProps) {
             <figure className="group mt-8">
               <HalftoneImage
                 src={urakawaLandscape}
-                alt={ui.aboutPhotoPlace}
+                alt={ui.frontPhotoCaption}
                 isDark={isDark}
                 className="w-full aspect-[16/9]"
                 focus={[0.5, 0.4]}
                 loading="eager"
               />
               <figcaption className={`mt-2.5 pb-2 border-b font-news italic text-sm ${rule} ${muted}`}>
-                {ui.aboutPhotoPlace}
+                {ui.frontPhotoCaption}
               </figcaption>
             </figure>
 
@@ -186,7 +186,7 @@ export default function HeroSection({ isDark, ui, courses }: HeroSectionProps) {
       </div>
 
       {/* The fold: the crease across the middle of the front page, edge to edge of the sheet */}
-      <div className="fold -mx-6 my-14 md:my-20" aria-hidden="true" />
+      <div data-print="hide" className="fold -mx-6 my-14 md:my-20" aria-hidden="true" />
 
       {/* Below the fold: the profile listing, full width */}
       <div className="max-w-6xl mx-auto">

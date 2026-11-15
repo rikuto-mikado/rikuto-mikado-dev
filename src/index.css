@@ -53,11 +53,11 @@
 
   /* Dark theme surfaces, darkest to lightest */
   --color-night: #131211;
-  --color-night-paper: #171512;
+  /* Night edition: black stock (the screened tooth lifts it to about #1b1916) */
+  --color-night-paper: #121110;
 
   /* The surface the newspaper lies on (visible around the sheet) */
   --color-desk: #d3cdc1;
-  --color-night-desk: #0a0908;
   --color-night-panel: #161413;
   --color-night-section: #181614;
   --color-night-modal: #181615;
@@ -92,9 +92,7 @@ html {
 body {
   background-color: var(--color-desk);
 }
-html.dark body {
-  background-color: var(--color-night-desk);
-}
+
 
 /*
  * Newsprint. One pre-rendered tile (source: scripts/paper/tooth.html, an SVG filter of lit fractal
@@ -108,8 +106,15 @@ html.dark body {
   background-size: 320px 320px;
   background-blend-mode: multiply;
 }
+/*
+ * Night edition: the journal printed on black stock in white ink. Its own tooth tile
+ * (scripts/paper/tooth-night.html) is mostly black with faint light on the raised fibres, and is
+ * screened on, so the surface catches light rather than darkening.
+ */
 html.dark .paper {
   background-color: var(--color-night-paper);
+  background-image: url('./assets/paper/tooth-night.webp');
+  background-blend-mode: screen;
 }
 
 /*
@@ -122,10 +127,6 @@ html.dark .paper {
   background-attachment: fixed;
   padding: 0.375rem;
 }
-html.dark .desk {
-  background-color: var(--color-night-desk);
-  background-image: radial-gradient(ellipse 80% 60% at 50% 30%, rgb(255 255 255 / 0.03), transparent 70%);
-}
 .sheet {
   position: relative;
   width: 100%;
@@ -136,10 +137,12 @@ html.dark .desk {
     0 1px 2px rgb(60 45 30 / 0.12),
     0 8px 24px -10px rgb(60 45 30 / 0.25);
 }
+/* Dark mode keeps the same light desk, so only the sheet's own edge highlight changes */
 html.dark .sheet {
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / 0.05),
-    0 30px 80px -20px rgb(0 0 0 / 0.9);
+    0 1px 2px rgb(60 45 30 / 0.2),
+    0 8px 24px -10px rgb(60 45 30 / 0.35);
 }
 @media (min-width: 768px) {
   .desk {
@@ -151,6 +154,13 @@ html.dark .sheet {
       0 1px 1px rgb(60 45 30 / 0.1),
       0 3px 8px rgb(60 45 30 / 0.08),
       0 28px 60px -24px rgb(60 45 30 / 0.4);
+  }
+  html.dark .sheet {
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.05),
+      0 1px 1px rgb(60 45 30 / 0.2),
+      0 3px 8px rgb(60 45 30 / 0.15),
+      0 28px 60px -24px rgb(60 45 30 / 0.55);
   }
 }
 
@@ -183,19 +193,13 @@ html.dark {
   --color-accent: #e2685f;
 }
 
-/* Dark mode only: a soft vignette, like reading under a lamp */
-html.dark body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  background: radial-gradient(ellipse 125% 95% at 50% 42%, transparent 55%, rgb(0 0 0 / 0.35) 100%);
-}
-
 /* Ink on paper: a hair of spread on display type, as if the ink bled slightly into the fibres */
 html:not(.dark) .font-serif {
   text-shadow: 0 0 0.5px rgb(29 26 23 / 0.3);
+}
+/* White ink on black stock spreads a touch more, with a faint glow at the edges */
+html.dark .font-serif {
+  text-shadow: 0 0 0.6px rgb(245 243 238 / 0.35);
 }
 
 /*
@@ -211,6 +215,44 @@ html.dark .halftone-base {
   filter: grayscale(1) contrast(1.05) brightness(0.85);
   mix-blend-mode: normal;
   opacity: 0.45;
+}
+
+/*
+ * Newspaper body copy. Set ragged-right with eager hyphenation: in columns this narrow, full
+ * justification opens visible gaps between words, while hyphenation keeps the right edge tidy.
+ */
+.news-body {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 6 3 2;
+  text-wrap: pretty;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+}
+
+/*
+ * Japanese has no true italic: stop the browser from slanting kanji/kana artificially.
+ * Latin text inside italic runs keeps its real italic from Fraunces / Newsreader.
+ */
+html[lang='ja'] {
+  font-synthesis-style: none;
+}
+
+/* Japanese headings break between phrases (文節), never mid-word, e.g. not 「次のフ／ェーズ」 */
+html[lang='ja'] :is(h1, h2, h3, h4, blockquote) {
+  word-break: auto-phrase;
+}
+
+/* Multi-column story text with a hairline between columns */
+.news-columns {
+  column-gap: 2.25rem;
+  column-rule: 1px solid var(--color-cream-border);
+}
+html.dark .news-columns {
+  column-rule-color: var(--color-night-border);
+}
+.news-columns > p + p {
+  margin-top: 0;
+  text-indent: 1.4em;
 }
 
 /* Newspaper drop cap for lead paragraphs */
@@ -281,6 +323,14 @@ html.dark .halftone-base {
   border-bottom: 1px dotted currentColor;
   opacity: 0.45;
   transform: translateY(-0.3em);
+}
+
+/*
+ * Nameplate: Fraunces at its largest optical size, where the contrast between thick and thin
+ * strokes is highest, so the name reads as a newspaper title while staying a single typeface.
+ */
+.nameplate {
+  font-variation-settings: 'opsz' 144, 'SOFT' 0, 'WONK' 0;
 }
 
 /* Fraunces: keep the display cut calm (no soft/wonky alternates) */
@@ -382,10 +432,200 @@ html.dark .halftone-base {
   }
 }
 
+/*
+ * "Live" marker for the current timeline entry: the dot breathes with a soft glow while a ring of
+ * light expands from it and fades, like a status lamp.
+ */
+.rail-dot-live {
+  animation: rail-dot-glow 2.4s ease-in-out infinite;
+}
+.rail-dot-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  animation: rail-dot-pulse 2.4s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+}
+@keyframes rail-dot-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 1px var(--color-accent));
+  }
+  50% {
+    filter: drop-shadow(0 0 5px var(--color-accent));
+  }
+}
+@keyframes rail-dot-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  80%,
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
   .fog::before,
-  .fog::after {
+  .fog::after,
+  .rail-dot-pulse {
     animation: none;
   }
+  .rail-dot-pulse {
+    display: none;
+  }
+  /* Keep a steady glow instead of the breathing one */
+  .rail-dot-live {
+    animation: none;
+    filter: drop-shadow(0 0 4px var(--color-accent));
+  }
 }
+
+/*
+ * ─── Print Edition ────────────────────────────────────────────────────────────────────────────
+ * Printing (or "Save as PDF") produces the paper itself: A4 sheets, white stock to save ink, each
+ * section opening a new page under its own folio, and every screen-only control removed. App
+ * switches to the light theme, expands every list and loads every photo before the dialog opens.
+ */
+/* A4 is what people print and attach; browsers lay out print at roughly the A4/Letter text width */
+@page {
+  size: A4;
+  margin: 14mm 13mm;
+}
+
+@media print {
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  /* Newspaper density: every rem-based size and space sets about 12% tighter on paper */
+  html {
+    font-size: 14px;
+  }
+
+  /* Halftones, hatching and rules are part of the page, so print their colours as designed */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  [data-print='hide'] {
+    display: none !important;
+  }
+
+  /* The desk and the sheet's shadow belong to the screen; on paper the page is the sheet */
+  .desk {
+    padding: 0 !important;
+    background: none !important;
+  }
+  .sheet {
+    max-width: none !important;
+    box-shadow: none !important;
+  }
+  .paper {
+    background: #fff !important;
+  }
+
+  /* One section per page, so each prints under its own folio (A2, A3, B1 …) */
+  #about,
+  #trajectory,
+  #courses,
+  #blog,
+  #study-log,
+  #contact {
+    break-before: page;
+    border-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  section,
+  footer {
+    padding-bottom: 6mm !important;
+  }
+
+  /* Nothing sticks to the viewport on paper; the timeline takes the width the index used */
+  .sticky,
+  .lg\:sticky {
+    position: static !important;
+  }
+  .timeline-rail {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Photos: the halftone canvas carries the tone in print, so the full-resolution <img> base is dropped */
+  .halftone-base {
+    display: none !important;
+  }
+
+  /*
+   * Let long stories and timeline entries flow across pages like newspaper copy; keep only small
+   * units whole (photos, list rows, notice boxes, column stories), and keep headings with their text.
+   */
+  figure,
+  li,
+  aside,
+  .column-rules > *,
+  dl > div {
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* The profile listing wraps instead of scrolling sideways */
+  figure .whitespace-pre {
+    white-space: pre-wrap !important;
+  }
+  figure .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  /* Page heads sit tighter on paper, leaving the page to the story */
+  .page-head {
+    margin-bottom: 6mm !important;
+  }
+  .page-head-lead {
+    padding-top: 4mm !important;
+  }
+
+  /* About: story and portrait side by side, the portrait in a narrow right-hand column */
+  .about-grid {
+    grid-template-columns: minmax(0, 1fr) 52mm !important;
+    column-gap: 8mm !important;
+    align-items: start;
+  }
+  /* The grid row must be free to split across pages, or the whole story jumps to the next one */
+  .about-grid > figure {
+    position: static !important;
+    break-inside: auto;
+  }
+  .about-grid blockquote {
+    margin-top: 5mm !important;
+    margin-bottom: 5mm !important;
+    padding-top: 4mm !important;
+    padding-bottom: 4mm !important;
+  }
+
+  /* Keep the lead essay and each target-employer notice in one piece */
+  .lead-story,
+  #trajectory-crossroads .grid > div {
+    break-inside: avoid;
+  }
+}
+

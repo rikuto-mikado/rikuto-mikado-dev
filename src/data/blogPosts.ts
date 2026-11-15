@@ -127,6 +127,26 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
         'Unconditionally accepting people with completely different backgrounds can potentially destroy a country in some cases. We must be aware of this reality. However, choosing the path of total rejection certainly does not lead to a bright future either.',
       ],
     },
+    {
+      id: 'on-unfounded-confidence',
+      title: 'On Unfounded Confidence',
+      excerpt:
+        'I believe that "unfounded confidence" is indispensable for anyone taking on a challenge, and especially for those of us who are still students.',
+      date: 'Nov 2026',
+      category: 'Philosophy & Identity',
+      tags: ['Self-Belief', 'Independence', 'Conformity', 'Youth'],
+      paragraphs: [
+        'I believe that "unfounded confidence" is indispensable for anyone taking on a challenge, and especially for those of us who are still students.',
+        'This unfounded confidence basically comes from ignorance, from not knowing anything yet. Even so, that sense of being capable of anything, that feeling of superiority, plays a very important role when it comes to starting something. At the same time, it is also true that young people of my generation (myself included) are finding it harder and harder to feel it. As superintelligence spreads through society, layoffs will surely surface and become plain for everyone to see. But if we wait until then to act, it will be too late in many ways.',
+        'I think everyone should have this unfounded confidence. Of course, overestimate yourself and it becomes arrogance; underestimate yourself and it becomes self-deprecation. But at the very least, once you decide to do something different from other people, this kind of feeling becomes essential.',
+        'To be clear, this feeling is not about looking down on others. It sounds rather cold, but I think it ultimately arrives at a thorough lack of understanding of, and interest in, other people. In the end, unless you can take care of yourself, and unless you have some room to breathe, you cannot pay attention to others or to the people around you. It is not hard to imagine how much effort it takes to care for others while wearing yourself down.',
+        'Many people listen to the trends and opinions around them, go along with them, imitate them and try to fit in. As a way of getting by in society, I think that is a necessary skill. But we should keep in mind that it can also become a choice to abandon your agency and independence and to "live by other people’s axis." I don’t mean that all of it is like that, but from where I stand, keeping up with my generation’s trends and opinions is quite exhausting, and frankly I am not very interested in them in the first place (even if I am happy to be friends with the people involved).',
+        'People are dissatisfied with society, the market or the system, and feel that something is wrong. Yet far too many of them, even with those feelings, never act on them and simply end up complaining. In the mass psychology of a society this may be an entirely natural phenomenon, but to me it looks quite eerie, even frightening.',
+        'As I see it, each person has their own life. Even if adults tell you things or berate you, you should not let go of your own axis, or of the things you want to hold on to in life. I think those feelings deserve to be cherished, whether they come from an ideal of "this is how I want to live" or from the reverse motive of "this is a way of living I refuse."',
+        'Not being understood by the people around you is only natural. So there is no need to force yourself to be understood. However, in situations where understanding is truly necessary (explaining yourself to your parents, for example), emotional arguments get you nowhere, and there will be moments when you need thorough, airtight logic.',
+        'Getting listeners to peel away the generalities that blanket their thinking, so that they understand your ideas from the ground up, is extremely hard. I know that full well, but I believe it is a skill you will certainly need in order to live your life.',
+      ],
+    },
   ],
   ja: [
     {
@@ -238,18 +258,55 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
         'あまりにもバックグラウンドが異なる存在を無条件に許容することは、場合によっては国を壊すことになり得る。その現実は知っておかなければならない。かと言って、完全な拒絶の道が明るい未来につながるわけでも決してないのだが。',
       ],
     },
+    {
+      id: 'on-unfounded-confidence',
+      title: '根拠のない自信',
+      excerpt:
+        '私は「根拠のない自信」というのは、何かに挑戦する人や、特にまだ学生であるような人たちには必要不可欠なものだと思う。',
+      date: '2026年11月',
+      category: '哲学・アイデンティティ',
+      tags: ['自信', '主体性', '同調圧力', '若者'],
+      paragraphs: [
+        '私は「根拠のない自信」というのは、何かに挑戦する人や、特にまだ学生であるような人たちには必要不可欠なものだと思う。',
+        'この根拠のない自信というのは、基本的には何も知らない「無知」から来るものだ。しかし、この万能感や優越感のようなものは、何かをスタートする上である意味でとても大事な役割を果たす。ただ同時に、いまの世代の若者（私も含むが）は、この万能感を感じにくくなってきつつあるというのも事実なんだと思う。超知能が社会に浸透していけば、レイオフは確実に表面化し、誰の目にもわかりやすい形で世の中に知れ渡ることになるだろう。だが、その状況になってから手を打つようでは、色々と手遅れであると思う。',
+        '私は、この根拠のない自信は誰もが持つべきものだと考えている。もちろん、これが自分を過大評価しすぎれば「傲慢」になり、過小評価すれば「卑下」にもなる。しかし、少なくとも「人と違うことをする」と決めたなら、このような感覚はどうしても必要になる。',
+        '前提として、この感覚は他者を見下すためのものではない。どちらかというとかなり冷酷な言い方にはなるが、基本的には他者への「徹底的な無理解・無関心」に達するものなんだと思う。結局のところ、人は自分自身を大事にできなければ、あるいは自分自身に余裕がなければ、他者や周りに気を配ることなどできない。自分をすり減らしながら他者を気遣うことがどれほどの労力を要するかは、想像に難くない。',
+        '多くの人は、周りの流行や主義主張に耳を傾け、同調し、擬態し、馴染もうとする。これは社会生活を営む上での処世術としては必要な要素であるとは思う。しかし、それは主体性や自立性を捨てて放棄し、「他者軸で生きる」という選択にもなりかねないことは注視すべきである。もちろん全部がそうだと言うつもりはないが、私から見ると、同世代の流行や主義主張についていくのはかなり大変だし、そもそもあまり興味がない（友人として関わる気はあってもだ）。',
+        '社会や市場、あるいは体制に対して不満がある、おかしいと思っている。そういった感情を持っていても行動に移せず、ただ愚痴を吐いて終わってしまう人たちがあまりにも多い。これは社会という大衆心理においては極めて自然な事象なのかもしれないが、私から見るとかなり不気味だし、怖くも映る。',
+        '私から見れば、個々にはそれぞれの人生がある。たとえ大人たちに何かを言われたり罵倒されたりしても、自分の軸や、人生において大事にしたいものを手放すべきではない。それは「こういう風に生きたい」という理想だけでなく、「こういう生き方は嫌だ」という逆説的な動機から生まれる感情であっても、大事にすべきだとは思う。',
+        '周りの人に理解されないというのは当たり前のことだ。だから、無理に理解してもらおうと努める必要もない。ただし、どうしても理解が必要な場（例えば親に対する説明など）では、感情論ではどうにもならず、徹底的な「理詰め」が必要になる場面が出てくる。',
+        '聞き手に覆い被さっている一般論を剥ぎ取ってもらい、自分の考えを根本から理解してもらうというのは、至難の業だ。それは重々理解しているが、生きていく上では確実に必要な要素なのだと思う。',
+      ],
+    },
   ],
 }
 
-export const upcomingPostData: Record<Language, UpcomingPost | null> = {
-  en: {
-    title: 'Two Weeks in Latvia',
-    excerpt: 'What daily life was like during my two weeks in Latvia, before I ultimately decided to return to Japan.',
-    status: 'In Progress • Soon',
-  },
-  ja: {
-    title: 'ラトビアでの2週間',
-    excerpt: '結果的に帰国を選んだ、ラトビアで過ごした2週間の生活がどんなものだったのか。',
-    status: '執筆予定 (In Progress)',
-  },
+// Essays in progress, shown as "next issue" notices beside the latest stories (in display order)
+export const upcomingPostData: Record<Language, UpcomingPost[]> = {
+  en: [
+    {
+      title: 'Two Weeks in Latvia',
+      excerpt: 'What daily life was like during my two weeks in Latvia, before I ultimately decided to return to Japan.',
+      status: 'In Progress • Soon',
+    },
+    {
+      title: 'On the Advantage of a Degree',
+      excerpt:
+        'With AI reshaping the job market, can young people still wield the authority of a degree with the same force it once carried?',
+      status: 'In Progress • Soon',
+    },
+  ],
+  ja: [
+    {
+      title: 'ラトビアでの2週間',
+      excerpt: '結果的に帰国を選んだ、ラトビアで過ごした2週間の生活がどんなものだったのか。',
+      status: '執筆予定 (In Progress)',
+    },
+    {
+      title: '学位の優位性について',
+      excerpt:
+        'AIによる市場の変動を前に、特に若者たちは、学位という権威をこれまでと同じ効力を持つものとして振りかざし続けられるのか。',
+      status: '執筆予定 (In Progress)',
+    },
+  ],
 }

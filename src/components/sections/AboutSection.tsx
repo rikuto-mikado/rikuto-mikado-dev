@@ -35,7 +35,7 @@ export default function AboutSection({ isDark, ui }: AboutSectionProps) {
           heading={ui.aboutHeading}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12">
+        <div className="about-grid grid grid-cols-1 lg:grid-cols-12 gap-y-12">
           {/* Story, continued from the front page */}
           <article className={`lg:col-span-8 lg:pr-10 lg:border-r ${rule}`}>
             <JumpLine text={jumpText(ui.continuedFrom, FRONT_PAGE)} align="left" />
@@ -85,7 +85,7 @@ export default function AboutSection({ isDark, ui }: AboutSectionProps) {
                 {ui.aboutPhotoName}
               </p>
               <p className={`font-news italic text-sm ${muted}`}>
-                {ui.aboutPhotoPlace}. {ui.aboutPhotoDesc}
+                {ui.locationText}
               </p>
             </figcaption>
           </figure>

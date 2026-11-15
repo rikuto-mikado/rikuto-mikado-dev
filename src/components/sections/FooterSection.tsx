@@ -1,9 +1,11 @@
+import { ArrowDown, Printer } from 'lucide-react'
 import { CONTACT_EMAIL } from '../../config'
 import { PAPER_NAME } from '../../data/edition'
 import { FRONT_PAGE, sectionPage } from '../../data/navigation'
 import type { SocialLink } from '../../data/socialLinks'
 import type { UiText } from '../../data/translations'
 import { useEdition } from '../../hooks/useEdition'
+import { usePrintEdition } from '../../hooks/usePrintEdition'
 import { scrollToTarget } from '../../lib/smoothScroll'
 import PageHead from '../newspaper/PageHead'
 
@@ -16,6 +18,7 @@ interface FooterSectionProps {
 /** Back page (D2): letters to the editor (contact), social links and the colophon. */
 export default function FooterSection({ isDark, ui, socialLinks }: FooterSectionProps) {
   const { edition } = useEdition()
+  const { isPrinting, printEdition } = usePrintEdition()
   const rule = isDark ? 'border-night-border' : 'border-cream-border'
   const muted = isDark ? 'text-gray-400' : 'text-gray-500'
   const strong = isDark ? 'text-ivory' : 'text-ink'
@@ -47,7 +50,7 @@ export default function FooterSection({ isDark, ui, socialLinks }: FooterSection
               {CONTACT_EMAIL}
             </a>
 
-            <ul className="mt-10 flex flex-wrap items-center gap-2">
+            <ul data-print="hide" className="mt-10 flex flex-wrap items-center gap-2">
               {socialLinks.map(({ name, url, icon: Icon }) => (
                 <li key={name}>
                   <a
@@ -66,6 +69,16 @@ export default function FooterSection({ isDark, ui, socialLinks }: FooterSection
                 </li>
               ))}
             </ul>
+
+            {/* Print only: icons mean nothing on paper, so the addresses are set in type */}
+            <dl className="hidden print:grid mt-8 grid-cols-[7rem_1fr] gap-x-4 gap-y-1 font-mono text-[11px]">
+              {socialLinks.map(({ name, url }) => (
+                <div key={name} className="contents">
+                  <dt className="uppercase tracking-wider">{name}</dt>
+                  <dd className="break-all">{url.replace(/^https?:\/\//, '')}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
 
           {/* Colophon box */}
@@ -81,7 +94,39 @@ export default function FooterSection({ isDark, ui, socialLinks }: FooterSection
                 {edition.volume} · {edition.issue}
                 <br />
                 {edition.longDate}
+                {isDark && (
+                  <>
+                    <br />
+                    {ui.nightEdition}
+                  </>
+                )}
               </p>
+
+              {/* Print Edition: save this paper as a PDF */}
+              <button
+                type="button"
+                data-print="hide"
+                onClick={() => void printEdition()}
+                title={ui.printEditionHint}
+                className={`group mt-4 w-full flex items-center justify-between gap-3 pt-3 border-t text-left cursor-pointer ${rule}`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <Printer className="w-4 h-4 text-accent" strokeWidth={1.75} aria-hidden="true" />
+                  <span>
+                    <span className={`block font-serif text-lg leading-tight transition-colors group-hover:text-accent ${strong}`}>
+                      {ui.printEdition}
+                    </span>
+                    <span className={`block font-mono text-[11px] ${isPrinting ? 'text-accent' : muted}`}>
+                      {isPrinting ? ui.printPreparing : ui.printEditionCta}
+                    </span>
+                  </span>
+                </span>
+                <ArrowDown
+                  className="w-4 h-4 text-accent transition-transform duration-300 group-hover:translate-y-0.5"
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                />
+              </button>
             </div>
           </aside>
         </div>

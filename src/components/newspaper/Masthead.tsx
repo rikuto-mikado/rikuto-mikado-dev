@@ -1,8 +1,10 @@
+import { ArrowDown, Printer } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { SITE_LOGO_SRC } from '../../config'
+import { PAPER_NAME } from '../../data/edition'
 import { navSections } from '../../data/navigation'
 import type { UiText } from '../../data/translations'
 import { useEdition } from '../../hooks/useEdition'
+import { usePrintEdition } from '../../hooks/usePrintEdition'
 import { scrollToTarget } from '../../lib/smoothScroll'
 import { formatDuration, minutesInWeek, minutesOnDay, useStudyLogFeed } from '../../lib/studyLog'
 
@@ -31,6 +33,7 @@ function Ear({ isDark, children }: { isDark: boolean; children: ReactNode }) {
 export default function Masthead({ isDark, ui }: MastheadProps) {
   const { edition } = useEdition()
   const feed = useStudyLogFeed()
+  const { isPrinting, printEdition } = usePrintEdition()
 
   const muted = isDark ? 'text-gray-400' : 'text-gray-500'
   const strong = isDark ? 'text-ivory' : 'text-ink'
@@ -41,7 +44,7 @@ export default function Masthead({ isDark, ui }: MastheadProps) {
   const weekMinutes = feed.status === 'ready' ? minutesInWeek(feed.entries, feed.fetchedAt) : null
 
   return (
-    <header className="relative px-6 pt-24 sm:pt-28">
+    <header className="relative px-6 pt-24 sm:pt-28 print:pt-0">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-[11rem_1fr_11rem] items-center gap-6">
           {/* Left ear: live study figure from the typbox feed */}
@@ -57,23 +60,42 @@ export default function Masthead({ isDark, ui }: MastheadProps) {
 
           {/* Nameplate */}
           <div className="text-center">
+            {/* One face, one weight, one style for the whole name */}
             <p
-              className={`font-serif font-medium leading-[0.92] tracking-[-0.025em] text-[clamp(2.75rem,10.5vw,6.75rem)] ${strong}`}
+              className={`nameplate font-serif font-semibold leading-[0.92] tracking-[-0.02em] text-[clamp(2.6rem,10vw,6.5rem)] ${strong}`}
             >
-              <span className="italic font-light">The</span> R.M. Journal
+              {PAPER_NAME}
             </p>
             <p className={`mt-3 font-news italic text-sm sm:text-base ${muted}`}>{ui.paperMotto}</p>
           </div>
 
-          {/* Right ear: volume and issue */}
-          <Ear isDark={isDark}>
+          {/* Right ear on screen: the Print Edition (opens the print dialog to save this paper as a PDF) */}
+          <button
+            type="button"
+            data-print="hide"
+            onClick={() => void printEdition()}
+            title={ui.printEditionHint}
+            className={`group hidden md:flex flex-col justify-center gap-1 px-4 py-3 border min-h-[5.5rem] text-left cursor-pointer transition-colors duration-300 ${
+              isDark ? 'border-night-border hover:border-accent' : 'border-cream-border hover:border-accent'
+            }`}
+          >
             <span className={`flex items-center justify-between gap-2 ${smallCaps}`}>
-              {edition.volume}
-              <img src={SITE_LOGO_SRC} alt="" className="w-5 h-5 rounded" />
+              {ui.printEdition}
+              <Printer className="w-3.5 h-3.5 text-accent" strokeWidth={1.75} aria-hidden="true" />
             </span>
-            <span className={`font-serif text-3xl leading-none tabular-nums ${strong}`}>{edition.issue}</span>
-            <span className={`font-mono text-[11px] tabular-nums ${muted}`}>Est. 2026</span>
-          </Ear>
+            <span className={`flex items-baseline gap-2 font-serif text-2xl leading-none ${strong}`}>
+              PDF
+              <ArrowDown
+                className="w-4 h-4 self-center text-accent transition-transform duration-300 group-hover:translate-y-0.5"
+                strokeWidth={1.75}
+                aria-hidden="true"
+              />
+            </span>
+            <span className={`font-mono text-[11px] ${isPrinting ? 'text-accent' : muted}`}>
+              {isPrinting ? ui.printPreparing : ui.printEditionCta}
+            </span>
+          </button>
+
         </div>
 
         {/* Volume / date bar */}

@@ -10,6 +10,7 @@ import whyMassesImg from '../assets/whyIbelievethemasses.webp'
 import onExistentialCrisisImg from '../assets/onexistentialcrisis.webp'
 import theComplexityOfEducationImg from '../assets/thecomplexityofeducation.webp'
 import theIdealOfDiversityImg from '../assets/theidealofdiversity.webp'
+import unfoundedConfidenceImg from '../assets/unfoundedconfidence.webp'
 
 export const certImages: Record<CertImageKey, string> = {
   pythonBootcamp: certPythonBootcamp,
@@ -27,4 +28,5 @@ export const blogCoverImages: Partial<Record<string, string>> = {
   'on-existential-crisis': onExistentialCrisisImg,
   'education-complexity-and-information-gap': theComplexityOfEducationImg,
   'the-ideal-of-diversity': theIdealOfDiversityImg,
+  'on-unfounded-confidence': unfoundedConfidenceImg,
 }

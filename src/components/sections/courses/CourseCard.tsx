@@ -1,5 +1,6 @@
 import { certImages } from '../../../data/images'
 import type { CourseItem, UiText } from '../../../data/translations'
+import { usePrintEdition } from '../../../hooks/usePrintEdition'
 import { Clickable, Kicker } from '../../common/Card'
 
 interface CourseCardProps {
@@ -15,6 +16,8 @@ interface CourseCardProps {
  */
 export default function CourseCard({ course, isDark, ui, onSelect }: CourseCardProps) {
   const muted = isDark ? 'text-gray-400' : 'text-gray-500'
+  // Lazy images never load for a print snapshot, so switch to eager while printing
+  const { isPrinting } = usePrintEdition()
   const strong = isDark ? 'text-linen' : 'text-ink'
 
   return (
@@ -31,7 +34,7 @@ export default function CourseCard({ course, isDark, ui, onSelect }: CourseCardP
         <img
           src={certImages[course.imageKey]}
           alt=""
-          loading="lazy"
+          loading={isPrinting ? 'eager' : 'lazy'}
           className="w-full aspect-[4/3] object-cover object-top"
         />
       </figure>
