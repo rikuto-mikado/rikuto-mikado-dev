@@ -30,8 +30,9 @@ export default function CertificateModal({ cert, isDark, ui, onClose }: Certific
       onClick={onClose}
     >
       <div
-        className={`relative rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 sm:p-8 space-y-5 transition-colors duration-300 ${
-          isDark ? 'bg-night-modal text-linen' : 'bg-white text-gray-800'
+        data-lenis-prevent
+        className={`paper relative rounded-sm max-w-4xl w-full max-h-[92dvh] overflow-y-auto overscroll-contain shadow-2xl p-6 sm:p-8 space-y-5 transition-colors duration-300 ${
+          isDark ? 'text-linen' : 'text-ink'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -41,12 +42,12 @@ export default function CertificateModal({ cert, isDark, ui, onClose }: Certific
           }`}
         >
           <div>
-            <span className="text-xs uppercase tracking-wider font-sans font-semibold text-rust">
+            <span className="text-xs uppercase tracking-wider font-sans font-semibold text-accent">
               {cert.platform} {ui.certCompletion}
             </span>
             <h3
               id={titleId}
-              className={`font-serif text-2xl font-bold mt-1 transition-colors duration-300 ${
+              className={`font-serif text-2xl font-normal tracking-tight mt-1 transition-colors duration-300 ${
                 isDark ? 'text-ivory' : 'text-gray-900'
               }`}
             >
@@ -67,8 +68,8 @@ export default function CertificateModal({ cert, isDark, ui, onClose }: Certific
         </div>
 
         <div
-          className={`rounded-xl overflow-hidden border shadow-inner transition-colors duration-300 ${
-            isDark ? 'border-night-rule bg-[#121110]' : 'border-gray-200 bg-gray-50'
+          className={`overflow-hidden border transition-colors duration-300 ${
+            isDark ? 'border-night-rule bg-night' : 'border-cream-border bg-white'
           }`}
         >
           <img src={certImages[cert.imageKey]} alt={cert.title} className="w-full h-auto object-contain" />
@@ -81,14 +82,14 @@ export default function CertificateModal({ cert, isDark, ui, onClose }: Certific
         >
           {metadata.map(({ label, value }) => (
             <div key={label}>
-              <span className="block text-gray-400 uppercase text-[10px] tracking-wider">{label}</span>
+              <span className="block text-gray-400 uppercase text-[11px] tracking-wider">{label}</span>
               <span className={valueClass}>{value}</span>
             </div>
           ))}
           <div>
-            <span className="block text-gray-400 uppercase text-[10px] tracking-wider">{ui.certId}</span>
+            <span className="block text-gray-400 uppercase text-[11px] tracking-wider">{ui.certId}</span>
             <span
-              className={`font-mono truncate block transition-colors duration-300 ${isDark ? 'text-sand' : 'text-gray-800'}`}
+              className={`font-mono truncate block transition-colors duration-300 ${isDark ? 'text-accent' : 'text-gray-800'}`}
               title={cert.certificateId}
             >
               {cert.certificateId.slice(0, 15)}...

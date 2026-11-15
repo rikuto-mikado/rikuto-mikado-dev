@@ -1,91 +1,109 @@
 import type { BlogPost } from '../../../data/blogPosts'
 import { blogCoverImages } from '../../../data/images'
 import type { UiText } from '../../../data/translations'
-import { Card, CardBody, CardCategoryBadge, CardExcerpt, CardFooter, CardHoverHint, CardTitle } from '../../common/Card'
-import { BookOpenIcon } from '../../common/icons'
+import { Clickable, Kicker } from '../../common/Card'
+import HalftoneImage from '../../newspaper/HalftoneImage'
 
-interface BlogCardProps {
+interface StoryProps {
   post: BlogPost
   isDark: boolean
   ui: UiText
   onSelect: (postId: string) => void
 }
 
-/** Typographic cover shown when a post has no cover image. */
-function PlaceholderCover({ post, isDark }: { post: BlogPost; isDark: boolean }) {
+const headlineColor = (isDark: boolean) =>
+  isDark ? 'text-ivory group-hover:text-accent' : 'text-ink group-hover:text-accent'
+const bodyColor = (isDark: boolean) => (isDark ? 'text-stone' : 'text-gray-700')
+const metaColor = (isDark: boolean) => (isDark ? 'text-gray-400' : 'text-gray-500')
+
+function ReadLink({ ui }: { ui: UiText }) {
   return (
-    <>
-      <div className="absolute -right-4 -bottom-4 w-28 h-28 rounded-full border border-rust/15 pointer-events-none" />
-      <div className="absolute right-6 bottom-6 w-16 h-16 rounded-full border border-dashed border-rust/20 pointer-events-none" />
-      <div className="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
-        <span className="text-[10px] font-sans font-semibold tracking-[0.2em] uppercase text-rust/80">
-          {post.category}
-        </span>
-        <div className="flex items-center justify-center my-auto py-2">
-          <BookOpenIcon className="w-8 h-8 text-rust/40 transform group-hover:scale-110 transition-transform duration-500" />
-        </div>
-        <span className={`text-[10px] font-serif italic ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{post.date}</span>
-      </div>
-    </>
+    <span
+      className="inline-flex items-center gap-1.5 font-sans text-xs font-medium uppercase tracking-[0.14em] transition-transform duration-300 group-hover:translate-x-0.5 text-accent"
+    >
+      {ui.readShort} <span aria-hidden="true">&rarr;</span>
+    </span>
   )
 }
 
-export default function BlogCard({ post, isDark, ui, onSelect }: BlogCardProps) {
-  const coverImg = blogCoverImages[post.id]
+function Dateline({ post, isDark }: { post: BlogPost; isDark: boolean }) {
   const primaryTag = post.tags[0]
+  return (
+    <p className={`font-mono text-[11px] tabular-nums tracking-wide ${metaColor(isDark)}`}>
+      {post.date}
+      {primaryTag && <> &nbsp;·&nbsp; #{primaryTag}</>}
+    </p>
+  )
+}
+
+/** Front-page lead: large photo, big headline and a drop-capped opening paragraph. */
+export function LeadStory({ post, isDark, ui, onSelect }: StoryProps) {
+  const coverImg = blogCoverImages[post.id]
+  const opening = post.paragraphs[0] || post.excerpt
 
   return (
-    <Card as="article" isDark={isDark} label={`${ui.readEssay}: ${post.title}`} onClick={() => onSelect(post.id)}>
-      <div
-        className={`relative aspect-[16/10] overflow-hidden border-b transition-colors duration-500 flex flex-col justify-between p-5 ${
-          isDark
-            ? 'bg-gradient-to-br from-[#25221E] via-[#1E1C19] to-night-panel border-night-edge'
-            : 'bg-gradient-to-br from-paper via-[#EFECE6] to-[#E5E0D5] border-[#ece6dd]'
-        }`}
-      >
-        {coverImg ? (
-          <>
-            <img
-              src={coverImg}
-              alt=""
-              loading="lazy"
-              className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.78] contrast-[1.05] group-hover:scale-105 group-hover:brightness-[0.88] transition-all duration-700 ease-out"
-            />
-            {/* Gradient overlay for contrast and editorial mood */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/20 pointer-events-none" />
-          </>
-        ) : (
-          <PlaceholderCover post={post} isDark={isDark} />
-        )}
+    <Clickable
+      as="article"
+      label={`${ui.readEssay}: ${post.title}`}
+      onClick={() => onSelect(post.id)}
+      className="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10"
+    >
+      {coverImg && (
+        <figure className="lg:col-span-7">
+          <HalftoneImage src={coverImg} alt="" isDark={isDark} className="w-full aspect-[4/3]" cell={3.3} />
+        </figure>
+      )}
 
-        <CardHoverHint label={ui.readEssay} />
-      </div>
-
-      <CardBody
-        footer={
-          <CardFooter isDark={isDark}>
-            <span className="truncate pr-2">
-              <strong className={`font-medium transition-colors duration-500 ${isDark ? 'text-ivory' : 'text-gray-800'}`}>
-                {primaryTag ? `#${primaryTag}` : ''}
-              </strong>
-            </span>
-            <span
-              className={`inline-flex items-center gap-1 font-semibold transition-colors duration-300 group-hover:translate-x-0.5 ${
-                isDark ? 'text-apricot' : 'text-rust'
-              }`}
-            >
-              {ui.readShort} &rarr;
-            </span>
-          </CardFooter>
-        }
-      >
-        <div className={`text-[11px] font-sans ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-          <span className="font-medium">{post.date}</span>
+      <div className={`${coverImg ? 'lg:col-span-5' : 'lg:col-span-12 max-w-3xl'} flex flex-col gap-4`}>
+        <Kicker>{post.category}</Kicker>
+        <h3
+          className={`font-serif font-normal text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.08] tracking-tight text-balance transition-colors duration-300 ${headlineColor(isDark)}`}
+        >
+          {post.title}
+        </h3>
+        <Dateline post={post} isDark={isDark} />
+        <p
+          className={`news-body drop-cap font-news text-[17px] leading-[1.7] line-clamp-[8] transition-colors duration-500 ${bodyColor(isDark)}`}
+        >
+          {opening}
+        </p>
+        <div className="pt-1">
+          <ReadLink ui={ui} />
         </div>
-        <CardCategoryBadge isDark={isDark}>{post.category}</CardCategoryBadge>
-        <CardTitle isDark={isDark}>{post.title}</CardTitle>
-        <CardExcerpt isDark={isDark}>{post.paragraphs[0] || post.excerpt}</CardExcerpt>
-      </CardBody>
-    </Card>
+      </div>
+    </Clickable>
+  )
+}
+
+/** Secondary story set in a ruled column: small photo, headline, short excerpt. */
+export default function BlogCard({ post, isDark, ui, onSelect }: StoryProps) {
+  const coverImg = blogCoverImages[post.id]
+
+  return (
+    <Clickable
+      as="article"
+      label={`${ui.readEssay}: ${post.title}`}
+      onClick={() => onSelect(post.id)}
+      className="flex flex-col gap-3"
+    >
+      {coverImg && (
+        <figure className="mb-1">
+          <HalftoneImage src={coverImg} alt="" isDark={isDark} className="w-full aspect-[16/10]" />
+        </figure>
+      )}
+      <Kicker>{post.category}</Kicker>
+      <h3
+        className={`font-serif font-normal text-[1.4rem] leading-snug tracking-tight text-balance transition-colors duration-300 ${headlineColor(isDark)}`}
+      >
+        {post.title}
+      </h3>
+      <Dateline post={post} isDark={isDark} />
+      <p className={`news-body font-news text-[15px] leading-relaxed line-clamp-4 transition-colors duration-500 ${bodyColor(isDark)}`}>
+        {post.paragraphs[0] || post.excerpt}
+      </p>
+      <div className="mt-auto pt-2">
+        <ReadLink ui={ui} />
+      </div>
+    </Clickable>
   )
 }

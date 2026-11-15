@@ -1,19 +1,50 @@
 @import "tailwindcss";
 
 @theme {
+  /* Typography: editorial serif for display, neutral sans for reading, JP fallbacks for Japanese copy */
+  --font-serif: 'Fraunces', 'Noto Serif JP', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Newspaper body type: Newsreader was drawn for long-form news reading */
+  --font-news: 'Newsreader', 'Noto Serif JP', ui-serif, Georgia, serif;
+
+  /* Ink: primary text in light mode (newspaper black, a touch warm) */
+  --color-ink: #1d1a17;
+  --color-ink-deep: #171513;
+
+  /* Newsprint look: "white" is a soft off-white and the gray scale is a warm neutral instead of Tailwind's cool slate */
+  --color-white: #fcfbf8;
+  --color-gray-50: #f7f5f0;
+  --color-gray-100: #edeae3;
+  --color-gray-200: #dedad0;
+  --color-gray-300: #c8c2b6;
+  --color-gray-400: #9f988b;
+  --color-gray-500: #6f685d;
+  --color-gray-600: #57514a;
+  --color-gray-700: #433e38;
+  --color-gray-800: #2f2b27;
+  --color-gray-900: #201d1a;
+  --color-gray-950: #13110f;
+
   /* Brand accents */
-  --color-rust: #9a4c22;
+  /*
+   * Accent: newspaper red, one hue at two lightnesses. #9b1c1c reads on paper; on the dark sheet it
+   * would sink, so dark mode lifts it to a lighter red (same hue, so it still reads as the same ink).
+   * Components use `*-accent`; `accent-fill` is the fixed deep red for fills that carry white text.
+   */
+  --color-accent: #9b1c1c;
+  --color-accent-fill: #9b1c1c;
   --color-sand: #d4a373;
   --color-apricot: #e0a96d;
   --color-tan: #c29c6d;
   --color-sun: #f5c563;
 
-  /* Light theme neutrals */
-  --color-paper: #f5f4f0;
-  --color-cream-surface: #ede7dc;
-  --color-cream-divider: #e6e2d8;
-  --color-cream-line: #e3dbcd;
-  --color-cream-border: #d6ccbd;
+  /* Light theme neutrals: fresh newsprint, off-white with a little warmth */
+  --color-paper: #f4f1ea;
+  --color-cream-surface: #e9e5dc;
+  --color-cream-divider: #e0dbd0;
+  --color-cream-line: #dbd5c9;
+  --color-cream-border: #c9c2b4;
 
   /* Text on dark backgrounds */
   --color-ivory: #f5f3ee;
@@ -22,6 +53,11 @@
 
   /* Dark theme surfaces, darkest to lightest */
   --color-night: #131211;
+  --color-night-paper: #171512;
+
+  /* The surface the newspaper lies on (visible around the sheet) */
+  --color-desk: #d3cdc1;
+  --color-night-desk: #0a0908;
   --color-night-panel: #161413;
   --color-night-section: #181614;
   --color-night-modal: #181615;
@@ -47,11 +83,215 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-desk);
+}
+html.dark body {
+  background-color: var(--color-night-desk);
+}
+
+/*
+ * Newsprint. One pre-rendered tile (source: scripts/paper/tooth.html, an SVG filter of lit fractal
+ * noise) gives the fine, even tooth of fresh newspaper stock. It is near-white and multiplied onto
+ * the paper colour, so it only adds texture, never stains or spots.
+ * Used on the page itself and on every opaque "sheet" (sidebar, modals).
+ */
+.paper {
+  background-color: var(--color-paper);
+  background-image: url('./assets/paper/tooth.webp');
+  background-size: 320px 320px;
+  background-blend-mode: multiply;
+}
+html.dark .paper {
+  background-color: var(--color-night-paper);
+}
+
+/*
+ * The newspaper as an object: one sheet lying on a desk. Phones keep a hairline of desk around
+ * the sheet; from tablet width the sheet floats with a cut edge and a soft, layered contact shadow.
+ */
+.desk {
+  background-color: var(--color-desk);
+  background-image: radial-gradient(ellipse 80% 60% at 50% 30%, rgb(255 255 255 / 0.18), transparent 70%);
+  background-attachment: fixed;
+  padding: 0.375rem;
+}
+html.dark .desk {
+  background-color: var(--color-night-desk);
+  background-image: radial-gradient(ellipse 80% 60% at 50% 30%, rgb(255 255 255 / 0.03), transparent 70%);
+}
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  box-shadow:
+    inset 0 0 0 1px rgb(60 45 30 / 0.06),
+    0 1px 2px rgb(60 45 30 / 0.12),
+    0 8px 24px -10px rgb(60 45 30 / 0.25);
+}
+html.dark .sheet {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.05),
+    0 30px 80px -20px rgb(0 0 0 / 0.9);
+}
+@media (min-width: 768px) {
+  .desk {
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  .sheet {
+    box-shadow:
+      inset 0 0 0 1px rgb(60 45 30 / 0.06),
+      0 1px 1px rgb(60 45 30 / 0.1),
+      0 3px 8px rgb(60 45 30 / 0.08),
+      0 28px 60px -24px rgb(60 45 30 / 0.4);
+  }
+}
+
+/*
+ * The fold across the front page: a crease is a faint shadow on one side of the line and a
+ * catch of light on the other.
+ */
+.fold {
+  height: 14px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(60 45 30 / 0.06) 45%,
+    rgb(60 45 30 / 0.12) 50%,
+    rgb(255 255 255 / 0.55) 52%,
+    transparent
+  );
+}
+html.dark .fold {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(0 0 0 / 0.35) 48%,
+    rgb(255 255 255 / 0.06) 52%,
+    transparent
+  );
+}
+
+html.dark {
+  --color-accent: #e2685f;
+}
+
+/* Dark mode only: a soft vignette, like reading under a lamp */
+html.dark body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: radial-gradient(ellipse 125% 95% at 50% 42%, transparent 55%, rgb(0 0 0 / 0.35) 100%);
+}
+
+/* Ink on paper: a hair of spread on display type, as if the ink bled slightly into the fibres */
+html:not(.dark) .font-serif {
+  text-shadow: 0 0 0.5px rgb(29 26 23 / 0.3);
+}
+
+/*
+ * Base layer under the halftone dot screen: the photo in monochrome, multiplied into the paper at
+ * reduced strength so the dots still dominate the texture while shapes and faces stay legible.
+ */
+.halftone-base {
+  filter: grayscale(1) contrast(1.08) brightness(1.04);
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+html.dark .halftone-base {
+  filter: grayscale(1) contrast(1.05) brightness(0.85);
+  mix-blend-mode: normal;
+  opacity: 0.45;
+}
+
+/* Newspaper drop cap for lead paragraphs */
+.drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 3.6em;
+  line-height: 0.82;
+  font-weight: 400;
+  padding: 0.06em 0.1em 0 0;
+  color: var(--color-accent);
+}
+
+/*
+ * Column rules between grid items (newspaper style). Columns keep equal widths: the gap is a real
+ * column-gap and the hairline is drawn in the middle of it by a pseudo-element on every item that
+ * does not start a row. Pair with grid-cols-1 sm:grid-cols-2 lg:grid-cols-3.
+ */
+.column-rules > * {
+  position: relative;
+  border-color: inherit;
+}
+.column-rules > *::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid;
+  border-color: inherit;
+  display: none;
+}
+@media (min-width: 640px) {
+  .column-rules {
+    column-gap: 3.5rem;
+  }
+  .column-rules > *::before {
+    left: -1.75rem;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  .column-rules > *:nth-child(2n)::before {
+    display: block;
+  }
+}
+@media (min-width: 1024px) {
+  .column-rules {
+    column-gap: 4rem;
+  }
+  .column-rules > *::before {
+    left: -2rem;
+  }
+  .column-rules > *:not(:nth-child(3n + 1))::before {
+    display: block;
+  }
+}
+
+/* Engraved hatching for chart bars: diagonal ink lines inside a hairline frame */
+.hatch {
+  border: 1px solid currentColor;
+  background-image: repeating-linear-gradient(135deg, currentColor 0 1px, transparent 1px 4px);
+}
+
+/* Dot leaders for statistics tables ("DEV ........ 15.2h") */
+.leader {
+  flex: 1;
+  min-width: 1.5rem;
+  margin: 0 0.5rem;
+  border-bottom: 1px dotted currentColor;
+  opacity: 0.45;
+  transform: translateY(-0.3em);
+}
+
+/* Fraunces: keep the display cut calm (no soft/wonky alternates) */
+.font-serif {
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 0, 'WONK' 0;
 }
 
 .loader {
-  --color-1: #f5f4f0;
-  --color-2: #9a4c22;
+  --color-1: #f4f1ea;
+  --color-2: #9b1c1c;
   --size: 1px;
 
   width: calc(32 * var(--size));
@@ -104,7 +344,7 @@ html {
 
 /* Drifting mist laid over tentative roadmap entries */
 .fog {
-  --fog-rgb: 245 244 240;
+  --fog-rgb: 244 241 234;
   position: absolute;
   inset: -1rem -1rem -1rem -0.5rem;
   overflow: hidden;

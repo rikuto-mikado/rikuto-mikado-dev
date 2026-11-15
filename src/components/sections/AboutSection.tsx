@@ -1,132 +1,94 @@
 import myfaceImg from '../../assets/myface.webp'
-import urakawaLandscape from '../../assets/urakawa-landscape.webp'
+import { jumpText } from '../../data/edition'
+import { FRONT_PAGE, sectionPage } from '../../data/navigation'
 import type { UiText } from '../../data/translations'
+import HalftoneImage from '../newspaper/HalftoneImage'
+import JumpLine from '../newspaper/JumpLine'
+import PageHead from '../newspaper/PageHead'
 
 interface AboutSectionProps {
   isDark: boolean
   ui: UiText
 }
 
-// Radial masks fade the landscape photo into the page background
-const LANDSCAPE_MASK = {
-  dark: 'radial-gradient(ellipse 85% 90% at 75% 45%, black 35%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.2) 100%)',
-  light: 'radial-gradient(ellipse 75% 85% at 80% 45%, black 25%, rgba(0,0,0,0.35) 65%, transparent 95%)',
-}
-
+/** Page A2: the front-page story continued, with a pull quote, a portrait and the writer's specialties. */
 export default function AboutSection({ isDark, ui }: AboutSectionProps) {
-  const landscapeMask = isDark ? LANDSCAPE_MASK.dark : LANDSCAPE_MASK.light
+  const strong = isDark ? 'text-ivory' : 'text-ink'
+  const body = isDark ? 'text-stone' : 'text-gray-700'
+  const muted = isDark ? 'text-gray-400' : 'text-gray-500'
+  const rule = isDark ? 'border-night-border' : 'border-cream-border'
+  const heavyRule = isDark ? 'border-linen/80' : 'border-ink'
 
   return (
     <section
       id="about"
-      className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 overflow-hidden scroll-mt-6 ${
-        isDark ? 'bg-night-section border-night-divider' : 'border-cream-divider'
+      className={`relative w-full py-20 md:py-28 px-6 border-t transition-colors duration-500 scroll-mt-6 ${
+        isDark ? 'border-night-divider' : 'border-cream-divider'
       }`}
     >
-      {/* Atmospheric landscape background (hometown) */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {isDark && (
-          <div className="absolute inset-0 bg-gradient-to-r from-night-section/80 via-transparent to-[#221c17]/30 z-10 pointer-events-none" />
-        )}
-        <img
-          src={urakawaLandscape}
-          alt=""
-          className={`w-full h-full object-cover object-[85%_35%] transition-opacity duration-700 ${
-            isDark
-              ? 'opacity-[0.30] filter contrast-110 brightness-100 saturate-[0.85]'
-              : 'opacity-[0.18] filter contrast-105 saturate-[0.9]'
-          }`}
-          style={{ maskImage: landscapeMask, WebkitMaskImage: landscapeMask }}
+      <div className="max-w-6xl mx-auto">
+        <PageHead
+          isDark={isDark}
+          page={sectionPage('about')}
+          section={ui.navAbout}
+          kicker={ui.aboutSectionBadge}
+          heading={ui.aboutHeading}
         />
-      </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-        {/* Left: narrative */}
-        <div className="lg:col-span-7 space-y-8">
-          <div className="space-y-2">
-            <span className="text-xs font-sans uppercase tracking-widest text-rust font-semibold block">
-              {ui.aboutSectionBadge}
-            </span>
-            <h2 className="text-4xl md:text-5xl text-rust italic font-serif leading-tight">{ui.aboutHeading}</h2>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12">
+          {/* Story, continued from the front page */}
+          <article className={`lg:col-span-8 lg:pr-10 lg:border-r ${rule}`}>
+            <JumpLine text={jumpText(ui.continuedFrom, FRONT_PAGE)} align="left" />
 
-          <div
-            className={`p-6 rounded-2xl border-l-4 border-rust space-y-2 transition-colors duration-500 ${
-              isDark ? 'bg-[#1E1C1A]' : 'bg-[#ede8de]'
-            }`}
-          >
-            <p
-              className={`text-xl md:text-2xl font-serif italic leading-snug transition-colors duration-500 ${
-                isDark ? 'text-ivory' : 'text-gray-900'
-              }`}
-            >
-              {ui.aboutQuote}
-            </p>
-          </div>
+            <div className={`mt-5 news-columns md:columns-2 font-news text-[17px] leading-[1.7] ${body}`}>
+              <p className="news-body">{ui.aboutP2}</p>
 
-          <div
-            className={`space-y-5 font-sans text-base md:text-lg leading-relaxed font-light transition-colors duration-500 ${
-              isDark ? 'text-stone' : 'text-gray-700'
-            }`}
-          >
-            <p>{ui.aboutP1}</p>
-            <p>{ui.aboutP2}</p>
-            <p>{ui.aboutP3}</p>
-          </div>
+              {/* Pull quote, spanning both columns */}
+              <blockquote className={`[column-span:all] my-9 py-7 border-y-[3px] ${heavyRule}`}>
+                <p
+                  className={`font-serif font-light italic text-[1.7rem] md:text-[2.1rem] leading-[1.2] tracking-tight text-center text-balance ${strong}`}
+                >
+                  {ui.aboutQuote}
+                </p>
+              </blockquote>
 
-          <div className="pt-2 flex flex-wrap gap-2.5">
-            {[ui.aboutBadge1, ui.aboutBadge2].map((badge) => (
-              <span
-                key={badge}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-sans font-medium transition-colors duration-500 ${
-                  isDark
-                    ? 'bg-night-chip text-apricot border border-night-border'
-                    : 'bg-[#eae4da] text-[#783515] border border-cream-border'
-                }`}
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: arch-framed profile photo */}
-        <div className="lg:col-span-5 flex flex-col items-center lg:sticky lg:top-16">
-          <div className="relative group">
-            <div className="absolute -inset-3 rounded-t-full border-2 border-dashed border-sand pointer-events-none"></div>
-
-            <div
-              className={`relative w-64 sm:w-72 lg:w-80 xl:w-[22rem] h-84 sm:h-96 lg:h-[28rem] xl:h-[31rem] rounded-t-full overflow-hidden shadow-2xl border-4 transition-all duration-500 ${
-                isDark ? 'border-night-edge bg-[#1E1C1A]' : 'border-white bg-gray-200'
-              }`}
-            >
-              <img
-                src={myfaceImg}
-                alt="Rikuto Mikado"
-                className="w-full h-full object-cover object-top filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700"
-              />
+              <p className="news-body">{ui.aboutP3}</p>
             </div>
-          </div>
 
-          <div className="mt-6 text-center space-y-1.5">
-            <p
-              className={`font-serif italic text-2xl transition-colors duration-500 ${
-                isDark ? 'text-ivory' : 'text-gray-900'
-              }`}
-            >
-              {ui.aboutPhotoName}
-            </p>
-            <p className="text-xs font-sans uppercase tracking-[0.2em] text-rust font-semibold">
-              {ui.aboutPhotoPlace}
-            </p>
-            <p
-              className={`font-sans text-xs font-light transition-colors duration-500 ${
-                isDark ? 'text-gray-400' : 'text-gray-500'
-              }`}
-            >
-              {ui.aboutPhotoDesc}
-            </p>
-          </div>
+            {/* Specialties */}
+            <div className={`mt-10 pt-5 border-t ${rule}`}>
+              <h3 className={`font-sans text-[11px] uppercase tracking-[0.18em] ${muted}`}>{ui.specialtiesLabel}</h3>
+              <ul className="mt-3 flex flex-col sm:flex-row sm:flex-wrap gap-x-8 gap-y-2">
+                {[ui.aboutBadge1, ui.aboutBadge2].map((badge) => (
+                  <li key={badge} className={`flex items-baseline gap-2.5 font-serif text-lg ${strong}`}>
+                    <span className="text-accent" aria-hidden="true">
+                      ■
+                    </span>
+                    {badge}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          {/* Portrait */}
+          <figure className="group lg:col-span-4 lg:pl-10 lg:sticky lg:top-16 self-start">
+            <HalftoneImage
+              src={myfaceImg}
+              alt="Rikuto Mikado"
+              isDark={isDark}
+              className="w-full max-w-sm mx-auto lg:max-w-none aspect-[4/5]"
+              focus={[0.5, 0]}
+            />
+            <figcaption className={`mt-3 pt-2.5 border-t max-w-sm mx-auto lg:max-w-none space-y-1 ${rule}`}>
+              <p className={`font-sans text-[11px] uppercase tracking-[0.16em] font-semibold ${strong}`}>
+                {ui.aboutPhotoName}
+              </p>
+              <p className={`font-news italic text-sm ${muted}`}>
+                {ui.aboutPhotoPlace}. {ui.aboutPhotoDesc}
+              </p>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>

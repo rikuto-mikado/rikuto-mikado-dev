@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { sectionPage } from '../../../data/navigation'
 import type { CourseItem, UiText } from '../../../data/translations'
 import ReadMoreButton from '../../common/ReadMoreButton'
-import SectionHeader from '../../common/SectionHeader'
+import PageHead from '../../newspaper/PageHead'
 import CourseCard from './CourseCard'
 
 const INITIAL_VISIBLE_COUNT = 4
@@ -22,18 +23,32 @@ export default function CoursesSection({ isDark, ui, courses, onSelectCourse }: 
   return (
     <section
       id="courses"
-      className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 scroll-mt-6 ${
+      className={`relative w-full py-20 md:py-28 px-6 border-t transition-colors duration-500 scroll-mt-6 ${
         isDark ? 'border-night-divider' : 'border-cream-divider'
       }`}
     >
       <div className="max-w-6xl mx-auto">
-        <SectionHeader isDark={isDark} badge={ui.coursesBadge} heading={ui.coursesHeading} lead={ui.coursesLead} />
+        <PageHead
+          isDark={isDark}
+          page={sectionPage('courses')}
+          section={ui.navLearning}
+          kicker={ui.coursesBadge}
+          heading={ui.coursesHeading}
+          deck={ui.coursesLead}
+        />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {/* Register of certificates, ruled like a printed table */}
+        <ol
+          className={`border-t-[3px] border-b border-double divide-y transition-colors duration-500 ${
+            isDark ? 'border-night-border divide-night-border' : 'border-cream-border divide-cream-border'
+          }`}
+        >
           {visibleCourses.map((course) => (
-            <CourseCard key={course.certificateId} course={course} isDark={isDark} ui={ui} onSelect={onSelectCourse} />
+            <li key={course.certificateId}>
+              <CourseCard course={course} isDark={isDark} ui={ui} onSelect={onSelectCourse} />
+            </li>
           ))}
-        </div>
+        </ol>
 
         {courses.length > INITIAL_VISIBLE_COUNT && (
           <ReadMoreButton

@@ -16,10 +16,10 @@ export default function ReadMoreButton({ isDark, ui, isExpanded, onToggle }: Rea
         type="button"
         onClick={onToggle}
         aria-expanded={isExpanded}
-        className={`inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer shadow-sm hover:shadow-md ${
+        className={`inline-flex items-center gap-2.5 px-6 py-3 min-h-11 rounded-full text-xs font-sans font-medium uppercase tracking-[0.16em] transition-colors duration-300 cursor-pointer border ${
           isDark
-            ? 'bg-night-card hover:bg-[#25221E] text-apricot border border-night-border hover:border-sand/60'
-            : 'bg-white hover:bg-[#F9F8F5] text-rust border border-[#d8d1c5] hover:border-rust/60'
+            ? 'text-accent border-night-border hover:border-accent/60 hover:bg-night-card'
+            : 'text-accent border-cream-border hover:border-accent/50 hover:bg-white/60'
         }`}
       >
         <span>{isExpanded ? ui.showLess : ui.readMore}</span>

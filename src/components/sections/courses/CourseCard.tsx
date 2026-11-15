@@ -1,6 +1,6 @@
 import { certImages } from '../../../data/images'
 import type { CourseItem, UiText } from '../../../data/translations'
-import { Card, CardBody, CardCategoryBadge, CardExcerpt, CardFooter, CardHoverHint, CardTitle } from '../../common/Card'
+import { Clickable, Kicker } from '../../common/Card'
 
 interface CourseCardProps {
   course: CourseItem
@@ -9,48 +9,77 @@ interface CourseCardProps {
   onSelect: (course: CourseItem) => void
 }
 
+/**
+ * One row of the certificate register: thumbnail, date, course title and the particulars.
+ * Phones get a compact two-column row; from md up the particulars spread into their own columns.
+ */
 export default function CourseCard({ course, isDark, ui, onSelect }: CourseCardProps) {
+  const muted = isDark ? 'text-gray-400' : 'text-gray-500'
+  const strong = isDark ? 'text-linen' : 'text-ink'
+
   return (
-    <Card isDark={isDark} label={`${ui.viewCert}: ${course.title}`} onClick={() => onSelect(course)}>
-      <div
-        className={`relative aspect-[16/10] overflow-hidden border-b transition-colors duration-500 ${
-          isDark ? 'bg-[#151413] border-night-edge' : 'bg-gray-100 border-[#ece6dd]'
+    <Clickable
+      label={`${ui.viewCert}: ${course.title}`}
+      onClick={() => onSelect(course)}
+      className="grid grid-cols-[5.5rem_1fr] sm:grid-cols-[8rem_1fr] md:grid-cols-[8rem_5.5rem_1fr_10rem_5.5rem] gap-x-5 md:gap-x-8 py-6 items-start"
+    >
+      <figure
+        className={`overflow-hidden border transition-colors duration-500 ${
+          isDark ? 'border-night-border' : 'border-cream-border'
         }`}
       >
         <img
           src={certImages[course.imageKey]}
-          alt={course.title}
-          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+          alt=""
+          loading="lazy"
+          className="w-full aspect-[4/3] object-cover object-top"
         />
-        <CardHoverHint label={ui.viewCert} />
+      </figure>
+
+      {/* md+: date column */}
+      <time className={`hidden md:block pt-1 font-mono text-xs tabular-nums ${muted}`}>{course.date}</time>
+
+      <div className="min-w-0 space-y-1.5">
+        {/* Phones: date and hours ride above the title */}
+        <p className={`md:hidden font-mono text-[11px] tabular-nums ${muted}`}>
+          {course.date} &nbsp;·&nbsp; {course.hours}
+        </p>
+        <Kicker>{course.category}</Kicker>
+        <h3
+          className={`font-serif font-normal text-lg sm:text-xl leading-snug tracking-tight text-balance transition-colors duration-300 ${
+            isDark ? 'text-ivory group-hover:text-accent' : 'text-ink group-hover:text-accent'
+          }`}
+        >
+          {course.title}
+        </h3>
+        {course.note && (
+          <p
+            className={`hidden sm:block font-news text-[15px] leading-relaxed line-clamp-2 ${
+              isDark ? 'text-stone' : 'text-gray-600'
+            }`}
+          >
+            {course.note}
+          </p>
+        )}
+        <p className={`md:hidden font-sans text-xs ${muted}`}>
+          {ui.instructor}: <span className={strong}>{course.instructor}</span>
+        </p>
       </div>
 
-      <CardBody
-        footer={
-          <CardFooter isDark={isDark}>
-            <span className="truncate pr-2">
-              {ui.instructor}:{' '}
-              <strong className={`font-medium transition-colors duration-500 ${isDark ? 'text-ivory' : 'text-gray-800'}`}>
-                {course.instructor}
-              </strong>
-            </span>
-            <span
-              className={`shrink-0 px-2 py-0.5 rounded font-medium transition-colors duration-500 ${
-                isDark ? 'bg-night-divider text-gray-300' : 'bg-gray-100 text-gray-800'
-              }`}
-            >
-              {course.hours}
-            </span>
-          </CardFooter>
-        }
-      >
-        <div className={`flex items-center justify-between text-[11px] font-sans ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-          <span className="font-medium">{course.date}</span>
-        </div>
-        <CardCategoryBadge isDark={isDark}>{course.category}</CardCategoryBadge>
-        <CardTitle isDark={isDark}>{course.title}</CardTitle>
-        {course.note && <CardExcerpt isDark={isDark}>{course.note}</CardExcerpt>}
-      </CardBody>
-    </Card>
+      {/* md+: particulars */}
+      <p className={`hidden md:block pt-1 font-sans text-sm leading-snug ${strong}`}>
+        <span className={`block font-sans text-[11px] uppercase tracking-[0.14em] mb-1 ${muted}`}>{ui.instructor}</span>
+        {course.instructor}
+      </p>
+      <p className={`hidden md:flex pt-1 items-baseline justify-end gap-2 whitespace-nowrap font-mono text-xs tabular-nums ${strong}`}>
+        {course.hours}
+        <span
+          aria-hidden="true"
+          className="transition-transform duration-300 group-hover:translate-x-0.5 text-accent"
+        >
+          &rarr;
+        </span>
+      </p>
+    </Clickable>
   )
 }

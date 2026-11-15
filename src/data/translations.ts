@@ -623,6 +623,31 @@ export const uiText = {
     studyLogWeekEmpty: 'No sessions logged this week yet.',
     studyLogRecentEmpty: 'No sessions logged in the last 7 days.',
     studyLogSource: 'Study log from my TYPBOX account',
+    studyLogThisWeek: 'This Week',
+    studyLogLast7Days: 'Last 7 Days',
+    studyLogDailyLog: 'Daily Log',
+    studyLogToday: 'Today',
+
+    // Newspaper furniture (masthead, folios, jump lines, back page)
+    paperMotto: 'Notes on the physical layer, learning, and life',
+    insideLabel: 'Inside',
+    todaysStudy: "Today's Study",
+    bylineBy: 'By',
+    continuedOn: 'Continued on {page}',
+    continuedFrom: 'Continued from {page}',
+    inThisEdition: 'In This Edition',
+    latestEssayLabel: 'Latest Essay',
+    latestCertLabel: 'Newest Certificate',
+    studyFiguresLabel: 'The Week in Study',
+    vsLastWeek: 'vs. last week',
+    colophonTitle: 'Colophon',
+    colophonText:
+      'The R.M. Journal is written, edited and published by Rikuto Mikado in Hokkaido, Japan. Set in Fraunces, Newsreader and Inter.',
+    lettersTitle: 'Letters to the Editor',
+    lettersText: 'Questions, ideas, or just a hello. Every letter is read.',
+    listingCaption: 'Listing 1 — profile.py',
+    specialtiesLabel: 'Specialties',
+    chronologyLabel: 'Chronology',
 
     // Footer
     footerContact: 'Direct Contact',
@@ -770,6 +795,31 @@ export const uiText = {
     studyLogWeekEmpty: '今週の記録はまだありません。',
     studyLogRecentEmpty: '直近7日間の記録はありません。',
     studyLogSource: '私の TYPBOX アカウントの学習ログ',
+    studyLogThisWeek: '今週',
+    studyLogLast7Days: '直近7日間',
+    studyLogDailyLog: '日別の記録',
+    studyLogToday: '今日',
+
+    // Newspaper furniture (masthead, folios, jump lines, back page)
+    paperMotto: '物理レイヤー、学び、そして暮らしの記録',
+    insideLabel: '本日の紙面',
+    todaysStudy: '本日の学習',
+    bylineBy: '文',
+    continuedOn: '{page}面へ続く',
+    continuedFrom: '{page}面から続く',
+    inThisEdition: '今号の紙面から',
+    latestEssayLabel: '最新のエッセイ',
+    latestCertLabel: '最新の修了証',
+    studyFiguresLabel: '今週の学習',
+    vsLastWeek: '先週比',
+    colophonTitle: '奥付',
+    colophonText:
+      'The R.M. Journal は、北海道で Rikuto Mikado が執筆・編集・発行しています。書体は Fraunces、Newsreader、Inter。',
+    lettersTitle: '編集部へのお便り',
+    lettersText: 'ご質問、ご意見、ご挨拶など。お便りにはすべて目を通しています。',
+    listingCaption: 'リスト1 — profile.py',
+    specialtiesLabel: '専門分野',
+    chronologyLabel: '年表',
 
     // Footer
     footerContact: 'お問い合わせ',

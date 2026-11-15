@@ -2,6 +2,8 @@ import type { ReactNode } from 'react'
 
 interface TerminalProfileProps {
   isDark: boolean
+  /** Listing caption shown in light (print) mode */
+  caption: string
   className?: string
 }
 
@@ -27,23 +29,54 @@ const profileAttributes: [name: string, value: string | string[]][] = [
   ],
 ]
 
-// One Dark–style syntax colors
-const keyword = (text: string) => <span className="text-[#C678DD] font-semibold">{text}</span>
-const punct = (text: string) => <span className="text-[#ABB2BF]">{text}</span>
-const str = (text: string) => <span className="text-[#98C379]">{`"${text}"`}</span>
-const self = <span className="text-[#E06C75] italic">self</span>
+interface SyntaxPalette {
+  keyword: string
+  punct: string
+  string: string
+  self: string
+  className: string
+  func: string
+  attr: string
+}
+
+// Dark: warm editor palette. Light: printed in ink on the paper, like a code listing in a journal.
+const palettes: Record<'dark' | 'light', SyntaxPalette> = {
+  dark: {
+    keyword: 'text-accent',
+    punct: 'text-[#8A8178]',
+    string: 'text-[#B5BD8F]',
+    self: 'text-[#C4BEB4]',
+    className: 'text-ivory',
+    func: 'text-[#C4BEB4]',
+    attr: 'text-linen',
+  },
+  light: {
+    keyword: 'text-accent',
+    punct: 'text-gray-500',
+    string: 'text-[#56602a]',
+    self: 'text-gray-600',
+    className: 'text-ink font-medium',
+    func: 'text-gray-700',
+    attr: 'text-ink',
+  },
+}
 
 const ATTR_INDENT = '        '
 const ITEM_INDENT = '            '
 
-function buildLines(): ReactNode[] {
+function buildLines(c: SyntaxPalette): ReactNode[] {
+  const keyword = (text: string) => <span className={c.keyword}>{text}</span>
+  const punct = (text: string) => <span className={c.punct}>{text}</span>
+  const str = (text: string) => <span className={c.string}>{`"${text}"`}</span>
+  const self = <span className={`${c.self} italic`}>self</span>
+
   const lines: ReactNode[] = [
     <>
-      {keyword('class')} <span className="text-[#E5C07B] font-bold">Developer</span>:
+      {keyword('class')} <span className={c.className}>Developer</span>:
     </>,
     <>
       {'    '}
-      {keyword('def')} <span className="text-[#61AFEF] font-semibold">__init__</span>({self}):
+      {keyword('def')} <span className={c.func}>__init__</span>({self}):
     </>,
   ]
 
@@ -51,7 +84,7 @@ function buildLines(): ReactNode[] {
     const assignment = (
       <>
         {ATTR_INDENT}
-        {self}.<span className="text-linen">{name}</span> {punct('=')}
+        {self}.<span className={c.attr}>{name}</span> {punct('=')}
       </>
     )
 
@@ -85,46 +118,56 @@ function buildLines(): ReactNode[] {
   return lines
 }
 
-// Static content: build once at module load instead of on every render
-const lines = buildLines()
+// Static content: build once per theme at module load instead of on every render
+const darkLines = buildLines(palettes.dark)
+const lightLines = buildLines(palettes.light)
 
-export default function TerminalProfile({ isDark, className = '' }: TerminalProfileProps) {
+export default function TerminalProfile({ isDark, caption, className = '' }: TerminalProfileProps) {
+  const lines = isDark ? darkLines : lightLines
+  const fadeFrom = isDark ? 'from-ink-deep' : 'from-paper'
+
   return (
-    <div
-      className={`w-full rounded-2xl overflow-hidden border shadow-2xl transition-all duration-500 font-mono text-left ${
-        isDark
-          ? 'bg-[#121110]/95 border-night-edge shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)]'
-          : 'bg-night-section/95 border-sand/60 shadow-[0_25px_60px_-15px_rgba(154,76,34,0.22)]'
+    <figure
+      className={`w-full overflow-hidden font-mono text-left transition-colors duration-500 ${
+        isDark ? 'rounded-lg border border-night-border bg-ink-deep text-linen' : 'border-y-[3px] border-double border-cream-border text-ink'
       } ${className}`}
     >
-      {/* Window chrome: traffic lights only */}
-      <div className="h-9 px-4 bg-[#1B1917] border-b border-[#2A2724] flex items-center select-none">
-        <div className="flex items-center gap-2 group/dots">
-          <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] flex items-center justify-center text-[8px] text-black/70 font-bold opacity-85 group-hover/dots:opacity-100 transition-opacity">
-            <span className="opacity-0 group-hover/dots:opacity-100 transition-opacity">✕</span>
-          </div>
-          <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] flex items-center justify-center text-[8px] text-black/70 font-bold opacity-85 group-hover/dots:opacity-100 transition-opacity">
-            <span className="opacity-0 group-hover/dots:opacity-100 transition-opacity">−</span>
-          </div>
-          <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] flex items-center justify-center text-[8px] text-black/70 font-bold opacity-85 group-hover/dots:opacity-100 transition-opacity">
-            <span className="opacity-0 group-hover/dots:opacity-100 transition-opacity">+</span>
-          </div>
-        </div>
-      </div>
+      {/* Caption bar: editor tab in dark mode, a listing caption in light mode */}
+      <figcaption
+        className={`h-10 flex items-center justify-between select-none text-[11px] tracking-wide border-b ${
+          isDark ? 'px-4 border-white/[0.07] text-[#C4BEB4]' : 'px-1 border-cream-border text-gray-600'
+        }`}
+      >
+        <span>{isDark ? 'profile.py' : caption}</span>
+        <span className={isDark ? 'text-[#6b635b]' : 'text-gray-500'}>python</span>
+      </figcaption>
 
-      {/* Code body */}
-      <div className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-[13px] leading-[1.65] font-mono selection:bg-rust/40 selection:text-white [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-        <div className="min-w-full inline-block">
-          {lines.map((content, index) => (
-            <div key={index} className="flex items-start hover:bg-white/[0.03] rounded px-1 transition-colors">
-              <span className="w-6 sm:w-8 shrink-0 text-right pr-3 select-none text-[#524B43] text-[11px] sm:text-xs">
-                {index + 1}
-              </span>
-              <span className="text-linen whitespace-pre">{content}</span>
-            </div>
-          ))}
+      {/* Code body; scrolls sideways on narrow screens, with a fade hinting at the overflow */}
+      <div className="relative">
+        <div
+          className={`py-4 sm:py-5 pr-4 overflow-x-auto text-[11.5px] sm:text-[13px] leading-[1.7] selection:bg-accent-fill/30 [scrollbar-width:thin] ${
+            isDark ? '[scrollbar-color:#3a352f_transparent]' : '[scrollbar-color:#c7b795_transparent]'
+          }`}
+        >
+          <div className="min-w-full inline-block">
+            {lines.map((content, index) => (
+              <div key={index} className="flex items-start">
+                <span
+                  className={`w-9 sm:w-12 shrink-0 text-right pr-4 select-none tabular-nums ${
+                    isDark ? 'text-[#4a443e]' : 'text-gray-400'
+                  }`}
+                >
+                  {index + 1}
+                </span>
+                <span className="whitespace-pre">{content}</span>
+              </div>
+            ))}
+          </div>
         </div>
+        <div
+          className={`pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l ${fadeFrom} to-transparent sm:hidden`}
+        />
       </div>
-    </div>
+    </figure>
   )
 }

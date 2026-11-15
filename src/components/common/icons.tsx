@@ -89,26 +89,6 @@ export function ChevronRightIcon(props: StrokeIconProps) {
   return <StrokeIcon {...props} d="M9 5l7 7-7 7" />
 }
 
-export function BookOpenIcon({ strokeWidth = 1.3, ...props }: StrokeIconProps) {
-  return (
-    <StrokeIcon
-      {...props}
-      strokeWidth={strokeWidth}
-      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-    />
-  )
-}
-
-export function PencilSquareIcon({ strokeWidth = 1.2, ...props }: StrokeIconProps) {
-  return (
-    <StrokeIcon
-      {...props}
-      strokeWidth={strokeWidth}
-      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-    />
-  )
-}
-
 /** Sun in dark mode (click to go light), moon in light mode. */
 export function ThemeIcon({ isDark, className }: IconProps & { isDark: boolean }) {
   return isDark ? (

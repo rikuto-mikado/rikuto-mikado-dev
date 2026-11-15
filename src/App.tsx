@@ -1,28 +1,30 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Toast from './components/common/Toast'
 import FloatingDock from './components/layout/FloatingDock'
-import LightTrails from './components/layout/LightTrails'
 import LoadingScreen from './components/layout/LoadingScreen'
 import Sidebar from './components/layout/Sidebar'
+import Masthead from './components/newspaper/Masthead'
 import AboutSection from './components/sections/AboutSection'
 import BlogSection from './components/sections/blog/BlogSection'
 import CertificateModal from './components/sections/courses/CertificateModal'
 import CoursesSection from './components/sections/courses/CoursesSection'
 import FooterSection from './components/sections/FooterSection'
 import HeroSection from './components/sections/hero/HeroSection'
-import RoadmapSection from './components/sections/RoadmapSection'
 import StudyLogFeed from './components/sections/StudyLogFeed'
 import TrajectorySection from './components/sections/TrajectorySection'
 import { IS_JAPANESE_AVAILABLE, SITE_LOGO_SRC } from './config'
+import { getEditionInfo } from './data/edition'
 import { sectionIds } from './data/navigation'
 import { socialLinks } from './data/socialLinks'
 import type { CourseItem } from './data/translations'
 import { coursesData, crossroadsRoutesData, timelineEventsData, uiText } from './data/translations'
+import { EditionContext } from './hooks/useEdition'
 import { useEscapeKey } from './hooks/useEscapeKey'
 import { useLanguage } from './hooks/useLanguage'
 import { useScrollSpy } from './hooks/useScrollSpy'
 import { useTheme } from './hooks/useTheme'
 import { useToast } from './hooks/useToast'
+import { startSmoothScroll } from './lib/smoothScroll'
 
 export default function App() {
   const { isDark, toggleTheme } = useTheme()
@@ -35,6 +37,7 @@ export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const ui = uiText[lang]
+  const editionValue = useMemo(() => ({ lang, edition: getEditionInfo(lang) }), [lang])
 
   const toggleLang = useCallback(() => {
     if (!IS_JAPANESE_AVAILABLE) {
@@ -49,66 +52,70 @@ export default function App() {
   const closeCert = useCallback(() => setSelectedCert(null), [])
 
   useEscapeKey(closeCert)
+  useEffect(() => startSmoothScroll(), [])
 
   return (
-    <div
-      className={`relative flex flex-col min-h-screen font-serif transition-colors duration-500 selection:bg-rust selection:text-white ${
-        isDark ? 'bg-night text-linen' : 'bg-paper text-gray-800'
-      }`}
-    >
-      <LoadingScreen />
+    <EditionContext.Provider value={editionValue}>
+      <div
+        className={`desk relative min-h-screen font-serif transition-colors duration-500 selection:bg-accent-fill selection:text-white ${
+          isDark ? 'text-linen' : 'text-ink'
+        }`}
+      >
+        <LoadingScreen />
 
-      <FloatingDock
-        isDark={isDark}
-        ui={ui}
-        isHidden={isBlogModalOpen || selectedCert !== null}
-        isSidebarOpen={isSidebarOpen}
-        onToggleTheme={toggleTheme}
-        onToggleLang={toggleLang}
-        onOpenSidebar={openSidebar}
-      />
+        <FloatingDock
+          isDark={isDark}
+          ui={ui}
+          isHidden={isBlogModalOpen || selectedCert !== null}
+          isSidebarOpen={isSidebarOpen}
+          onToggleTheme={toggleTheme}
+          onToggleLang={toggleLang}
+          onOpenSidebar={openSidebar}
+        />
 
-      <Toast toast={toast} isDark={isDark} onDismiss={dismissToast} />
+        <Toast toast={toast} isDark={isDark} onDismiss={dismissToast} />
 
-      <Sidebar
-        isOpen={isSidebarOpen}
-        onClose={closeSidebar}
-        isDark={isDark}
-        onToggleTheme={toggleTheme}
-        lang={lang}
-        onToggleLang={toggleLang}
-        isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
-        activeSection={activeSection}
-        logoSrc={SITE_LOGO_SRC}
-        socialLinks={socialLinks}
-      />
+        <Sidebar
+          isOpen={isSidebarOpen}
+          onClose={closeSidebar}
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+          lang={lang}
+          onToggleLang={toggleLang}
+          isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
+          activeSection={activeSection}
+          logoSrc={SITE_LOGO_SRC}
+          socialLinks={socialLinks}
+        />
 
-      <LightTrails />
+        {/* The newspaper itself: one sheet on the desk */}
+        <div className="paper sheet flex flex-col">
+          <Masthead isDark={isDark} ui={ui} />
+          <HeroSection isDark={isDark} ui={ui} courses={coursesData[lang]} />
+          <AboutSection isDark={isDark} ui={ui} />
+          <TrajectorySection
+            isDark={isDark}
+            ui={ui}
+            events={timelineEventsData[lang]}
+            routes={crossroadsRoutesData[lang]}
+          />
+          <CoursesSection isDark={isDark} ui={ui} courses={coursesData[lang]} onSelectCourse={setSelectedCert} />
 
-      <HeroSection isDark={isDark} ui={ui} />
-      <AboutSection isDark={isDark} ui={ui} />
-      <TrajectorySection
-        isDark={isDark}
-        ui={ui}
-        events={timelineEventsData[lang]}
-        routes={crossroadsRoutesData[lang]}
-      />
-      <CoursesSection isDark={isDark} ui={ui} courses={coursesData[lang]} onSelectCourse={setSelectedCert} />
+          {selectedCert && <CertificateModal cert={selectedCert} isDark={isDark} ui={ui} onClose={closeCert} />}
 
-      {selectedCert && <CertificateModal cert={selectedCert} isDark={isDark} ui={ui} onClose={closeCert} />}
+          <BlogSection
+            lang={lang}
+            isDark={isDark}
+            onToggleLang={toggleLang}
+            isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
+            onModalStateChange={setIsBlogModalOpen}
+          />
 
-      <BlogSection
-        lang={lang}
-        isDark={isDark}
-        onToggleLang={toggleLang}
-        isJapaneseAvailable={IS_JAPANESE_AVAILABLE}
-        onModalStateChange={setIsBlogModalOpen}
-      />
+          <StudyLogFeed isDark={isDark} ui={ui} lang={lang} />
 
-      <StudyLogFeed isDark={isDark} ui={ui} lang={lang} />
-
-      <RoadmapSection ui={ui} />
-      <FooterSection ui={ui} socialLinks={socialLinks} />
-    </div>
+          <FooterSection isDark={isDark} ui={ui} socialLinks={socialLinks} />
+        </div>
+      </div>
+    </EditionContext.Provider>
   )
 }

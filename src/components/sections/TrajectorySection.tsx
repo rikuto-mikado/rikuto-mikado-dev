@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
+import { sectionPage } from '../../data/navigation'
 import type { CrossroadsRoute, TimelineItem, UiText } from '../../data/translations'
-import SectionHeader from '../common/SectionHeader'
+import { scrollToTarget } from '../../lib/smoothScroll'
+import PageHead from '../newspaper/PageHead'
 
 interface TrajectorySectionProps {
   isDark: boolean
@@ -9,30 +11,64 @@ interface TrajectorySectionProps {
   routes: CrossroadsRoute[]
 }
 
-const statusPillBase =
-  'inline-block text-xs font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full transition-colors duration-500'
+type StatusTone = 'current' | 'upcoming' | 'muted'
 
-const periodChipClass = (isDark: boolean) =>
-  `inline-block text-xs font-sans font-semibold uppercase tracking-wider px-3 py-0.5 rounded-full transition-colors duration-500 ${
-    isDark ? 'text-apricot bg-night-chip border border-night-border' : 'text-rust bg-[#eae4da] border border-cream-border'
-  }`
+/** Status marker: small dot + mono label. One accent hue, varied by fill, instead of a rainbow of pills. */
+function StatusTag({ tone, isDark, children }: { tone: StatusTone; isDark: boolean; children: ReactNode }) {
+  const dot =
+    tone === 'current'
+      ? 'bg-accent'
+      : tone === 'upcoming'
+        ? 'border border-accent'
+        : isDark
+          ? 'border border-gray-500'
+          : 'border border-gray-400'
+  const text = tone === 'muted' ? (isDark ? 'text-gray-400' : 'text-gray-500') : 'text-accent'
 
-function RailConnector() {
-  // Horizontal dashed connector to the vertical rail
-  return <div className="absolute -left-[34px] top-3.5 w-8 border-t-2 border-dashed border-sand"></div>
+  return (
+    <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider ${text}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${dot}`} aria-hidden="true" />
+      {children}
+    </span>
+  )
 }
 
-function TimelineEntry({ item, isDark, ui }: { item: TimelineItem; isDark: boolean; ui: UiText }) {
+const periodClass = (isDark: boolean) =>
+  `font-mono text-xs tabular-nums transition-colors duration-500 ${isDark ? 'text-linen' : 'text-ink'}`
+
+/** Marker sitting on the vertical rail beside each entry. */
+function RailDot({ isDark, filled = false }: { isDark: boolean; filled?: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`absolute -left-[calc(2rem+4.5px)] sm:-left-[calc(2.5rem+4.5px)] top-1.5 w-2 h-2 rounded-full ring-4 transition-colors duration-500 ${
+        filled ? 'bg-accent' : isDark ? 'bg-night-border' : 'bg-cream-border'
+      } ${isDark ? 'ring-night' : 'ring-paper'}`}
+    />
+  )
+}
+
+function TimelineEntry({
+  item,
+  isDark,
+  ui,
+  anchorId,
+}: {
+  item: TimelineItem
+  isDark: boolean
+  ui: UiText
+  anchorId: string
+}) {
   // Tentative entries keep their header legible above the fog and blur only the body
   const fogged = item.isTentative ? 'blur-[3px] opacity-60 select-none' : ''
 
   return (
-    <div className="relative group">
-      <RailConnector />
+    <div id={anchorId} data-chronology className="relative group scroll-mt-28">
+      <RailDot isDark={isDark} filled={item.isCurrent} />
 
-      <div className="space-y-2">
-        <div className="relative z-10 flex flex-wrap items-center gap-2">
-          <span className={periodChipClass(isDark)}>{item.period}</span>
+      <div className="space-y-3">
+        <div className="relative z-10 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <span className={periodClass(isDark)}>{item.period}</span>
           {item.duration && (
             <span className={`text-xs font-sans transition-colors duration-500 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
               • {item.duration}
@@ -44,46 +80,34 @@ function TimelineEntry({ item, isDark, ui }: { item: TimelineItem; isDark: boole
             </span>
           )}
           {item.isCurrent && (
-            <span
-              className={`${statusPillBase} ${
-                isDark ? 'text-emerald-300 bg-emerald-950/70 border border-emerald-800/60' : 'text-emerald-800 bg-emerald-100'
-              }`}
-            >
+            <StatusTag tone="current" isDark={isDark}>
               {ui.statusCurrent}
-            </span>
+            </StatusTag>
           )}
           {item.isTentative ? (
-            <span
-              className={`${statusPillBase} ${
-                isDark ? 'text-stone bg-night-chip border border-night-border' : 'text-gray-600 bg-gray-200'
-              }`}
-            >
+            <StatusTag tone="muted" isDark={isDark}>
               {ui.statusTentative}
-            </span>
+            </StatusTag>
           ) : (
             item.isUpcoming && (
-              <span
-                className={`${statusPillBase} ${
-                  isDark ? 'text-amber-300 bg-amber-950/70 border border-amber-800/60' : 'text-amber-800 bg-amber-100'
-                }`}
-              >
+              <StatusTag tone="upcoming" isDark={isDark}>
                 {ui.statusRoadmap}
-              </span>
+              </StatusTag>
             )
           )}
         </div>
 
         <div className={`space-y-2 transition-[filter,opacity] duration-500 ${fogged}`}>
           <h3
-            className={`font-serif italic text-xl md:text-2xl font-semibold leading-snug transition-colors duration-500 ${
-              isDark ? 'text-ivory' : 'text-gray-900'
+            className={`font-serif text-2xl md:text-[1.75rem] font-normal tracking-tight leading-snug text-balance transition-colors duration-500 ${
+              isDark ? 'text-ivory' : 'text-ink'
             }`}
           >
             {item.title}
           </h3>
 
           <p
-            className={`font-sans text-sm md:text-base leading-relaxed font-light transition-colors duration-500 ${
+            className={`news-body font-news text-base md:text-[17px] leading-[1.7] transition-colors duration-500 ${
               isDark ? 'text-stone' : 'text-gray-700'
             }`}
           >
@@ -91,11 +115,11 @@ function TimelineEntry({ item, isDark, ui }: { item: TimelineItem; isDark: boole
           </p>
 
           {item.details && item.details.length > 0 && (
-            <ul className="mt-3.5 space-y-2 font-sans text-xs sm:text-sm pl-0.5">
+            <ul className="mt-3.5 space-y-2 font-news text-[15px] pl-0.5">
               {item.details.map((detail, index) => (
                 <li key={index} className="flex items-start gap-2.5">
-                  <span className={`mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full ${isDark ? 'bg-apricot' : 'bg-rust'}`} />
-                  <span className={`leading-relaxed font-light ${isDark ? 'text-stone' : 'text-gray-700'}`}>{detail}</span>
+                  <span className="mt-[0.6em] shrink-0 w-2.5 border-t border-accent" />
+                  <span className={`leading-relaxed ${isDark ? 'text-stone' : 'text-gray-700'}`}>{detail}</span>
                 </li>
               ))}
             </ul>
@@ -115,33 +139,31 @@ function FogBank({ isDark, children }: { isDark: boolean; children: ReactNode })
   )
 }
 
+const CROSSROADS_ID = 'trajectory-crossroads'
+
 function CrossroadsEntry({ isDark, ui, routes }: { isDark: boolean; ui: UiText; routes: CrossroadsRoute[] }) {
   const mutedText = isDark ? 'text-gray-400' : 'text-gray-500'
 
   return (
-    <div className="relative">
-      <RailConnector />
+    <div id={CROSSROADS_ID} data-chronology className="relative scroll-mt-28">
+      <RailDot isDark={isDark} />
 
-      <div className="space-y-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={periodChipClass(isDark)}>{ui.crossroadsPeriod}</span>
-          <span
-            className={`${statusPillBase} ${
-              isDark ? 'text-sky-300 bg-sky-950/70 border border-sky-800/60' : 'text-sky-800 bg-sky-100'
-            }`}
-          >
+      <div className="space-y-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <span className={periodClass(isDark)}>{ui.crossroadsPeriod}</span>
+          <StatusTag tone="upcoming" isDark={isDark}>
             {ui.statusConsidering}
-          </span>
+          </StatusTag>
         </div>
         <h3
-          className={`font-serif italic text-xl md:text-2xl font-semibold leading-snug transition-colors duration-500 ${
-            isDark ? 'text-ivory' : 'text-gray-900'
+          className={`font-serif text-2xl md:text-[1.75rem] font-normal tracking-tight leading-snug text-balance transition-colors duration-500 ${
+            isDark ? 'text-ivory' : 'text-ink'
           }`}
         >
           {ui.crossroadsTitle}
         </h3>
         <p
-          className={`font-sans text-sm md:text-base leading-relaxed font-light transition-colors duration-500 ${
+          className={`news-body font-news text-base md:text-[17px] leading-[1.7] transition-colors duration-500 ${
             isDark ? 'text-stone' : 'text-gray-700'
           }`}
         >
@@ -149,25 +171,31 @@ function CrossroadsEntry({ isDark, ui, routes }: { isDark: boolean; ui: UiText; 
         </p>
       </div>
 
-      <div className="relative mt-6 sm:pt-6">
+      <div className="relative mt-8 sm:pt-6">
         {/* One rail splitting into three branches */}
-        <div className="hidden sm:block absolute top-0 left-[16.66%] right-[16.66%] border-t-2 border-dashed border-sand"></div>
+        <div
+          className={`hidden sm:block absolute top-0 left-[16.66%] right-[16.66%] border-t ${
+            isDark ? 'border-night-border' : 'border-cream-border'
+          }`}
+        ></div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           {routes.map((route) => (
             <div
               key={route.id}
-              className={`relative rounded-xl border p-4 transition-colors duration-500 ${
-                isDark ? 'bg-night-card border-night-border' : 'bg-white/60 border-cream-border'
+              className={`relative rounded-md border p-4 sm:p-5 transition-colors duration-500 ${
+                isDark ? 'border-night-border' : 'border-cream-border'
               }`}
             >
-              <div className="hidden sm:block absolute -top-6 left-1/2 h-6 border-l-2 border-dashed border-sand"></div>
+              <div
+                className={`hidden sm:block absolute -top-6 left-1/2 h-6 border-l ${
+                  isDark ? 'border-night-border' : 'border-cream-border'
+                }`}
+              ></div>
 
               <div className="flex items-center gap-2.5 mb-2">
                 <span
-                  className={`shrink-0 flex items-center justify-center w-7 h-7 rounded-full border font-serif italic text-sm font-semibold ${
-                    isDark ? 'border-apricot text-apricot' : 'border-rust text-rust'
-                  }`}
+                  className="shrink-0 flex items-center justify-center w-7 h-7 rounded-full border font-mono text-xs border-accent text-accent"
                 >
                   {route.id}
                 </span>
@@ -185,8 +213,8 @@ function CrossroadsEntry({ isDark, ui, routes }: { isDark: boolean; ui: UiText; 
               <ul className="space-y-1.5 font-sans text-xs">
                 {route.points.map((point, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className={`mt-[7px] shrink-0 w-2 border-t ${isDark ? 'border-apricot' : 'border-rust'}`} />
-                    <span className={`leading-relaxed font-light ${isDark ? 'text-stone' : 'text-gray-700'}`}>{point}</span>
+                    <span className="mt-[7px] shrink-0 w-2 border-t border-accent" />
+                    <span className={`leading-relaxed ${isDark ? 'text-stone' : 'text-gray-700'}`}>{point}</span>
                   </li>
                 ))}
               </ul>
@@ -202,9 +230,102 @@ function CrossroadsEntry({ isDark, ui, routes }: { isDark: boolean; ui: UiText; 
   )
 }
 
+interface ChronologyItem {
+  id: string
+  period: string
+  title: string
+  tone: StatusTone | 'past'
+}
+
+/**
+ * Sticky "Chronology" index beside the timeline (desktop): every entry at a glance, the one being
+ * read highlighted, each line a jump link.
+ */
+function ChronologyIndex({
+  isDark,
+  ui,
+  items,
+  activeId,
+}: {
+  isDark: boolean
+  ui: UiText
+  items: ChronologyItem[]
+  activeId: string | null
+}) {
+  const muted = isDark ? 'text-gray-400' : 'text-gray-500'
+
+  return (
+    <nav
+      aria-label={ui.chronologyLabel}
+      className="hidden lg:block lg:col-span-3 self-start sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto [scrollbar-width:none]"
+    >
+      <h3
+        className={`pb-2 mb-1 border-b-[3px] font-sans text-[11px] uppercase tracking-[0.18em] font-semibold ${
+          isDark ? 'border-linen/80 text-linen' : 'border-ink text-ink'
+        }`}
+      >
+        {ui.chronologyLabel}
+      </h3>
+      <ol className={`divide-y ${isDark ? 'divide-night-border' : 'divide-cream-border'}`}>
+        {items.map((item) => {
+          const isActive = item.id === activeId
+          return (
+            <li key={item.id}>
+              <button
+                type="button"
+                aria-current={isActive ? 'location' : undefined}
+                onClick={() => {
+                  const target = document.getElementById(item.id)
+                  if (target) scrollToTarget(target)
+                }}
+                className="group relative w-full text-left py-2 pl-4 cursor-pointer"
+              >
+                {/* Active marker */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute left-0 top-2.5 bottom-2.5 w-[3px] transition-colors duration-300 ${
+                    isActive ? 'bg-accent' : 'bg-transparent'
+                  }`}
+                />
+                <span
+                  className={`block font-mono text-[11px] tabular-nums transition-colors ${
+                    isActive ? 'text-accent' : muted
+                  }`}
+                >
+                  {item.period}
+                  {item.tone === 'current' && <span className="ml-2">●</span>}
+                </span>
+                <span
+                  className={`block mt-0.5 font-serif text-[14px] leading-snug truncate transition-colors ${
+                    isActive
+                      ? isDark
+                        ? 'text-ivory'
+                        : 'text-ink'
+                      : item.tone === 'muted'
+                        ? `${muted} italic`
+                        : isDark
+                          ? 'text-stone group-hover:text-ivory'
+                          : 'text-gray-600 group-hover:text-ink'
+                  }`}
+                >
+                  {item.title}
+                </span>
+              </button>
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
+  )
+}
+
 export default function TrajectorySection({ isDark, ui, events, routes }: TrajectorySectionProps) {
-  // Group consecutive tentative entries under one fog bank, and open the crossroads just above the current entry
+  const [activeId, setActiveId] = useState<string | null>(null)
+
+  // Read oldest → newest (the data is stored newest first). Consecutive tentative entries share one
+  // fog bank, and the crossroads opens straight after the current entry, before the plans beyond it.
   const blocks: ReactNode[] = []
+  const chronology: ChronologyItem[] = []
   let foggedEntries: ReactNode[] = []
 
   const flushFog = () => {
@@ -217,31 +338,77 @@ export default function TrajectorySection({ isDark, ui, events, routes }: Trajec
     foggedEntries = []
   }
 
-  events.forEach((item, index) => {
-    const entry = <TimelineEntry key={index} item={item} isDark={isDark} ui={ui} />
+  const oldestFirst = events.map((item, index) => ({ item, index })).reverse()
+
+  oldestFirst.forEach(({ item, index }) => {
+    const anchorId = `trajectory-entry-${index}`
+    const entry = <TimelineEntry key={index} item={item} isDark={isDark} ui={ui} anchorId={anchorId} />
+    const tone: ChronologyItem['tone'] = item.isTentative
+      ? 'muted'
+      : item.isCurrent
+        ? 'current'
+        : item.isUpcoming
+          ? 'upcoming'
+          : 'past'
     if (item.isTentative) {
       foggedEntries.push(entry)
+      chronology.push({ id: anchorId, period: item.period, title: item.title, tone })
       return
     }
     flushFog()
+    blocks.push(entry)
+    chronology.push({ id: anchorId, period: item.period, title: item.title, tone })
     if (item.isCurrent && routes.length > 0) {
       blocks.push(<CrossroadsEntry key="crossroads" isDark={isDark} ui={ui} routes={routes} />)
+      chronology.push({ id: CROSSROADS_ID, period: ui.crossroadsPeriod, title: ui.crossroadsTitle, tone: 'upcoming' })
     }
-    blocks.push(entry)
   })
   flushFog()
+
+  // Highlight the entry crossing the upper-middle of the viewport
+  useEffect(() => {
+    const targets = [...document.querySelectorAll<HTMLElement>('#trajectory [data-chronology]')]
+    if (targets.length === 0) return
+    const observer = new IntersectionObserver(
+      (records) => {
+        for (const record of records) {
+          if (record.isIntersecting) setActiveId(record.target.id)
+        }
+      },
+      { rootMargin: '-35% 0px -60% 0px' },
+    )
+    targets.forEach((target) => observer.observe(target))
+    return () => observer.disconnect()
+  }, [events, routes])
 
   return (
     <section
       id="trajectory"
-      className={`relative z-10 w-full py-24 md:py-32 px-6 border-t transition-colors duration-500 scroll-mt-6 ${
+      className={`relative w-full py-20 md:py-28 px-6 border-t transition-colors duration-500 scroll-mt-6 ${
         isDark ? 'border-night-divider' : 'border-cream-divider'
       }`}
     >
-      <div className="max-w-4xl mx-auto">
-        <SectionHeader isDark={isDark} badge={ui.trajectoryBadge} heading={ui.trajectoryHeading} lead={ui.trajectoryLead} />
+      <div className="max-w-6xl mx-auto">
+        <PageHead
+          isDark={isDark}
+          page={sectionPage('trajectory')}
+          section={ui.navTrajectory}
+          kicker={ui.trajectoryBadge}
+          heading={ui.trajectoryHeading}
+          deck={ui.trajectoryLead}
+        />
 
-        <div className="relative border-l-2 border-sand max-w-2xl mx-auto space-y-14 pl-8 py-4">{blocks}</div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-10">
+          <ChronologyIndex isDark={isDark} ui={ui} items={chronology} activeId={activeId} />
+
+          <div
+            className={`relative lg:col-span-9 border-l space-y-14 pl-8 sm:pl-10 py-2 transition-colors duration-500 ${
+              isDark ? 'border-night-border' : 'border-cream-border'
+            }`}
+          >
+            {blocks}
+          </div>
+        </div>
       </div>
     </section>
   )

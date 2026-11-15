@@ -14,9 +14,9 @@ export default function LoadingScreen({ onFinished }: LoadingScreenProps) {
 
   useEffect(() => {
     const startTime = performance.now()
-    // 2000ms = 1 complete open & close cycle of the 1s alternate fan animation
-    const minDuration = 2000
-    const maxDuration = 2600
+    // Kept short: a long forced intro reads as padding, especially on phones
+    const minDuration = 1000
+    const maxDuration = 1800
 
     let exitTimer: number | undefined
     let unmountTimer: number | undefined
@@ -60,7 +60,7 @@ export default function LoadingScreen({ onFinished }: LoadingScreenProps) {
     <div
       role="status"
       aria-live="polite"
-      aria-label="Loading Rikuto Mikado Portfolio"
+      aria-label="Loading The R.M. Journal"
       className={`fixed inset-0 z-[200] flex flex-col items-center justify-center bg-night-panel text-paper select-none transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
         isExiting
           ? 'opacity-0 -translate-y-2 pointer-events-none'
@@ -72,7 +72,7 @@ export default function LoadingScreen({ onFinished }: LoadingScreenProps) {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle 320px at 50% 46%, rgba(154, 76, 34, 0.16), transparent 75%)',
+            'radial-gradient(circle 320px at 50% 46%, rgba(155, 28, 28, 0.16), transparent 75%)',
         }}
       />
 
@@ -88,11 +88,11 @@ export default function LoadingScreen({ onFinished }: LoadingScreenProps) {
 
         {/* Subtle editorial caption */}
         <div className="flex flex-col items-center gap-2.5">
-          <p className="font-serif italic text-lg sm:text-xl tracking-wide text-paper/90">
-            Rikuto Mikado
+          <p className="font-serif italic font-light text-lg sm:text-xl tracking-wide text-paper/90">
+            The R.M. Journal
           </p>
-          <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-sand/80 font-semibold">
-            Portfolio
+          <span className="font-sans text-[11px] uppercase tracking-[0.24em] text-accent/80 font-medium">
+            Rikuto Mikado
           </span>
         </div>
       </div>

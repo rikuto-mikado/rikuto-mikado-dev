@@ -16,15 +16,13 @@ export default function Toast({ toast, isDark, onDismiss }: ToastProps) {
     <div
       role="status"
       aria-live="polite"
-      className={`fixed top-4 left-4 right-4 sm:left-auto sm:right-6 sm:top-6 sm:max-w-sm z-[120] px-4 py-3 rounded-2xl border shadow-2xl backdrop-blur-md transition-all duration-300 animate-fade-in ${
-        isDark ? 'bg-night-card/95 border-apricot/50 text-ivory' : 'bg-[#FAF8F5]/95 border-rust/50 text-gray-900'
+      className={`fixed top-4 left-4 right-4 sm:left-auto sm:right-6 sm:top-6 sm:max-w-sm z-[120] px-4 py-3 rounded-lg border shadow-lg backdrop-blur-md transition-all duration-300 animate-fade-in ${
+        isDark ? 'bg-night-card/95 border-night-border text-ivory' : 'bg-paper/95 border-cream-border text-ink'
       }`}
     >
       <div className="flex items-start gap-3">
         <div
-          className={`p-1.5 rounded-full mt-0.5 shrink-0 ${
-            isDark ? 'bg-apricot/15 text-apricot' : 'bg-rust/15 text-rust'
-          }`}
+          className="p-1.5 rounded-full mt-0.5 shrink-0 bg-accent/15 text-accent"
         >
           <InfoIcon className="w-4 h-4" />
         </div>
