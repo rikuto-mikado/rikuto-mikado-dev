@@ -147,6 +147,26 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
         'Getting listeners to peel away the generalities that blanket their thinking, so that they understand your ideas from the ground up, is extremely hard. I know that full well, but I believe it is a skill you will certainly need in order to live your life.',
       ],
     },
+    {
+      id: 'how-to-break-preconceptions',
+      title: 'How to Break Preconceptions and Prejudices',
+      excerpt:
+        'Because I continue to walk a path quite different from mainstream choices, I am aware that I am largely unfamiliar with the common sense and prejudices widely accepted by society.',
+      date: 'Nov 2026',
+      category: 'Perspectives & Society',
+      tags: ['Preconceptions', 'Perspective', 'Multiple Markets', 'Common Sense'],
+      paragraphs: [
+        'Because I continue to walk a path quite different from mainstream choices, I am aware that I am largely unfamiliar with the common sense and prejudices widely accepted by society.',
+        'Many people, including my friends, are controlled by invisible rules and ideas of "common sense." They convince themselves that this is simply how things are, give up, and force themselves to fit in. Once you get used to this, that is the end of it, and I think it is actually the easiest way to live. In fact, going against this current is basically nothing more than poison for most people.',
+        'The reason is simple: most people want to protect their own territory, status, and position. Because of this, they can coldly dismiss different norms from the outside as "abnormal" with surprising ease, or unconsciously look away from them. If they actually face those different ideas, they feel as though their own experiences and hard-earned efforts are being denied—and in some cases, they genuinely are—which probably creates an unconscious sense of fear.',
+        'However, as people grow older and their communities become more fixed—leaving places like school, which for better or worse are full of diverse viewpoints—they increasingly fall under the illusion that the view in front of them is normal and represents the entire world. Eventually, they lose the ability to notice the doubts or conflicts within their own values. Some people might even mistake this issue for a purely internal, personal problem.',
+        'I am not a particularly kind person, so even if I meet or interact with people like that, I would not try to help or advise them unless there is some personal interest or specific reason to do so. (People are fundamentally self-centered; as a basic rule, you cannot care for others unless you care for yourself first, and nothing distorts people more than selfish advice given unconsciously out of goodwill.) Still, I would like to share a few thoughts on this here.',
+        'First, I personally believe that having as few preconceptions as possible allows you to live a happier life. When your world is wider, you gain more choices, more possibilities, and a sharper understanding of everyday events.',
+        'In my view, the quickest and most practical way to do this is to avoid being trapped in a single industry or market, and instead stay involved in at least two completely different markets. I think this is extremely important.',
+        'To give a very rough example, the values, precautions, and widely accepted common sense of the construction industry might look ridiculous to researchers or people working in academic institutions. Of course, the exact opposite is also true.',
+        'In the end, people unconsciously try to believe that what they see is normal and true. I do not think this itself is a bad thing; in fact, it is completely natural. However, precisely because of that, continuously seeing the existence of completely different markets and norms right in front of your eyes—and building up those experiences—seems deeply important.',
+      ],
+    },
   ],
   ja: [
     {
@@ -276,6 +296,26 @@ export const blogPostsData: Record<Language, BlogPost[]> = {
         '私から見れば、個々にはそれぞれの人生がある。たとえ大人たちに何かを言われたり罵倒されたりしても、自分の軸や、人生において大事にしたいものを手放すべきではない。それは「こういう風に生きたい」という理想だけでなく、「こういう生き方は嫌だ」という逆説的な動機から生まれる感情であっても、大事にすべきだとは思う。',
         '周りの人に理解されないというのは当たり前のことだ。だから、無理に理解してもらおうと努める必要もない。ただし、どうしても理解が必要な場（例えば親に対する説明など）では、感情論ではどうにもならず、徹底的な「理詰め」が必要になる場面が出てくる。',
         '聞き手に覆い被さっている一般論を剥ぎ取ってもらい、自分の考えを根本から理解してもらうというのは、至難の業だ。それは重々理解しているが、生きていく上では確実に必要な要素なのだと思う。',
+      ],
+    },
+    {
+      id: 'how-to-break-preconceptions',
+      title: '先入観や偏見を壊す方法',
+      excerpt:
+        '今の私にとっては、大衆的な選択とはかなり異なった道を歩き続けている以上、世間一般的に謳われるような常識や偏見みたいなものにはかなり疎いという自覚はある。',
+      date: '2026年11月',
+      category: '視点・社会考察',
+      tags: ['先入観', '視点', '複数市場', '常識'],
+      paragraphs: [
+        '今の私にとっては、大衆的な選択とはかなり異なった道を歩き続けている以上、世間一般的に謳われるような常識や偏見みたいなものにはかなり疎いという自覚はある。',
+        '私の友達を含む多くの人は、目に見えない当たり前や常識といった言葉や形式に振り回され、それが当たり前だと自身を納得させ、諦めさせ、押し込んで生きている。これに慣れてしまえばそれまでだし、それが一番楽な生き方だとも思う。実際、この波に逆らった生き方というのは、基本的に多くの人にとっては毒でしかないと思う。',
+        '理由は単純で、多くの人は自身のテリトリーや身分、立場を守りたがるからだ。それゆえに、外から入ってきた別の常識のようなものを「異端」として驚くほど冷徹に切り捨てたり、無意識に目を背けたりできてしまう。向き合ってしまうと、自身の経験論や積み上げてきた努力のようなものが否定される感覚（実質的にそうなる事象もあると思うが）があり、無意識にでも恐怖を感じてしまうからだろう。',
+        'ただ、これでは人は大人になって歳を重ねていく上で、コミュニティが固まっていく（学校のような、良くも悪くも多様な考えが溢れている領域から離れる）につれて、どんどん自分の見えている景色こそが当たり前であり、世界のすべてであると錯覚していく。そして、自身の中にある価値観の揺らぎや不協和音自体に目を向けられなくなっていく。この問題を、単なる個人の内在的な問題だと錯覚する人もいるかもしれない。',
+        '私は別にそこまで優しい人間ではないので、仮にそんな人を見かけたり関わることになっても、何かしら利害や理由が上乗せされたりしない限りは、助けたり助言したりすることはないと思う（人は基本的に自分中心であり、大原則として自分をまず大事にできないと他者のことは大事にできないと思うし、そもそも無意識に行われる、善意による身勝手な他者へのアドバイスほど人を歪めるものはないからだ）。ただ、ここでは少しだけ話してみようと思っている。',
+        'まず私は個人的に、この先入観みたいなものはできるだけない方が幸せであれると思っている。世界が広くあれるということは、それだけ選択肢も、可能性も、また日常的な事象に対する解像度も上がるからだ。',
+        '私として一番手っ取り早い方法は、「一つの業界や市場に囚われず、最低でも2つ以上の全く異なる市場と関わるようにすること」であり、これはすごく大事だと思う。',
+        'すごくざっくりした例を挙げると、建設業界で大事にされていることや気をつけていること、その業界で広く謳われている常識のようなものは、研究職に就いている人たちや学術的な機関に属しているような人たちからすれば、滑稽に映るかもしれない。もちろん、これは逆も然りだ。',
+        '結局のところ、人は無意識に自分が見えているものが当たり前であり、真実であると思い込もうとする。これ自体は悪いことではないし、極めて自然なことであると思う。だがだからこそ、常にこの「全く異なる市場や常識の存在」を目の前で感じ続けること、そういった体験を積み重ねるという経験は、とても大事に見える。',
       ],
     },
   ],
