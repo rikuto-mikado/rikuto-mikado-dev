@@ -12,8 +12,8 @@ import BlogCard, { LeadStory } from './BlogCard'
 import BlogReaderModal from './BlogReaderModal'
 import UpcomingPostCard from './UpcomingPostCard'
 
-// Front page: one lead story plus a row of secondary columns
-const INITIAL_SECONDARY_COUNT = 2
+// Front page: one lead story plus one full row (3 columns on desktop) of published essays
+const INITIAL_SECONDARY_COUNT = 3
 
 interface BlogSectionProps {
   lang: Language
@@ -41,12 +41,6 @@ export default function BlogSection({
   // Posts are stored oldest first; the newest leads the page
   const [leadPost, ...olderPosts] = [...posts].reverse()
   const secondaryPosts = isExpanded || isPrinting ? olderPosts : olderPosts.slice(0, INITIAL_SECONDARY_COUNT)
-  // The "next issue" notices share one column, always in the first row after the first two stories
-  const columns = [
-    ...secondaryPosts.slice(0, INITIAL_SECONDARY_COUNT).map((post) => ({ kind: 'post' as const, post })),
-    ...(upcomingPosts.length > 0 ? [{ kind: 'upcoming' as const, posts: upcomingPosts }] : []),
-    ...secondaryPosts.slice(INITIAL_SECONDARY_COUNT).map((post) => ({ kind: 'post' as const, post })),
-  ]
   const rule = isDark ? 'border-night-border' : 'border-cream-border'
   // Looked up by id so the open essay follows language switches
   const selectedPost = posts.find((p) => p.id === selectedPostId) ?? null
@@ -82,24 +76,14 @@ export default function BlogSection({
           </div>
         )}
 
-        {columns.length > 0 && (
+        {/* Published essays only, so "Read more" appends older essays without interruption */}
+        {secondaryPosts.length > 0 && (
           <div
             className={`column-rules mt-12 pt-10 border-t grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 transition-colors duration-500 ${rule}`}
           >
-            {columns.map((item, index) => (
-              <div
-                key={item.kind === 'post' ? item.post.id : 'upcoming'}
-                className={`flex flex-col ${index > 0 ? `max-sm:border-t max-sm:pt-10 ${rule}` : ''}`}
-              >
-                {item.kind === 'post' ? (
-                  <BlogCard post={item.post} isDark={isDark} ui={ui} onSelect={setSelectedPostId} />
-                ) : (
-                  <div className="flex flex-col gap-5">
-                    {item.posts.map((post) => (
-                      <UpcomingPostCard key={post.title} post={post} isDark={isDark} ui={ui} />
-                    ))}
-                  </div>
-                )}
+            {secondaryPosts.map((post, index) => (
+              <div key={post.id} className={`flex flex-col ${index > 0 ? `max-sm:border-t max-sm:pt-10 ${rule}` : ''}`}>
+                <BlogCard post={post} isDark={isDark} ui={ui} onSelect={setSelectedPostId} />
               </div>
             ))}
           </div>
@@ -112,6 +96,17 @@ export default function BlogSection({
             isExpanded={isExpanded}
             onToggle={() => setIsExpanded((prev) => !prev)}
           />
+        )}
+
+        {/* "Next issue" notices: their own ruled block below the published essays */}
+        {upcomingPosts.length > 0 && (
+          <div className={`mt-16 pt-10 border-t-[3px] border-double transition-colors duration-500 ${rule}`}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {upcomingPosts.map((post) => (
+                <UpcomingPostCard key={post.title} post={post} isDark={isDark} ui={ui} />
+              ))}
+            </div>
+          </div>
         )}
       </div>
 
