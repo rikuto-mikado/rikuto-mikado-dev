@@ -26,18 +26,51 @@ export interface CrossroadsRoute {
   points: string[]
 }
 
-export type CertImageKey = 'pythonBootcamp' | 'fullstackWeb' | 'pythonMega' | 'indianCooking' | 'mba' | 'sqlBootcamp'
+export type CertImageKey =
+  | 'highschool'
+  | 'pythonBootcamp'
+  | 'fullstackWeb'
+  | 'pythonMega'
+  | 'indianCooking'
+  | 'mba'
+  | 'sqlBootcamp'
 
 export interface CourseItem {
+  /** 'course' (default): online course certificate; 'diploma': formal academic credential */
+  kind?: 'course' | 'diploma'
   title: string
+  /** Instructor for a course, issuing institution for a diploma */
   instructor: string
+  /** Study length for a course (e.g. "22 hrs"), credential type for a diploma (e.g. "Diploma") */
   hours: string
   platform: string
   date: string
   category: string
   note?: string
   imageKey: CertImageKey
-  certificateId: string
+  /** Issuer's certificate ID; credentials without one show `verification` instead */
+  certificateId?: string
+  /** Shown in place of a certificate ID, e.g. "Verified Diploma · Nashville, TN" */
+  verification?: string
+}
+
+export type ProjectImageKey = 'typbox' | 'talonbox' | 'warbox'
+
+export interface ProjectItem {
+  id: string
+  title: string
+  /** Short category printed in the card's figure line, e.g. "Full-Stack Application" */
+  category: string
+  /** When the project was built, e.g. "Oct 2026 –" */
+  period: string
+  /** 2–3 line overview */
+  description: string
+  /** Spec table: one row per layer, e.g. { label: 'Frontend', value: 'React · TypeScript' } */
+  stack: { label: string; value: string }[]
+  imageKey: ProjectImageKey
+  githubUrl: string
+  /** Live deployment, when there is one */
+  demoUrl?: string
 }
 
 export const timelineEventsData: Record<Language, TimelineItem[]> = {
@@ -456,6 +489,18 @@ export const crossroadsRoutesData: Record<Language, CrossroadsRoute[]> = {
 export const coursesData: Record<Language, CourseItem[]> = {
   en: [
     {
+      kind: 'diploma',
+      title: 'High School Diploma',
+      instructor: 'Penn Foster High School',
+      hours: 'Diploma',
+      platform: 'Penn Foster',
+      date: 'Feb 2025',
+      category: 'Academic Credential',
+      note: 'Completed the full course of study prescribed by Penn Foster High School; diploma awarded in Nashville, Tennessee.',
+      imageKey: 'highschool',
+      verification: 'Verified Diploma · Nashville, TN',
+    },
+    {
       title: 'The Complete Python Bootcamp From Zero to Hero',
       instructor: 'Jose Portilla',
       hours: '22 hrs',
@@ -523,6 +568,18 @@ export const coursesData: Record<Language, CourseItem[]> = {
     },
   ],
   ja: [
+    {
+      kind: 'diploma',
+      title: '高等学校卒業証書（High School Diploma）',
+      instructor: 'Penn Foster High School',
+      hours: '卒業証書',
+      platform: 'Penn Foster',
+      date: '2025年2月',
+      category: '学歴・卒業資格',
+      note: 'Penn Foster High School の所定の課程をすべて修了し、米国テネシー州ナッシュビルにて卒業証書を授与。',
+      imageKey: 'highschool',
+      verification: '認証済み卒業証書 · 米国テネシー州ナッシュビル',
+    },
     {
       title: 'The Complete Python Bootcamp From Zero to Hero',
       instructor: 'Jose Portilla',
@@ -592,6 +649,111 @@ export const coursesData: Record<Language, CourseItem[]> = {
   ],
 }
 
+export const projectsData: Record<Language, ProjectItem[]> = {
+  en: [
+    {
+      id: 'typbox',
+      title: 'TYPBOX',
+      category: 'Full-Stack Application',
+      period: 'Oct 2026 –',
+      description:
+        'A study-time tracker that turns hours into progress: log sessions by subject, read the analytics, and earn BITS for buffs, boss raids and a pixel room. It also powers the Study Log on page D1.',
+      stack: [
+        { label: 'Frontend', value: 'React 19 · TypeScript · Vite · Tailwind CSS v4' },
+        { label: 'Backend', value: 'Django · Django REST Framework · SimpleJWT' },
+        { label: 'Database', value: 'PostgreSQL' },
+        { label: 'Hosting', value: 'Render' },
+      ],
+      imageKey: 'typbox',
+      githubUrl: 'https://github.com/rikuto-mikado/typbox-dev',
+      demoUrl: 'https://typbox.me',
+    },
+    {
+      id: 'talonbox',
+      title: 'TALONBOX',
+      category: 'Browser Game Collection',
+      period: 'Nov 2026',
+      description:
+        'Fifty-four classic card games in the browser, from solitaire to casino and table games against the computer. Each game’s rules are pure, tested functions behind one shared engine with undo, hints and seeded deals.',
+      stack: [
+        { label: 'Frontend', value: 'React · TypeScript · Vite · Tailwind CSS' },
+        { label: 'State', value: 'Zustand · Motion' },
+        { label: 'Testing', value: 'Vitest · Playwright' },
+        { label: 'Hosting', value: 'Render' },
+      ],
+      imageKey: 'talonbox',
+      githubUrl: 'https://github.com/rikuto-mikado/deck-hub',
+      demoUrl: 'https://deck-hub.onrender.com/#/',
+    },
+    {
+      id: 'warbox',
+      title: 'WARBOX',
+      category: 'Full-Stack Strategy Game',
+      period: 'Nov 2026',
+      description:
+        'A real-time medieval strategy game: raise armies from your castles, pick a commander and a mix of troops, then march across a tilted 3D map with fog of war, across five game modes.',
+      stack: [
+        { label: 'Frontend', value: 'React · TypeScript · Three.js · Tailwind CSS v4' },
+        { label: 'Backend', value: 'Django 5.2 · Django REST Framework' },
+        { label: 'Database', value: 'PostgreSQL' },
+      ],
+      imageKey: 'warbox',
+      githubUrl: 'https://github.com/rikuto-mikado/web-rts-engine',
+    },
+  ],
+  ja: [
+    {
+      id: 'typbox',
+      title: 'TYPBOX',
+      category: 'フルスタック・アプリケーション',
+      period: '2026年10月 –',
+      description:
+        '学習時間を「積み上がる成果」に変える学習トラッカー。科目別にセッションを記録して分析でき、貯めた BITS でバフやボスレイド、ピクセルルームを楽しめます。D1面の学習ログもこのアプリから配信しています。',
+      stack: [
+        { label: 'フロントエンド', value: 'React 19 · TypeScript · Vite · Tailwind CSS v4' },
+        { label: 'バックエンド', value: 'Django · Django REST Framework · SimpleJWT' },
+        { label: 'データベース', value: 'PostgreSQL' },
+        { label: 'ホスティング', value: 'Render' },
+      ],
+      imageKey: 'typbox',
+      githubUrl: 'https://github.com/rikuto-mikado/typbox-dev',
+      demoUrl: 'https://typbox.me',
+    },
+    {
+      id: 'talonbox',
+      title: 'TALONBOX',
+      category: 'ブラウザゲーム集',
+      period: '2026年11月',
+      description:
+        'ソリティアからカジノ、CPU対戦のテーブルゲームまで、54種類のクラシックなカードゲームをブラウザで。各ゲームのルールはテスト済みの純粋関数として実装し、アンドゥ・ヒント・シード付き配札を備えた共通エンジンで動かしています。',
+      stack: [
+        { label: 'フロントエンド', value: 'React · TypeScript · Vite · Tailwind CSS' },
+        { label: '状態管理', value: 'Zustand · Motion' },
+        { label: 'テスト', value: 'Vitest · Playwright' },
+        { label: 'ホスティング', value: 'Render' },
+      ],
+      imageKey: 'talonbox',
+      githubUrl: 'https://github.com/rikuto-mikado/deck-hub',
+      demoUrl: 'https://deck-hub.onrender.com/#/',
+    },
+    {
+      id: 'warbox',
+      title: 'WARBOX',
+      category: 'フルスタック・戦略ゲーム',
+      period: '2026年11月',
+      description:
+        '中世を舞台にしたリアルタイムストラテジー。城から軍を編成し、指揮官と兵種の組み合わせを選んで、霧に包まれた立体マップを進軍します。5つのゲームモードを収録。',
+      stack: [
+        { label: 'フロントエンド', value: 'React · TypeScript · Three.js · Tailwind CSS v4' },
+        { label: 'バックエンド', value: 'Django 5.2 · Django REST Framework' },
+        { label: 'データベース', value: 'PostgreSQL' },
+      ],
+      imageKey: 'warbox',
+      githubUrl: 'https://github.com/rikuto-mikado/web-rts-engine',
+    },
+  ],
+}
+
 export const uiText = {
   en: {
     menu: 'Menu',
@@ -613,8 +775,10 @@ export const uiText = {
     navAboutSub: 'Vision & Physical Foundation',
     navTrajectory: 'Trajectory',
     navTrajectorySub: 'Experience & Milestones',
-    navLearning: 'Learning',
-    navLearningSub: 'Courses & Certifications',
+    navProjects: 'Projects',
+    navProjectsSub: 'Full-Stack Applications & Works',
+    navLearning: 'Credentials',
+    navLearningSub: 'Diplomas & Certifications',
     navBlog: 'Blog',
     navBlogSub: 'Essays on AI & Society',
     navStudyLog: 'Study Log',
@@ -658,17 +822,31 @@ export const uiText = {
     crossroadsLead: 'Beyond global data centres: options that combine good conditions, high pay and a repeatable path in.',
     crossroadsFooter: 'Four doors, one key: the same licences and English open every one of them.',
 
+    // Projects
+    projectsBadge: 'Works & Exhibits',
+    projectsHeading: 'Projects Built From the Ground Up',
+    projectsLead:
+      'Full-stack applications and games designed, built and shipped independently, from the database schema to the last pixel. Hover over any plate to bring the screenshot into focus.',
+    projectFigure: 'Fig.',
+    projectStack: 'Technical Specifications',
+    projectSource: 'GitHub',
+    projectDemo: 'Live',
+    opensInNewTab: 'opens in a new tab',
+
     // Courses
-    coursesBadge: 'Skill Acquisition',
-    coursesHeading: 'Courses & Continuous Learning',
+    coursesBadge: 'Credentials & Certifications',
+    coursesHeading: 'Certificates & Academic Credentials',
     coursesLead:
-      'Certified coursework completed through intensive independent study across software engineering, AI tooling, and essential life skills. Click any certificate to inspect credentials.',
-    viewCert: 'View Certificate',
+      'A register of formal academic diplomas and independently earned certifications, spanning software engineering, AI tooling, business, and essential life skills. Click any entry to inspect the credential.',
+    viewCert: 'View Credential',
     instructor: 'Instructor',
+    institution: 'Institution',
     date: 'Date',
-    length: 'Length',
+    length: 'Duration / Type',
     certId: 'Certificate ID',
+    verification: 'Verification',
     certCompletion: 'Certificate of Completion',
+    diplomaAward: 'Academic Diploma',
 
     // Blog
     blogBadge: 'Perspectives & Essays',
@@ -763,8 +941,10 @@ export const uiText = {
     navAboutSub: 'ビジョンと物理レイヤーへの転換',
     navTrajectory: '経歴・進路',
     navTrajectorySub: 'これまでの歩みと今後の展望',
-    navLearning: '取得スキル',
-    navLearningSub: 'Udemy修了証と学習実績',
+    navProjects: '制作物',
+    navProjectsSub: 'フルスタック開発の作品集',
+    navLearning: '資格・修了証',
+    navLearningSub: '卒業証書・各種認定証',
     navBlog: 'ブログ',
     navBlogSub: '思考録とエッセイ',
     navStudyLog: '学習ログ',
@@ -808,17 +988,31 @@ export const uiText = {
     crossroadsLead: '「ホワイト × 高収入 × 再現性の高さ」を軸に、データセンター以外で視野に入れている候補です。',
     crossroadsFooter: '扉は四つ、鍵は一つ。積み上げた資格と英語が、どの扉にもそのまま通用する。',
 
+    // Projects
+    projectsBadge: '制作物・作品展示',
+    projectsHeading: 'ゼロから作り上げたプロダクト',
+    projectsLead:
+      'データベース設計から細部のUIまで、すべてを一人で設計・開発・公開したフルスタックアプリケーションとゲーム。画像にカーソルを合わせると、スクリーンショットが鮮明に浮かび上がります。',
+    projectFigure: '図',
+    projectStack: '技術仕様',
+    projectSource: 'GitHub',
+    projectDemo: '公開版',
+    opensInNewTab: '新しいタブで開きます',
+
     // Courses
-    coursesBadge: 'スキルの修得',
-    coursesHeading: '受講コースと修得スキル',
+    coursesBadge: '資格・修了認定',
+    coursesHeading: '取得資格・卒業証書・修了証',
     coursesLead:
-      'ソフトウェアエンジニアリングからAIツールの活用、さらには自立生活を支える実践的スキルに至るまで、徹底した独学によって修了した認定コース群。クリックして修了証の詳細を確認できます。',
-    viewCert: '修了証を確認',
+      '正式な卒業証書から、独学で取得した各種認定証まで。ソフトウェアエンジニアリング、AIツール、ビジネス、そして生活を支える実践的スキルにわたる資格の記録です。クリックすると証書の詳細を確認できます。',
+    viewCert: '証書を確認',
     instructor: '講師',
+    institution: '発行機関',
     date: '取得時期',
-    length: '総学習時間',
+    length: '期間・種別',
     certId: '修了証ID',
+    verification: '認証',
     certCompletion: '修了認定証',
+    diplomaAward: '卒業証書',
 
     // Blog
     blogBadge: '思考録 ＆ エッセイ',

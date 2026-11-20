@@ -19,6 +19,8 @@ export default function CourseCard({ course, isDark, ui, onSelect }: CourseCardP
   // Lazy images never load for a print snapshot, so switch to eager while printing
   const { isPrinting } = usePrintEdition()
   const strong = isDark ? 'text-linen' : 'text-ink'
+  // Diplomas are issued by an institution rather than taught by an instructor
+  const issuerLabel = course.kind === 'diploma' ? ui.institution : ui.instructor
 
   return (
     <Clickable
@@ -65,13 +67,13 @@ export default function CourseCard({ course, isDark, ui, onSelect }: CourseCardP
           </p>
         )}
         <p className={`md:hidden font-sans text-xs ${muted}`}>
-          {ui.instructor}: <span className={strong}>{course.instructor}</span>
+          {issuerLabel}: <span className={strong}>{course.instructor}</span>
         </p>
       </div>
 
       {/* md+: particulars */}
       <p className={`hidden md:block pt-1 font-sans text-sm leading-snug ${strong}`}>
-        <span className={`block font-sans text-[11px] uppercase tracking-[0.14em] mb-1 ${muted}`}>{ui.instructor}</span>
+        <span className={`block font-sans text-[11px] uppercase tracking-[0.14em] mb-1 ${muted}`}>{issuerLabel}</span>
         {course.instructor}
       </p>
       <p className={`hidden md:flex pt-1 items-baseline justify-end gap-2 whitespace-nowrap font-mono text-xs tabular-nums ${strong}`}>

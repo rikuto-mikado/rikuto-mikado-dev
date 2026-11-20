@@ -14,8 +14,9 @@ export default function CertificateModal({ cert, isDark, ui, onClose }: Certific
   const titleId = useId()
   const dialogRef = useFocusTrap<HTMLDivElement>(true)
   const valueClass = `font-semibold transition-colors duration-300 ${isDark ? 'text-ivory' : 'text-gray-800'}`
+  const isDiploma = cert.kind === 'diploma'
   const metadata = [
-    { label: ui.instructor, value: cert.instructor },
+    { label: isDiploma ? ui.institution : ui.instructor, value: cert.instructor },
     { label: ui.date, value: cert.date },
     { label: ui.length, value: cert.hours },
   ]
@@ -44,7 +45,7 @@ export default function CertificateModal({ cert, isDark, ui, onClose }: Certific
         >
           <div>
             <span className="text-xs uppercase tracking-wider font-sans font-semibold text-accent">
-              {cert.platform} {ui.certCompletion}
+              {cert.platform} {isDiploma ? ui.diplomaAward : ui.certCompletion}
             </span>
             <h3
               id={titleId}
@@ -87,15 +88,24 @@ export default function CertificateModal({ cert, isDark, ui, onClose }: Certific
               <span className={valueClass}>{value}</span>
             </div>
           ))}
-          <div>
-            <span className="block text-gray-400 uppercase text-[11px] tracking-wider">{ui.certId}</span>
-            <span
-              className={`font-mono truncate block transition-colors duration-300 ${isDark ? 'text-accent' : 'text-gray-800'}`}
-              title={cert.certificateId}
-            >
-              {cert.certificateId.slice(0, 15)}...
-            </span>
-          </div>
+          {cert.certificateId ? (
+            <div>
+              <span className="block text-gray-400 uppercase text-[11px] tracking-wider">{ui.certId}</span>
+              <span
+                className={`font-mono truncate block transition-colors duration-300 ${isDark ? 'text-accent' : 'text-gray-800'}`}
+                title={cert.certificateId}
+              >
+                {cert.certificateId.slice(0, 15)}...
+              </span>
+            </div>
+          ) : (
+            cert.verification && (
+              <div>
+                <span className="block text-gray-400 uppercase text-[11px] tracking-wider">{ui.verification}</span>
+                <span className={valueClass}>{cert.verification}</span>
+              </div>
+            )
+          )}
         </div>
       </div>
     </div>

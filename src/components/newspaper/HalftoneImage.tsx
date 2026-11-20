@@ -22,6 +22,8 @@ const SCREEN_ANGLE = Math.PI / 4
  *  1. the photo itself in monochrome, lightly inked into the paper, which carries the detail;
  *  2. a 45° dot screen on a transparent canvas, each dot's area following the tone underneath.
  * Together they read clearly at a glance yet show the dot texture up close. Redraws on resize / theme change.
+ * On hover / focus (of the frame or an enclosing `.group`), or a tap on touch screens, the dot screen fades
+ * and the monochrome photo sharpens so fine detail becomes legible (see `.halftone` in index.css).
  */
 export default function HalftoneImage({
   src,
@@ -41,6 +43,8 @@ export default function HalftoneImage({
   const { isPrinting } = usePrintEdition()
   const isNear = isNearViewport || isPrinting
   const [focusX, focusY] = focus
+  // Touch screens have no hover: a tap toggles the sharpened view instead
+  const [isSharp, setIsSharp] = useState(false)
 
   useEffect(() => {
     if (isNear) return
@@ -175,7 +179,14 @@ export default function HalftoneImage({
   }, [image, isDark, isPrinting, cell, focusX, focusY])
 
   return (
-    <div ref={frameRef} className={`relative overflow-hidden ${className}`}>
+    <div
+      ref={frameRef}
+      data-sharp={isSharp || undefined}
+      onPointerUp={(e) => {
+        if (e.pointerType === 'touch') setIsSharp((prev) => !prev)
+      }}
+      className={`halftone relative overflow-hidden ${className}`}
+    >
       {/* Continuous-tone base: the photo in monochrome, inked lightly into the paper */}
       <img
         src={isNear ? src : undefined}
@@ -184,7 +195,7 @@ export default function HalftoneImage({
         style={{ objectPosition: `${focusX * 100}% ${focusY * 100}%` }}
       />
       {/* Dot screen on top */}
-      <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 w-full h-full" />
+      <canvas ref={canvasRef} aria-hidden="true" className="halftone-screen absolute inset-0 w-full h-full" />
     </div>
   )
 }

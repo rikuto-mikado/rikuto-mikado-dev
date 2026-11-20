@@ -47,7 +47,7 @@ export default function CoursesSection({ isDark, ui, courses, onSelectCourse }: 
           }`}
         >
           {visibleCourses.map((course) => (
-            <li key={course.certificateId}>
+            <li key={course.imageKey}>
               <CourseCard course={course} isDark={isDark} ui={ui} onSelect={onSelectCourse} />
             </li>
           ))}

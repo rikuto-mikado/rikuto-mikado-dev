@@ -12,7 +12,8 @@ interface NavSection {
 export const navSections = [
   { id: 'about', page: 'A2', labelKey: 'navAbout', subtitleKey: 'navAboutSub' },
   { id: 'trajectory', page: 'A3', labelKey: 'navTrajectory', subtitleKey: 'navTrajectorySub' },
-  { id: 'courses', page: 'B1', labelKey: 'navLearning', subtitleKey: 'navLearningSub' },
+  { id: 'projects', page: 'B1', labelKey: 'navProjects', subtitleKey: 'navProjectsSub' },
+  { id: 'courses', page: 'B2', labelKey: 'navLearning', subtitleKey: 'navLearningSub' },
   { id: 'blog', page: 'C1', labelKey: 'navBlog', subtitleKey: 'navBlogSub' },
   { id: 'study-log', page: 'D1', labelKey: 'navStudyLog', subtitleKey: 'navStudyLogSub' },
   { id: 'contact', page: 'D2', labelKey: 'navContact', subtitleKey: 'navContactSub' },

@@ -218,6 +218,58 @@ html.dark .halftone-base {
 }
 
 /*
+ * Sharpen on demand: hovering a photo (or the card around it), focusing that card, or tapping the
+ * photo on a touch screen fades the dot screen and brings the photo up to full strength. It stays
+ * monochrome, but fine detail (UI text in screenshots, faces) becomes legible.
+ */
+.halftone-screen,
+.halftone-base {
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease;
+}
+.halftone[data-sharp] .halftone-screen,
+.group:focus-visible .halftone .halftone-screen,
+.group:focus-within .halftone .halftone-screen {
+  opacity: 0.06;
+}
+.halftone[data-sharp] .halftone-base,
+.group:focus-visible .halftone .halftone-base,
+.group:focus-within .halftone .halftone-base {
+  filter: grayscale(1) contrast(1.12);
+  opacity: 1;
+}
+html.dark .halftone[data-sharp] .halftone-base,
+html.dark .group:focus-visible .halftone .halftone-base,
+html.dark .group:focus-within .halftone .halftone-base {
+  filter: grayscale(1) contrast(1.08) brightness(0.95);
+  opacity: 0.92;
+}
+/* Hover only where it is real: on touch screens a sticky :hover would block the tap toggle */
+@media (hover: hover) {
+  .halftone:hover .halftone-screen,
+  .group:hover .halftone .halftone-screen {
+    opacity: 0.06;
+  }
+  .halftone:hover .halftone-base,
+  .group:hover .halftone .halftone-base {
+    filter: grayscale(1) contrast(1.12);
+    opacity: 1;
+  }
+  html.dark .halftone:hover .halftone-base,
+  html.dark .group:hover .halftone .halftone-base {
+    filter: grayscale(1) contrast(1.08) brightness(0.95);
+    opacity: 0.92;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .halftone-screen,
+  .halftone-base {
+    transition: none;
+  }
+}
+
+/*
  * Newspaper body copy. Set ragged-right with eager hyphenation: in columns this narrow, full
  * justification opens visible gaps between words, while hyphenation keeps the right edge tidy.
  */
@@ -539,6 +591,7 @@ html.dark .news-columns {
   /* One section per page, so each prints under its own folio (A2, A3, B1 …) */
   #about,
   #trajectory,
+  #projects,
   #courses,
   #blog,
   #study-log,
@@ -564,6 +617,9 @@ html.dark .news-columns {
   /* Photos: the halftone canvas carries the tone in print, so the full-resolution <img> base is dropped */
   .halftone-base {
     display: none !important;
+  }
+  .halftone-screen {
+    opacity: 1 !important;
   }
 
   /*

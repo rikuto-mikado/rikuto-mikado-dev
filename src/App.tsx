@@ -10,6 +10,7 @@ import CertificateModal from './components/sections/courses/CertificateModal'
 import CoursesSection from './components/sections/courses/CoursesSection'
 import FooterSection from './components/sections/FooterSection'
 import HeroSection from './components/sections/hero/HeroSection'
+import ProjectsSection from './components/sections/projects/ProjectsSection'
 import StudyLogFeed from './components/sections/StudyLogFeed'
 import TrajectorySection from './components/sections/TrajectorySection'
 import { IS_JAPANESE_AVAILABLE, SITE_LOGO_SRC } from './config'
@@ -17,7 +18,7 @@ import { getEditionInfo } from './data/edition'
 import { sectionIds } from './data/navigation'
 import { socialLinks } from './data/socialLinks'
 import type { CourseItem } from './data/translations'
-import { coursesData, crossroadsRoutesData, timelineEventsData, uiText } from './data/translations'
+import { coursesData, crossroadsRoutesData, projectsData, timelineEventsData, uiText } from './data/translations'
 import { EditionContext } from './hooks/useEdition'
 import { useEscapeKey } from './hooks/useEscapeKey'
 import { useLanguage } from './hooks/useLanguage'
@@ -108,6 +109,7 @@ export default function App() {
               events={timelineEventsData[lang]}
               routes={crossroadsRoutesData[lang]}
             />
+            <ProjectsSection isDark={isDarkView} ui={ui} projects={projectsData[lang]} />
             <CoursesSection isDark={isDarkView} ui={ui} courses={coursesData[lang]} onSelectCourse={setSelectedCert} />
 
             {selectedCert && <CertificateModal cert={selectedCert} isDark={isDarkView} ui={ui} onClose={closeCert} />}
