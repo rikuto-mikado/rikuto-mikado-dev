@@ -1,4 +1,4 @@
-import myfaceImg from '../../assets/myface.webp'
+import portraitImg from '../../assets/about-portrait.webp'
 import { jumpText } from '../../data/edition'
 import { FRONT_PAGE, sectionPage } from '../../data/navigation'
 import type { UiText } from '../../data/translations'
@@ -74,7 +74,7 @@ export default function AboutSection({ isDark, ui }: AboutSectionProps) {
           {/* Portrait */}
           <figure className="group lg:col-span-4 lg:pl-10 lg:sticky lg:top-16 self-start">
             <HalftoneImage
-              src={myfaceImg}
+              src={portraitImg}
               alt="Rikuto Mikado"
               isDark={isDark}
               className="w-full max-w-sm mx-auto lg:max-w-none aspect-[4/5]"

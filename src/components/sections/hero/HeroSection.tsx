@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import urakawaLandscape from '../../../assets/urakawa-landscape.webp'
+import urakawaLandscape from '../../../assets/hero-urakawa-landscape.webp'
 import { blogPostsData } from '../../../data/blogPosts'
 import { jumpText } from '../../../data/edition'
 import { sectionPage, type SectionId } from '../../../data/navigation'
